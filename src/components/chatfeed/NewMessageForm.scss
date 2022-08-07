@@ -1,0 +1,29 @@
+.new_message{
+    background-color: white;
+    width: 100%;
+    padding: 1rem;
+    form{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        input{
+            background-color: transparent;
+            flex-grow: 1;
+            font-size: 1rem;
+        }
+        span{
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+        
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+            &:hover{
+                background-color: var(--grey-500);
+            }
+        }
+    }
+}

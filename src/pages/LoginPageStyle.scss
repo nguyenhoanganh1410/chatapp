@@ -1,0 +1,38 @@
+.login ,.chat_loading{
+    height: 100vh;
+    width: 100%;
+   // background-color: azure;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    text-align: center;
+    h1{
+        color: var(--shades-left-bar);
+        font-size: 4rem;
+    }
+    .text{
+        margin: 1rem 0;
+        font-size: 18px;
+        font-weight: 500;
+        color: #333333;
+    }
+}
+
+.chat_loading{
+
+    h1{
+        color: var(--shades-left-bar);
+        font-size: 3rem;
+        margin-top: 4rem;
+    }
+    .loading_group{
+       position: absolute;
+       top:50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+       p{
+        margin-top: 1rem;
+       }
+    }
+}
