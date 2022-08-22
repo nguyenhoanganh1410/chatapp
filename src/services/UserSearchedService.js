@@ -1,12 +1,10 @@
+//UserSearched document in firestore
+
 import firebase from "../firebase";
 import "firebase/compat/firestore";
-const db = firebase.firestore().collection("/users");
+const db = firebase.firestore().collection("/UserSearched");
 const getById = (id) => {
   return db.doc(id).get();
-};
-
-const getUserByEmail = (email) => {
-  return db.where("email", "==", email).get();
 };
 const create = (data) => {
   return db.add(data);
@@ -17,11 +15,10 @@ const update = (id, value) => {
 const remove = (id) => {
   return db.doc(id).delete();
 };
-const UserService = {
+const UserSearchedService = {
   getById,
-  getUserByEmail,
   create,
   update,
   remove,
 };
-export default UserService;
+export default UserSearchedService;

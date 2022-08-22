@@ -89,6 +89,8 @@ const TabBarComponent = () => {
 
   const handleLogout = (e) => {
     firebase.auth().signOut();
+    //delete user current
+    depatch(SetUser(null));
   };
 
   return (

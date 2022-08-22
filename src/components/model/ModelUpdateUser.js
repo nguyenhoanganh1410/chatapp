@@ -21,7 +21,8 @@ import { storageRef } from "../../firebase";
 import { BsFillCameraFill } from "react-icons/bs";
 import "firebase/compat/firestore";
 import UserService from "../../services/UserService";
-import { SetShowUpdateForm } from "../../store/Actions";
+import { SetShowALert, SetShowUpdateForm } from "../../store/Actions";
+import AlertNotification from "./AlertNotification";
 const style = {
   position: "absolute",
   top: "50%",
@@ -42,7 +43,7 @@ const ModelDetailUser = () => {
   const { state, depatch } = React.useContext(Contex);
 
   //detructering...
-  const { user, showUpdateForm } = state;
+  const { user, showUpdateForm, showAlert } = state;
   // const [userTemp, setUserTemp] = React.useState(null);
   // console.log(userTemp);
 
@@ -56,6 +57,7 @@ const ModelDetailUser = () => {
   //kiem tra co su thay doi ve avatar, gender khong
   const [changeAvt, setChangeAvt] = React.useState(false);
   const [changeUser, setChangeUser] = React.useState(false);
+  const [openAlert, setOpenAlert] = React.useState(false);
   // console.log(checkedGender);
   // console.log(avt?.preview);
 
@@ -106,7 +108,7 @@ const ModelDetailUser = () => {
     //upload from imgage local to fire storage
     // 'file' comes from the Blob or File API
     //check ng dung co thay doi avatar khong?
-
+    handleClose();
     //avatar thay doi
     if (changeAvt) {
       storageRef
@@ -120,12 +122,20 @@ const ModelDetailUser = () => {
             .getDownloadURL()
             .then((url) => {
               // //update firebase store
-              UserService.update(user.uid, {
+            UserService.update(user.uid, {
                 sex: checkedGender,
                 avatar: url,
               }).then(function (snapshot) {
-                //thanh cong
+                  //thanh cong
+                //close update form
+
+                depatch(SetShowALert(true));
+                const timeout = setTimeout(() => {
+                  console.log("This will be called after 2 seconds");
+                  depatch(SetShowALert(false));
+                }, 2000);
                 console.log("secced");
+                return;
               });
             });
         });
@@ -137,6 +147,12 @@ const ModelDetailUser = () => {
         sex: checkedGender,
       }).then(function (snapshot) {
         //thanh cong
+
+        depatch(SetShowALert(true));
+        const timeout = setTimeout(() => {
+          console.log("This will be called after 2 seconds");
+          depatch(SetShowALert(false));
+        }, 2000);
         console.log("secced");
       });
     }
@@ -144,14 +160,21 @@ const ModelDetailUser = () => {
 
   //cancel -> close this form
   const handleCancel = () => {
-    //neu khong co su thay doi nao -> close
+    //co su thay doi : avatar, gender -> show confim dialog
     if (changeUser || changeAvt) {
-      handleClose();
+      //show dialog
+      setOpenAlert(true);
       return;
     }
-    //co su thay doi : avatar, gender -> show confim dialog
-    
+    //neu khong co su thay doi nao -> close
+    handleClose();
   };
+
+  const closeOpenAlert = () => {
+    setOpenAlert(false);
+    handleClose();
+  };
+
   return (
     <div>
       <Modal
@@ -262,6 +285,11 @@ const ModelDetailUser = () => {
           </Box>
         </Fade>
       </Modal>
+      <AlertNotification
+        openAlert={openAlert}
+        closeOpenAlert={closeOpenAlert}
+        handleSubmitChange={handleSubmitChange}
+      />
     </div>
   );
 };

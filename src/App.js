@@ -15,6 +15,7 @@ import "firebase/compat/firestore";
 import PageLoading from "./pages/PageLoading";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 import UserService from "./services/UserService";
+import RegisterPage from "./pages/RegisterPage";
 function App() {
   const navigate = useNavigate();
   const { state, depatch } = useContext(Contex);
@@ -69,6 +70,7 @@ function App() {
           {/* <Route path="/login" element={<LoginPage setToken={setToken} />} /> */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/loading" element={<PageLoading />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route
             path="*"
             element={

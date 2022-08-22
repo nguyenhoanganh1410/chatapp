@@ -10,7 +10,9 @@
   sans-serif;
     &:hover{
         background-color: rgba(0,0,0,0.02);
-      
+        .cancel_icon{
+            display: block;
+        }
     }
     .card_group{
         display: flex;
@@ -40,5 +42,9 @@
     .card_time{
         font-size: 12px;
         color: rgba(0,0,0,0.5);
+    }
+
+    .cancel_icon{
+        display: none;
     }
 }

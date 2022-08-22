@@ -116,7 +116,8 @@ const LoginForm = () => {
         </div>
       </form>
       <p>
-        Bạn chưa có tài khoản? <span>Đăng ký ngay</span>
+        Bạn chưa có tài khoản?{" "}
+        <span onClick={() => navigate("/register")}>Đăng ký ngay</span>
       </p>
     </div>
   );
