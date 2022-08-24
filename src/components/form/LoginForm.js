@@ -39,8 +39,7 @@ const LoginForm = () => {
       firebase
         .auth()
         .signInWithEmailAndPassword(mail, pass)
-        .then((user) => {
-          console.log(user);
+        .then((userCredential) => {
           //redict homepage
           navigate("/");
         })
@@ -50,12 +49,6 @@ const LoginForm = () => {
             "Tên đăng nhập hoặc mật khẩu không khớp, vui lòng nhập lại"
           );
         });
-      // try {
-      // } catch (error) {
-      //   // console.log("Failed to fetch : ", error);
-      //   console.log("Failed to fetch : ", error);
-      //   setTextNo("Tên đăng nhập hoặc mật khẩu không khớp, vui lòng nhập lại");
-      // }
     };
     loginFunc(email, password);
   };

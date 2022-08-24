@@ -1,20 +1,14 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 
-import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import SettingsIcon from "@mui/icons-material/Settings";
-import Button from "@mui/material/Button";
+
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
-import Stack from "@mui/material/Stack";
 
 import avt from "../images/av.jpg";
 import "./TabBarStyle.scss";
@@ -27,12 +21,14 @@ import ModelDetailUser from "./model/ModelDetailUser";
 import ModelUpdateUser from "./model/ModelUpdateUser";
 import Contex from "../store/Context";
 import { SetUser } from "../store/Actions";
-import userApi from "../api/userApi";
 
 import { useNavigate } from "react-router-dom";
 
 import firebase from "../firebase";
 import "firebase/compat/auth";
+
+import { deepOrange, deepPurple } from "@mui/material/colors";
+
 const TabBarComponent = () => {
   //active option
   const [activeOption, setActiveOption] = React.useState(0);
@@ -96,17 +92,30 @@ const TabBarComponent = () => {
   return (
     <div className="tab-bar">
       <div className="bar_top">
-        <Avatar
-          alt={user?.first_name}
-          className="avatar"
-          src={user?.avatar}
-          ref={anchorRef}
-          id="composition-button"
-          aria-controls={open ? "composition-menu" : undefined}
-          aria-expanded={open ? "true" : undefined}
-          aria-haspopup="true"
-          onClick={handleToggle}
-        />
+        {user?.avatar ? (
+          <Avatar
+            className="avatar"
+            src={user?.avatar}
+            ref={anchorRef}
+            aria-controls={open ? "composition-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={handleToggle}
+            alt={user?.first_name}
+          />
+        ) : (
+          <Avatar
+            className="avatar"
+            onClick={handleToggle}
+            src={user?.avatar}
+            ref={anchorRef}
+            aria-controls={open ? "composition-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+          >
+            {user?.last_name[0]}
+          </Avatar>
+        )}
 
         <ul className="option_icons">
           {arrIconOption.map((val, idx) => {

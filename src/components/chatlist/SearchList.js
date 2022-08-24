@@ -32,6 +32,10 @@ const SearchList = () => {
 
       depatch(SetLoadingSearchFunc(false));
     });
+
+    if (listUser.length === 0) {
+      depatch(SetLoadingSearchFunc(false));
+    }
   }, []);
 
   return (

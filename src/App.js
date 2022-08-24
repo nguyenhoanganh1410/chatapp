@@ -45,9 +45,9 @@ function App() {
         navigate("/login");
       } else {
         UserService.getById(u.uid).then(function (snapshot) {
-          // console.log("d" + snapshot.data().first_name);
+          console.log("d" + snapshot.data().first_name);
           const userTemp = { uid: u.uid, ...snapshot.data() };
-
+          console.log(snapshot.data());
           depatch(SetUser(userTemp));
         });
         //setLoading = false

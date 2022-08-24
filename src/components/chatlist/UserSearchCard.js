@@ -16,7 +16,18 @@ const UserSearchCard = ({ u }) => {
         style={{ alignItems: "normal" }}
         onClick={() => handleChat()}
       >
-        <Avatar className="avt" src={u?.avatar} alt={u?.first_name} />
+        {u?.avatar ? (
+          <Avatar className="avatar" src={u?.avatar} alt={u?.first_name} />
+        ) : (
+          <Avatar
+            className="avatar"
+            style={{ textTransform: "capitalize" }}
+            src={u?.avatar}
+          >
+            {u?.last_name[0]}
+          </Avatar>
+        )}
+
         <div className="card_name" style={{ marginLeft: "0" }}>
           <p style={{ textTransform: "capitalize" }}>
             {u?.last_name + " " + u?.first_name}
