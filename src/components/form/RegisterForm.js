@@ -22,7 +22,7 @@ import FormLabel from "@mui/material/FormLabel";
 import UserService from "../../services/UserService";
 import CircularProgress from "@mui/material/CircularProgress";
 import PageLoading from "../../pages/PageLoading";
-
+import { useTranslation } from "react-i18next";
 const LoginForm = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -31,6 +31,9 @@ const LoginForm = () => {
   const [lastName, setLastName] = React.useState("");
   //male or female
   const [value, setValue] = React.useState("female");
+
+  // It is a hook imported from 'react-i18next'
+  const { t } = useTranslation();
 
   //alert status erro
   const [textNo, setTextNo] = React.useState("");
@@ -161,7 +164,7 @@ const LoginForm = () => {
           style={{ width: "100%", margin: "0.5rem 0" }}
           id="password"
           variant="outlined"
-          label="Mật khẩu"
+          label={t("password")}
           type="password"
           onChange={(e) => handlePassword(e)}
         />
@@ -169,7 +172,7 @@ const LoginForm = () => {
           style={{ width: "100%", margin: "0.5rem 0" }}
           id="passwordAgain"
           variant="outlined"
-          label="Nhập lại mật khẩu"
+          label={t("password")}
           type="password"
           onChange={(e) => handlePasswordTwo(e)}
         />
@@ -177,7 +180,7 @@ const LoginForm = () => {
           style={{ width: "100%", margin: "0.5rem 0" }}
           id="firstName"
           variant="outlined"
-          label="Họ"
+          label={t("firstName")}
           type="text"
           onChange={(e) => handleFirstName(e)}
         />
@@ -185,7 +188,7 @@ const LoginForm = () => {
           style={{ width: "100%", margin: "0.5rem 0" }}
           id="lastName"
           variant="outlined"
-          label="Tên đệm và tên"
+          label={t("surname")}
           type="text"
           onChange={(e) => handleLastName(e)}
         />
@@ -204,13 +207,13 @@ const LoginForm = () => {
             <FormControlLabel
               value="female"
               control={<Radio />}
-              label="Nữ"
+              label={t("female") === "Giống cái" ? "Nữ" : t("female")}
               onClick={handleChangeGender}
             />
             <FormControlLabel
               value="male"
               control={<Radio />}
-              label="Nam"
+              label={t("male") === "Nam giới" ? "Nam" : t("male")}
               onClick={handleChangeGender}
             />
           </RadioGroup>
@@ -234,13 +237,13 @@ const LoginForm = () => {
                 <CircularProgress />
               </span>
             ) : null}
-            Đăng Ký
+            {t("register")}
           </Button>
         </div>
       </form>
       <p>
-        Bạn đã có tài khoản?{" "}
-        <span onClick={() => navigate("/login")}> Đăng nhập ngay</span>
+        {t("question")}?{" "}
+        <span onClick={() => navigate("/login")}>{t("signIn")}</span>
       </p>
     </div>
   );

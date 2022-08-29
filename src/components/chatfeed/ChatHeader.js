@@ -2,6 +2,7 @@ import "./ChatHeaderStyle.scss";
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import { BsLayoutSidebarReverse } from "react-icons/bs";
+import { BsCameraVideo } from "react-icons/bs";
 
 const ChatHeader = () => {
   return (
@@ -18,9 +19,14 @@ const ChatHeader = () => {
         </div>
       </div>
 
-      <span className="icon">
-        <BsLayoutSidebarReverse />
-      </span>
+      <div className="block_icon">
+        <span className="icon" title="Cuộc gọi video">
+          <BsCameraVideo />
+        </span>
+        <span className="icon" title="Thông tin hội thoại">
+          <BsLayoutSidebarReverse />
+        </span>
+      </div>
     </div>
   );
 };

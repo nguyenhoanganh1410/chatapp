@@ -72,11 +72,12 @@ const ChatList = () => {
               <Tab label="Chưa đọc" {...a11yProps(1)} />
             </Tabs>
           </Box>
+
           <TabPanel value={value} index={0}>
             <div data-simplebar className="listChatCard">
               <ChatCard />
-              <ChatCard />
-              <ChatCard />
+              <ChatCard status />
+              <ChatCard status />
               <ChatCard />
               <ChatCard />
               <ChatCard />
@@ -96,7 +97,7 @@ const ChatList = () => {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <div data-simplebar className="listChatCard">
-              <ChatCard />
+              <ChatCard status />
             </div>
           </TabPanel>
         </Box>

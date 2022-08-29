@@ -39,7 +39,7 @@
         cursor: pointer;
         width: 30px;
         height: 30px;
-       
+       margin-left: 4px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -47,5 +47,11 @@
         &:hover{
             background-color: var(--grey-500);
         }
+    }
+
+    .block_icon{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
     }
 }

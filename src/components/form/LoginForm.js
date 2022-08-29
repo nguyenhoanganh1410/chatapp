@@ -13,6 +13,7 @@ import { SetUser } from "../../store/Actions";
 import { useNavigate } from "react-router-dom";
 
 import firebase from "../../firebase";
+import { useTranslation } from "react-i18next";
 
 const LoginForm = () => {
   const [email, setEmail] = React.useState("");
@@ -21,16 +22,24 @@ const LoginForm = () => {
   const [textNo, setTextNo] = React.useState("");
 
   const { state, depatch } = React.useContext(Context);
+
+  // It is a hook imported from 'react-i18next'
+  const { t } = useTranslation();
   //detructering...
   const { user } = state;
 
   const navigate = useNavigate();
 
   const handleLogin = () => {
+    console.log(email);
+    console.log(password);
     //valid email
     var regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
     if (!email.match(regex)) {
       setTextNo("Email không đúng định dạng!!");
+      return;
+    } else if (password.length < 8) {
+      setTextNo("Mật khẩu phải lớn hơn 7 ký tự!!");
       return;
     }
 
@@ -72,6 +81,26 @@ const LoginForm = () => {
     }
   };
 
+  // React.useEffect(() => {
+  //   const keyDownHandler = (event) => {
+  //     console.log("User pressed: ", event.key);
+
+  //     if (event.key === "Enter") {
+  //       // 👇️ call submit function here
+  //       console.log(email);
+  //       console.log(password);
+
+  //       handleLogin();
+  //     }
+  //   };
+
+  //   document.addEventListener("keydown", keyDownHandler);
+
+  //   return () => {
+  //     document.removeEventListener("keydown", keyDownHandler);
+  //   };
+  // }, []);
+
   return (
     <div className="login_form">
       <form>
@@ -83,10 +112,13 @@ const LoginForm = () => {
           onChange={(e) => handleEmail(e)}
         />
         <TextField
-          style={{ width: "100%", margin: "0.5rem 0" }}
+          style={{
+            width: "100%",
+            margin: "0.5rem 0",
+          }}
           id="password"
           variant="outlined"
-          label="Mật khẩu"
+          label={t("password")}
           type="password"
           onChange={(e) => handlePassword(e)}
         />
@@ -103,14 +135,14 @@ const LoginForm = () => {
             onClick={() => handleLogin()}
             disabled={activeLoginBtn ? false : true}
           >
-            Đăng nhập
+            {t("login")}
           </Button>
-          <p>Quên mật khẩu?</p>
+          <p>{t("forgotPass")}?</p>
         </div>
       </form>
       <p>
-        Bạn chưa có tài khoản?{" "}
-        <span onClick={() => navigate("/register")}>Đăng ký ngay</span>
+        {t("login_textAlert")}?{" "}
+        <span onClick={() => navigate("/register")}>{t("registerNow")}</span>
       </p>
     </div>
   );

@@ -192,7 +192,7 @@ const TabBarComponent = () => {
       </div>
       <div className="bar_bottom">
         <ul className="option_icons">
-          <li className="option_icon" title="Cài đặt">
+          <li className="option_icon" title="Cài đặt" onClick={handleToggle}>
             <SettingsIcon className="icon_setting" />
           </li>
         </ul>

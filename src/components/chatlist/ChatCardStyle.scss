@@ -13,14 +13,30 @@
         .cancel_icon{
             display: block;
         }
+        .group_right{
+
+            .numberNotification{
+                opacity: 0;
+               display: none;
+            }
+            .threeDot{
+                opacity: 1;
+            }
+        }
     }
     .card_group{
         display: flex;
         align-items: center;
+        
         .avt{
             width: 50px;
             height: 50px;
             border: 1px solid white;
+        }
+        .group_text{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
         }
     }
     .card_name{
@@ -28,20 +44,60 @@
         h6{
             font-size: 16px;
             font-weight: 500;
-            color: rgba(0,0,0,0.9);
+            color: rgba(0,0,0,0.7);
         }
         p{
             font-size: 14px;
             color: rgba(0,0,0,0.5);
-            span{
-
-            }
+        }
+        .active_name{
+            font-weight: 700;
+            color: rgba(0,0,0,0.8);
+        }
+        .active{
+            color: rgba(0,0,0,6);
+            font-weight: 500;
         }
     }
 
-    .card_time{
-        font-size: 12px;
-        color: rgba(0,0,0,0.5);
+    .group_right{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: space-between;
+        height: 100%;
+        position: relative;
+        .card_time{
+            font-size: 12px;
+            color: rgba(0,0,0,0.5);
+         
+        }
+        .numberNotification{
+            background-color: #FF4A4A;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            font-size: 10px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            color: white;
+            transition: all 0.4s;
+            padding: 2px;
+            position: absolute;
+            bottom: 0;
+        }
+        .threeDot{
+            color: rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: all 0.4s;
+          
+          
+            &:hover{
+                color: rgba(60, 20, 241, 0.8);
+            }
+
+        }
     }
 
     .cancel_icon{
