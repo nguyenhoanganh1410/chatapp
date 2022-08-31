@@ -24,10 +24,33 @@
             }
         }
     }
+    .css-1ytufz-MuiAvatarGroup-root .MuiAvatar-root {
+        margin-left: 0px !important;
+    }
     .card_group{
         display: flex;
         align-items: center;
-        
+        .group_avatar{
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+           
+            .css-1ytufz-MuiAvatarGroup-root .MuiAvatar-root {
+                width: 22px !important;
+                height: 22px !important;
+                font-size: 12px;
+              
+            }
+           
+            .css-1ytufz-MuiAvatarGroup-root {
+                display: flex !important;
+                flex-direction: column-reverse !important;
+            }
+            .avatar_item{
+                width: 22px;
+                height: 22px;
+            }
+        }
         .avt{
             width: 50px;
             height: 50px;

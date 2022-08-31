@@ -12,6 +12,7 @@ import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to us
 import "simplebar/dist/simplebar.css";
 import SearchList from "./SearchList";
 import Contex from "../../store/Context";
+import ChatCardGroup from "./ChatCardGroup";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -75,6 +76,7 @@ const ChatList = () => {
 
           <TabPanel value={value} index={0}>
             <div data-simplebar className="listChatCard">
+              <ChatCardGroup />
               <ChatCard />
               <ChatCard status />
               <ChatCard status />

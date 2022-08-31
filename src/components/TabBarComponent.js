@@ -18,7 +18,6 @@ import { AiOutlineCheckSquare } from "react-icons/ai";
 import { RiContactsBook2Line } from "react-icons/ri";
 import { arrIconOption } from "../data/Data";
 import ModelDetailUser from "./model/ModelDetailUser";
-import ModelUpdateUser from "./model/ModelUpdateUser";
 import Contex from "../store/Context";
 import { SetUser } from "../store/Actions";
 
@@ -26,8 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 import firebase from "../firebase";
 import "firebase/compat/auth";
-
-import { deepOrange, deepPurple } from "@mui/material/colors";
+import AlertNotification from "./model/AlertNotification";
 
 const TabBarComponent = () => {
   //active option
@@ -40,8 +38,10 @@ const TabBarComponent = () => {
   const { state, depatch } = React.useContext(Contex);
   //detructering...
   const { user } = state;
-  //console.log(user.uid);
-  //const { first_name, last_name, avatar } = user;
+
+  //show model
+  const [openAlert, setOpenAlert] = React.useState(false);
+
   const navigate = useNavigate();
 
   React.useEffect(() => {}, []);
@@ -84,11 +84,19 @@ const TabBarComponent = () => {
   };
 
   const handleLogout = (e) => {
+    //show model
+    setOpenAlert(true);
+  };
+
+  const handleLogoutMain = () => {
+    //log out
     firebase.auth().signOut();
     //delete user current
     depatch(SetUser(null));
   };
-
+  const closeOpenAlert = () => {
+    setOpenAlert(false);
+  };
   return (
     <div className="tab-bar">
       <div className="bar_top">
@@ -197,6 +205,14 @@ const TabBarComponent = () => {
           </li>
         </ul>
       </div>
+      {openAlert ? (
+        <AlertNotification
+          openAlert={openAlert}
+          closeOpenAlert={closeOpenAlert}
+          handleLogoutMain={handleLogoutMain}
+          title={{ text: "Bạn có muốn đăng xuất không?", status: "logout" }}
+        />
+      ) : null}
     </div>
   );
 };

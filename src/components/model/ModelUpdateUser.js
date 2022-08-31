@@ -122,11 +122,11 @@ const ModelDetailUser = () => {
             .getDownloadURL()
             .then((url) => {
               // //update firebase store
-            UserService.update(user.uid, {
+              UserService.update(user.uid, {
                 sex: checkedGender,
                 avatar: url,
               }).then(function (snapshot) {
-                  //thanh cong
+                //thanh cong
                 //close update form
 
                 depatch(SetShowALert(true));
@@ -285,11 +285,14 @@ const ModelDetailUser = () => {
           </Box>
         </Fade>
       </Modal>
-      <AlertNotification
-        openAlert={openAlert}
-        closeOpenAlert={closeOpenAlert}
-        handleSubmitChange={handleSubmitChange}
-      />
+      {openAlert ? (
+        <AlertNotification
+          openAlert={openAlert}
+          closeOpenAlert={closeOpenAlert}
+          handleSubmitChange={handleSubmitChange}
+          title={{ text: "Bạn có muốn lưu thay đổi?", status: "update" }}
+        />
+      ) : null}
     </div>
   );
 };

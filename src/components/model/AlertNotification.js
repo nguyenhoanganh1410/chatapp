@@ -11,21 +11,30 @@ export default function AlertNotification({
   openAlert,
   closeOpenAlert,
   handleSubmitChange,
+  handleLogoutMain,
+  title,
 }) {
   const handleClose = () => {
     closeOpenAlert();
   };
 
-  const handleSubmit = () => {
-    handleSubmitChange();
-    closeOpenAlert();
-  };
 
+  //handle login in here
+  const handleSubmit = () => {
+    //neu la update user
+    if (title.status === "update") {
+      handleSubmitChange();
+      closeOpenAlert();
+    } else if (title.status === "logout") {
+      //log out
+      handleLogoutMain();
+      closeOpenAlert();
+    }
+  };
+  
+  console.log(title);
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button> */}
       <Dialog
         open={openAlert}
         onClose={handleClose}
@@ -35,7 +44,7 @@ export default function AlertNotification({
         <DialogTitle id="alert-dialog-title">{"Xác nhận"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Bạn có muốn lưu thay đổi?
+            {title.text}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -43,7 +52,7 @@ export default function AlertNotification({
             Không
           </Button>
           <Button variant="contained" onClick={handleSubmit}>
-            Có
+            {title.status === "logout" ? "Đăng xuất" : "Có"}
           </Button>
         </DialogActions>
       </Dialog>

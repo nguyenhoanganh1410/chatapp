@@ -5,10 +5,8 @@ import Button from "@mui/material/Button";
 
 import TextField from "@mui/material/TextField";
 
-import userApi from "../../api/userApi";
-
 import Context from "../../store/Context";
-import { SetUser } from "../../store/Actions";
+
 
 import { useNavigate } from "react-router-dom";
 
@@ -58,15 +56,19 @@ const LoginForm = () => {
     var regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
     if (!email.match(regex)) {
       setTextNo("Email không đúng định dạng!!");
+      document.getElementById("username").select();
       return;
     } else if (password.length < 8 || passwordTwo.length < 8) {
       setTextNo("Mật khẩu phải nhiều hơn 7 ký tự!");
+      document.getElementById("password").select();
       return;
     } else if (password != passwordTwo) {
       setTextNo("Mật khẩu không trùng khớp!!");
+      document.getElementById("passwordAgain").select();
       return;
     } else if (firstName.length === 0 || lastName.length === 0) {
       setTextNo("Họ và Tên không được bỏ trống");
+      document.getElementById("firstName").select();
       return;
     }
 
@@ -114,7 +116,9 @@ const LoginForm = () => {
         var errorMessage = error.message;
         if (errorCode === "auth/email-already-in-use") {
           console.log(errorCode);
-          setTextNo("Email đã tồn tại trong hệ thống.");
+          setTextNo(t("registerErro"));
+          setLoading(false);
+          document.getElementById("username").select();
         }
         console.log(errorMessage);
       });
@@ -195,7 +199,7 @@ const LoginForm = () => {
 
         <FormControl style={{ alignItems: "flex-start" }}>
           <FormLabel id="demo-controlled-radio-buttons-group">
-            Giới tính
+            {t("gender")}
           </FormLabel>
           <RadioGroup
             aria-labelledby="demo-controlled-radio-buttons-group"
