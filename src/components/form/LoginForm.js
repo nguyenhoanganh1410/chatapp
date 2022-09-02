@@ -1,19 +1,13 @@
 import "./LoginFormStyle.scss";
 import * as React from "react";
-
 import Button from "@mui/material/Button";
-
 import TextField from "@mui/material/TextField";
-
-import userApi from "../../api/userApi";
-
 import Context from "../../store/Context";
-import { SetUser } from "../../store/Actions";
-
 import { useNavigate } from "react-router-dom";
-
 import firebase from "../../firebase";
 import { useTranslation } from "react-i18next";
+import PageLoading from "../../pages/PageLoading";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const LoginForm = () => {
   const [email, setEmail] = React.useState("");
@@ -22,6 +16,8 @@ const LoginForm = () => {
   const [textNo, setTextNo] = React.useState("");
 
   const { state, depatch } = React.useContext(Context);
+  //loading effect in button login
+  const [loading, setLoading] = React.useState(false);
 
   // It is a hook imported from 'react-i18next'
   const { t } = useTranslation();
@@ -31,8 +27,6 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    console.log(email);
-    console.log(password);
     //valid email
     var regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
     if (!email.match(regex)) {
@@ -42,9 +36,9 @@ const LoginForm = () => {
       setTextNo("Mật khẩu phải lớn hơn 7 ký tự!!");
       return;
     }
-
     //send email, pass to server
     const loginFunc = (mail, pass) => {
+      setLoading(true);
       firebase
         .auth()
         .signInWithEmailAndPassword(mail, pass)
@@ -54,6 +48,7 @@ const LoginForm = () => {
         })
         .catch((error) => {
           console.log(error);
+          setLoading(false);
           setTextNo(
             "Tên đăng nhập hoặc mật khẩu không khớp, vui lòng nhập lại"
           );
@@ -80,26 +75,6 @@ const LoginForm = () => {
       setActiveLoginBtn(false);
     }
   };
-
-  // React.useEffect(() => {
-  //   const keyDownHandler = (event) => {
-  //     console.log("User pressed: ", event.key);
-
-  //     if (event.key === "Enter") {
-  //       // 👇️ call submit function here
-  //       console.log(email);
-  //       console.log(password);
-
-  //       handleLogin();
-  //     }
-  //   };
-
-  //   document.addEventListener("keydown", keyDownHandler);
-
-  //   return () => {
-  //     document.removeEventListener("keydown", keyDownHandler);
-  //   };
-  // }, []);
 
   return (
     <div className="login_form">
@@ -135,9 +110,15 @@ const LoginForm = () => {
             onClick={() => handleLogin()}
             disabled={activeLoginBtn ? false : true}
           >
+            {loading ? (
+              <span>
+                {" "}
+                <CircularProgress />
+              </span>
+            ) : null}
             {t("login")}
           </Button>
-          <p>{t("forgotPass")}?</p>
+          <p className="forget">{t("forgotPass")}?</p>
         </div>
       </form>
       <p>

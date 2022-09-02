@@ -33,4 +33,9 @@
             cursor: pointer;
         }
     }
+    .forget{
+        &:hover{
+            color:var(--shades-left-bar);
+        }
+    }
 }

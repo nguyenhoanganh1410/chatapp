@@ -2,6 +2,10 @@
     background-color: white;
     width: 100%;
     padding: 1rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
     form{
         display: flex;
         justify-content: space-between;

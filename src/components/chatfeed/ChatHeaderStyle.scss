@@ -6,6 +6,10 @@
     width: 100%;
     background-color: white;
     padding: 0.5rem 1rem;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
     .chat_header-info{
         display: flex;
         align-items: flex-start;
