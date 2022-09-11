@@ -8,6 +8,7 @@ import {
   SET_USERSEARCHED,
   SET_LOADINGSEARCHFUNC,
   SET_SEARCHINGSTATUS,
+  SET_SHOWTABINFO,
 } from "./Actions";
 
 //innite state
@@ -18,6 +19,7 @@ const initState = {
   showUpdateForm: false,
   showAlert: false,
   showTabHistorySearch: false,
+  showTabInfo: true,
 
   //user is searching
   userSearched: null,
@@ -75,6 +77,11 @@ const Reducer = (state, action) => {
       return {
         ...state,
         searchingStatus: action.payload,
+      };
+    case SET_SHOWTABINFO:
+      return {
+        ...state,
+        showTabInfo: action.payload,
       };
   }
 };

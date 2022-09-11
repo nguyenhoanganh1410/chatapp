@@ -18,13 +18,15 @@ const LoginPage = () => {
     if (language === 0) {
       setLenguage(1);
       setToken(1);
-      let loc = "http://localhost:3000/login";
-      window.location.replace(loc + "?lng=" + "en");
+      // alert(window.location.href);
+      // let loc = "http://localhost:3000/login";
+      window.location.replace(window.location.hrefc + "?lng=" + "en");
     } else if (language === 1) {
       setLenguage(0);
       setToken(0);
-      let loc = "http://localhost:3000/login";
-      window.location.replace(loc + "?lng=" + "vi");
+      // alert(window.location.href);
+      // let loc = "http://localhost:3000/login";
+      window.location.replace(window.location.href + "?lng=" + "vi");
     }
   };
 

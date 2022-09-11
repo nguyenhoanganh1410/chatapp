@@ -9,6 +9,7 @@ export const SET_SHOWALERT = "set_ShowAlert";
 export const SET_SHOWTABHISTORYSEARH = "set_ShowTabHistorySearch";
 export const SET_LOADINGSEARCHFUNC = "set_LoadingSearchFunc";
 export const SET_SEARCHINGSTATUS = "set_SearchStatus";
+export const SET_SHOWTABINFO = "set_ShowTabInfo";
 
 export const SetIsSignedIn = (payload) => {
   return {
@@ -16,6 +17,14 @@ export const SetIsSignedIn = (payload) => {
     payload,
   };
 };
+
+export const SetShowTabInfo = (payload) => {
+  return {
+    type: SET_SHOWTABINFO,
+    payload,
+  };
+};
+
 
 export const SetUser = (payload) => {
   return {

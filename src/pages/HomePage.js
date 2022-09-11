@@ -6,16 +6,37 @@ import ModelUpdateUser from "../components/model/ModelUpdateUser";
 
 import Alert from "@mui/material/Alert";
 import Contex from "../store/Context";
+import TabInfomation from "../components/chatfeed/TabInfomation";
+
 const HomePage = () => {
   const { state, depatch } = React.useContext(Contex);
 
   //detructering...
-  const { showAlert } = state;
+  const { showAlert, user, showTabInfo } = state;
+  console.log(user);
   return (
     <React.Fragment>
       <TabBarComponent />
       <ChatList />
-      <ChatFeed />
+      <div
+        style={
+          showTabInfo
+            ? {
+                display: "grid",
+                gridTemplateColumns: "2fr 1fr",
+                flexGrow: "1",
+              }
+            : {
+                display: "grid",
+
+                flexGrow: "1",
+              }
+        }
+        className="chat_main"
+      >
+        <ChatFeed />
+        {showTabInfo ? <TabInfomation /> : null}
+      </div>
 
       <ModelUpdateUser />
       {showAlert && (

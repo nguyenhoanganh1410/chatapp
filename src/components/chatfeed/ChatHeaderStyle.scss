@@ -5,11 +5,12 @@
     align-items: center;
     width: 100%;
     background-color: white;
-    padding: 0.5rem 1rem;
+    padding: 0rem 1rem;
     position: absolute;
     z-index: 10;
     top: 0;
     left: 0;
+    height: 65px;
     .chat_header-info{
         display: flex;
         align-items: flex-start;
@@ -19,6 +20,7 @@
             
 
         }
+      
         .info_text{
             display: flex;
             flex-direction: column;
@@ -57,5 +59,9 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
+        .choise{
+            background-color: var(--B10) !important;
+            color: var(--B50) !important;
+        }
     }
 }

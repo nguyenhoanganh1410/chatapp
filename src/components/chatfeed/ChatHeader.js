@@ -3,8 +3,17 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import { BsLayoutSidebarReverse } from "react-icons/bs";
 import { BsCameraVideo } from "react-icons/bs";
-
+import Context from "../../store/Context";
+import { SetShowTabInfo } from "../../store/Actions";
 const ChatHeader = () => {
+  const { state, depatch } = React.useContext(Context);
+
+  //detructering...
+  const { showTabInfo } = state;
+
+  const handleShowTabInfo = () => {
+    depatch(SetShowTabInfo(!showTabInfo));
+  };
   return (
     <div className="chat_header">
       <div className="chat_header-info">
@@ -14,7 +23,7 @@ const ChatHeader = () => {
           src="/static/images/avatar/1.jpg"
         />
         <div className="info_text">
-          <span className="info_name">phan dinh phuong</span>
+          <span className="info_name">anh nguyen</span>
           <span className="info_hour">truy cập 1 giờ trước</span>
         </div>
       </div>
@@ -23,7 +32,11 @@ const ChatHeader = () => {
         <span className="icon" title="Cuộc gọi video">
           <BsCameraVideo />
         </span>
-        <span className="icon" title="Thông tin hội thoại">
+        <span
+          className={showTabInfo ? "icon choise" : "icon"}
+          title="Thông tin hội thoại"
+          onClick={() => handleShowTabInfo()}
+        >
           <BsLayoutSidebarReverse />
         </span>
       </div>
