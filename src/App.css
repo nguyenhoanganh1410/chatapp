@@ -9,3 +9,9 @@
     border: 1px solid white;
     text-transform: capitalize;
 }
+
+.divide{
+    width: 100%;
+    height: 6px;
+    background-color: var(--neutral-700);
+}

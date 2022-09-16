@@ -8,25 +8,25 @@
     // flex-direction: column;
     //  justify-content: space-between;
   
+    .goToBottom{
+        width:35px;
+        height:35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        position: absolute;
+        bottom: 80px;
+        right: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 11;
+        &:hover{
+            color:var(--shades-left-bar)
+        }
+    }
     .message_content{
         
-        .goToBottom{
-            width:35px;
-            height:35px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
-            position: absolute;
-            bottom: 80px;
-            right: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 11;
-            &:hover{
-                color:var(--shades-left-bar)
-            }
-        }
         .card_title{
             display: inline-block;
             border-radius: 8px;
@@ -58,6 +58,7 @@
         height: 100%;
         overflow: hidden;
         overflow-y: auto;
+       
     }
 //     background-image: url(../../images/av.jpg);
 //     background-position: center;

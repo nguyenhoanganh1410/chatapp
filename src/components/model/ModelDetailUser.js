@@ -12,7 +12,8 @@ import Avatar from "@mui/material/Avatar";
 import "./ModelDetailUser.scss";
 import Contex from "../../store/Context";
 import { SetShowUpdateForm } from "../../store/Actions";
-
+import { MdGroupAdd } from "react-icons/md";
+import { RiDeleteBin3Line } from "react-icons/ri";
 const style = {
   position: "absolute",
   top: "50%",
@@ -27,7 +28,7 @@ const style = {
   paddingBottom: 1,
 };
 
-const ModelDetailUser = ({ openModelUser, setOpenModelUser }) => {
+const ModelDetailUser = ({ openModelUser, setOpenModelUser, friend }) => {
   const handleOpen = () => setOpenModelUser(true);
   const handleClose = () => setOpenModelUser(false);
   const { state, depatch } = React.useContext(Contex);
@@ -90,7 +91,7 @@ const ModelDetailUser = ({ openModelUser, setOpenModelUser }) => {
             </div>
 
             <div className="info-person">
-              <div>
+              <div style={{ padding: "0 1.25rem" }}>
                 <h5>Thông tin cá nhân</h5>
                 <p>
                   <span>Email:</span>
@@ -105,13 +106,34 @@ const ModelDetailUser = ({ openModelUser, setOpenModelUser }) => {
                   <span>{user?.date_of_birth}</span>
                 </p> */}
               </div>
-              <Button
-                className="btn-update"
-                variant="outlined"
-                onClick={() => handleShowUpdateForm()}
-              >
-                Cập nhật thông tin
-              </Button>
+              {friend ? (
+                <React.Fragment>
+                  <div className="divide"></div>
+                  <div className="option_details">
+                    <div className="option_one">
+                      <span>
+                        <MdGroupAdd />
+                      </span>
+                      Nhóm chung( 1)
+                    </div>
+                    <div className="option_one">
+                      <span>
+                        <RiDeleteBin3Line />
+                      </span>
+                      Xóa khỏi danh sach bạn bè
+                    </div>
+                  </div>
+                </React.Fragment>
+              ) : (
+                <Button
+                  className="btn-update"
+                  variant="outlined"
+                  onClick={() => handleShowUpdateForm()}
+                  style={{ margin: "0 1.25rem" }}
+                >
+                  Cập nhật thông tin
+                </Button>
+              )}
             </div>
           </Box>
         </Fade>

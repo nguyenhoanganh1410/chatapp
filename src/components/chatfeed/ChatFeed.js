@@ -10,6 +10,9 @@ import "./MessageStyle.scss";
 import TimeLine from "./TimeLine";
 import { IoIosArrowDown } from "react-icons/io";
 import { SearchComponent } from "stipop-react-sdk";
+import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
+import "simplebar/dist/simplebar.css";
+
 const ChatFeed = () => {
   const onScroll = (e) => {
     const currentScrollY = e.target.scrollTop;
@@ -19,7 +22,7 @@ const ChatFeed = () => {
   return (
     <div className="chat_feed">
       <ChatHeader />
-      <div className="message_content" onScroll={onScroll}>
+      <div data-simplebar className="message_content" onScroll={onScroll}>
         <div className="card_title">
           <div className="title_top">
             <Avatar
@@ -49,12 +52,11 @@ const ChatFeed = () => {
         <Message />
         <Message me />
         <Message me />
-
-        <span className="goToBottom">
-          <IoIosArrowDown />
-        </span>
       </div>
 
+      <span className="goToBottom">
+        <IoIosArrowDown />
+      </span>
       <NewMessageForm />
     </div>
   );

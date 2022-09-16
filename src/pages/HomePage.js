@@ -23,7 +23,7 @@ const HomePage = () => {
           showTabInfo
             ? {
                 display: "grid",
-                gridTemplateColumns: "2fr 1fr",
+                gridTemplateColumns: "1.95fr 1.05fr",
                 flexGrow: "1",
               }
             : {

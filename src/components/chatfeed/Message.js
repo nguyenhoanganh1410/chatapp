@@ -70,10 +70,11 @@ const Message = ({ me, type }) => {
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
+          title="Thêm"
         >
           <BiDotsHorizontalRounded />
         </span>
-        <span>
+        <span title="Trả lời">
           <MdFormatQuote />
         </span>
       </div>
