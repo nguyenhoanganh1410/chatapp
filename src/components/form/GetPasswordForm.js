@@ -23,8 +23,8 @@ const GetPassWordForm = () => {
 
   // It is a hook imported from 'react-i18next'
   const { t } = useTranslation();
-  //detructering...
-  const { user } = state;
+  // //detructering...
+  // const { user } = state;
 
   const navigate = useNavigate();
 
@@ -56,15 +56,17 @@ const GetPassWordForm = () => {
     }
     setTextNo("");
 
-    function sendPasswordReset() {
-      const email = "hoa00tb@gmail.com";
+    function sendPasswordReset(mail) {
       // [START auth_send_password_reset]
       firebase
         .auth()
-        .sendPasswordResetEmail(email)
+        .sendPasswordResetEmail(mail)
         .then(() => {
           // Password reset email sent!
-          alert(email);
+          alert("Đã gửi đường dẫn thay đổi mật khẩu cho email: " + mail);
+
+          //redict into login page
+          navigate("/login");
         })
         .catch((error) => {
           var errorCode = error.code;
@@ -74,7 +76,7 @@ const GetPassWordForm = () => {
         });
       // [END auth_send_password_reset]
     }
-    sendPasswordReset();
+    sendPasswordReset(email);
   };
   return (
     <div className="password_form">

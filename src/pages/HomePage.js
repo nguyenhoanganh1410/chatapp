@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ChatFeed from "../components/chatfeed/ChatFeed";
 import ChatList from "../components/chatlist/ChatList";
 import TabBarComponent from "../components/TabBarComponent";
 import ModelUpdateUser from "../components/model/ModelUpdateUser";
-
+import { useTranslation } from "react-i18next";
 import Alert from "@mui/material/Alert";
 import Contex from "../store/Context";
 import TabInfomation from "../components/chatfeed/TabInfomation";
@@ -14,7 +14,13 @@ const HomePage = () => {
 
   //detructering...
   const { showAlert, user, showTabInfo, indexTab } = state;
-  console.log(user);
+
+  // It is a hook imported from 'react-i18next'
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    document.title = t("homepage");
+  }, []);
   return (
     <React.Fragment>
       <TabBarComponent />

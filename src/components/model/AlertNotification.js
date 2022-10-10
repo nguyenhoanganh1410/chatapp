@@ -18,7 +18,6 @@ export default function AlertNotification({
     closeOpenAlert();
   };
 
-
   //handle login in here
   const handleSubmit = () => {
     //neu la update user
@@ -31,7 +30,7 @@ export default function AlertNotification({
       closeOpenAlert();
     }
   };
-  
+
   console.log(title);
   return (
     <div>
@@ -47,7 +46,7 @@ export default function AlertNotification({
             {title.text}
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions style={{ paddingBottom: "16px", paddingRight: "24px" }}>
           <Button variant="outlined" onClick={handleClose}>
             Không
           </Button>

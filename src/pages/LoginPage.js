@@ -3,6 +3,7 @@ import LoginForm from "../components/form/LoginForm";
 import useLanguageLocalStorage from "../hooks/useLanguageLocalStorage";
 import "./LoginPageStyle.scss";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 const LoginPage = () => {
   //detructering
@@ -29,6 +30,9 @@ const LoginPage = () => {
       window.location.replace(window.location.href + "?lng=" + "vi");
     }
   };
+  useEffect(() => {
+    document.title = t("loginpage");
+  }, []);
 
   return (
     <div className="login">
