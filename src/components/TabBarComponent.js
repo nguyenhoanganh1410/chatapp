@@ -19,7 +19,7 @@ import { RiContactsBook2Line } from "react-icons/ri";
 import { arrIconOption } from "../data/Data";
 import ModelDetailUser from "./model/ModelDetailUser";
 import Contex from "../store/Context";
-import { SetUser } from "../store/Actions";
+import { SetIndexTab, SetUser } from "../store/Actions";
 
 import { useNavigate } from "react-router-dom";
 
@@ -28,8 +28,6 @@ import "firebase/compat/auth";
 import AlertNotification from "./model/AlertNotification";
 
 const TabBarComponent = () => {
-  //active option
-  const [activeOption, setActiveOption] = React.useState(0);
   const [openModelUser, setOpenModelUser] = React.useState(false);
 
   const [open, setOpen] = React.useState(false);
@@ -37,8 +35,8 @@ const TabBarComponent = () => {
 
   const { state, depatch } = React.useContext(Contex);
   //detructering...
-  const { user } = state;
-
+  const { user, indexTab } = state;
+  console.log("index tab " + indexTab);
   //show model
   const [openAlert, setOpenAlert] = React.useState(false);
 
@@ -97,6 +95,10 @@ const TabBarComponent = () => {
   const closeOpenAlert = () => {
     setOpenAlert(false);
   };
+
+  const handleIndexTab = (idx) => {
+    depatch(SetIndexTab(idx));
+  };
   return (
     <div className="tab-bar">
       <div className="bar_top">
@@ -131,9 +133,9 @@ const TabBarComponent = () => {
               <li
                 key={val.id}
                 className={
-                  activeOption === idx ? "option_icon active" : "option_icon"
+                  indexTab === idx ? "option_icon active" : "option_icon"
                 }
-                onClick={() => setActiveOption(idx)}
+                onClick={() => handleIndexTab(idx)}
                 title={val.name}
               >
                 <span>{val.icon}</span>

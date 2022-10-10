@@ -9,6 +9,7 @@ import {
   SET_LOADINGSEARCHFUNC,
   SET_SEARCHINGSTATUS,
   SET_SHOWTABINFO,
+  SET_INDEXTAB,
 } from "./Actions";
 
 //innite state
@@ -19,7 +20,7 @@ const initState = {
   showUpdateForm: false,
   showAlert: false,
   showTabHistorySearch: false,
-  showTabInfo: true,
+  showTabInfo: false,
 
   //user is searching
   userSearched: null,
@@ -27,6 +28,11 @@ const initState = {
 
   // state searching currently
   searchingStatus: false,
+
+  //0: tab message
+  //1: tab friend
+  //2: something
+  indexTab: 0,
 };
 
 //depatch
@@ -82,6 +88,11 @@ const Reducer = (state, action) => {
       return {
         ...state,
         showTabInfo: action.payload,
+      };
+    case SET_INDEXTAB:
+      return {
+        ...state,
+        indexTab: action.payload,
       };
   }
 };

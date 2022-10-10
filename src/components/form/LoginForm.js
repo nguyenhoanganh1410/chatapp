@@ -76,6 +76,12 @@ const LoginForm = () => {
     }
   };
 
+  const onEnterPress = (e) => {
+    if (e.keyCode == 13 && e.shiftKey == false) {
+      handleLogin();
+    }
+  };
+
   return (
     <div className="login_form">
       <form>
@@ -84,6 +90,7 @@ const LoginForm = () => {
           id="username"
           label="Email"
           variant="outlined"
+          onKeyDown={onEnterPress}
           onChange={(e) => handleEmail(e)}
         />
         <TextField
@@ -95,6 +102,7 @@ const LoginForm = () => {
           variant="outlined"
           label={t("password")}
           type="password"
+          onKeyDown={onEnterPress}
           onChange={(e) => handlePassword(e)}
         />
         {textNo ? <p className="erro">{textNo}</p> : null}
@@ -118,7 +126,9 @@ const LoginForm = () => {
             ) : null}
             {t("login")}
           </Button>
-          <p className="forget">{t("forgotPass")}?</p>
+          <p className="forget" onClick={() => navigate("/password")}>
+            {t("forgotPass")}?
+          </p>
         </div>
       </form>
       <p>

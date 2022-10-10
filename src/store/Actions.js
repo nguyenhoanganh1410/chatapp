@@ -10,10 +10,18 @@ export const SET_SHOWTABHISTORYSEARH = "set_ShowTabHistorySearch";
 export const SET_LOADINGSEARCHFUNC = "set_LoadingSearchFunc";
 export const SET_SEARCHINGSTATUS = "set_SearchStatus";
 export const SET_SHOWTABINFO = "set_ShowTabInfo";
+export const SET_INDEXTAB = "set_IndexTab";
 
 export const SetIsSignedIn = (payload) => {
   return {
     type: SET_ISSIGNEDIN,
+    payload,
+  };
+};
+
+export const SetIndexTab = (payload) => {
+  return {
+    type: SET_INDEXTAB,
     payload,
   };
 };

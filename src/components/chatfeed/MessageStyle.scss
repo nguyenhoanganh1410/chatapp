@@ -30,6 +30,45 @@
 
     }
    }
+   .icon_list{
+    
+    .icons_react{
+        background-color: #fff;
+        box-shadow: 0 0 10px -2px rgba(0,0,0,0.2);
+      
+        padding: 6px 12px;
+        border-radius: 16px;
+        position: absolute;
+        z-index: 99;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 50%;
+       
+        transform: translateY(-50%);
+       // height: 50px;
+       //opacity: 0;
+        .icon_face{
+            width: 20px;
+            height: 20px;
+            object-fit: cover;
+            margin: 0 6px;
+            cursor: pointer;
+            transition: all 0.1s;
+           
+           
+            &:hover{
+                transform: scale(1.2);
+                
+            }
+        }
+
+    }
+   }
+   .icon_react:hover .icons_react{
+    opacity: 1;
+   }
+ 
     .icon_react{
         padding: 6px;
         background-color: #fff;
@@ -40,13 +79,14 @@
         position: absolute;
         bottom: -50%;
         transform: translateY(-50%);
-        
-        right: 20px;
+       
+        // right: 20px;
         border: 1px solid rgba(0,0,0,0.1);
         font-size: 14px;
         cursor: pointer;
         transition: all 0.2s;
         opacity: 0;
+       
     }
     .avatar{
         margin:0 0.5rem 0 1rem  !important;

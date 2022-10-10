@@ -3,6 +3,8 @@
     // width: 440px;
     border-right: 1px solid var(--grey-500);
     padding: 14px 0;
+    display: flex;
+    flex-direction: column;
     .listChatCard{
       height: 84vh;
         //overflow-y: scroll;

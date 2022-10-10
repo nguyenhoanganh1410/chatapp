@@ -6,6 +6,7 @@ import { BsCameraVideo } from "react-icons/bs";
 import Context from "../../store/Context";
 import { SetShowTabInfo } from "../../store/Actions";
 import ModelDetailUser from "../model/ModelDetailUser";
+import love from "../../images/love.jpg";
 const ChatHeader = () => {
   const { state, depatch } = React.useContext(Context);
   const [openModelUser, setOpenModelUser] = React.useState(false);
@@ -26,7 +27,7 @@ const ChatHeader = () => {
         <Avatar
           className="avt"
           alt="Remy Sharp"
-          src="/static/images/avatar/1.jpg"
+          src={love}
           onClick={() => handleShowInfo()}
         />
         <div className="info_text">

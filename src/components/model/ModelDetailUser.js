@@ -86,7 +86,9 @@ const ModelDetailUser = ({ openModelUser, setOpenModelUser, friend }) => {
                   className="avatar"
                   onClick={() => handleOpenAvartar()}
                 />
-                <p>{user?.first_name + " " + user?.last_name}</p>
+                <p style={{ textTransform: "capitalize" }}>
+                  {user?.first_name + " " + user?.last_name}
+                </p>
               </div>
             </div>
 

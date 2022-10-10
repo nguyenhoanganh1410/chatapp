@@ -9,20 +9,33 @@ import Avatar from "@mui/material/Avatar";
 import "./MessageStyle.scss";
 import TimeLine from "./TimeLine";
 import { IoIosArrowDown } from "react-icons/io";
-import { SearchComponent } from "stipop-react-sdk";
+
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 import "simplebar/dist/simplebar.css";
 
 const ChatFeed = () => {
-  const onScroll = (e) => {
-    const currentScrollY = e.target.scrollTop;
-    console.log(currentScrollY);
+  const messagesEnd = useRef();
+  const scrollToBottom = () => {
+    messagesEnd.current.scrollIntoView({ behavior: "smooth" });
   };
+
+  const handleScroll = () => {
+    console.log("scroll");
+  };
+
+  useEffect(() => {
+    //scroll last message
+    scrollToBottom();
+  }, []);
 
   return (
     <div className="chat_feed">
       <ChatHeader />
-      <div data-simplebar className="message_content" onScroll={onScroll}>
+      <div
+        data-simplebar
+        className="message_content"
+        onScroll={() => handleScroll()}
+      >
         <div className="card_title">
           <div className="title_top">
             <Avatar
@@ -44,6 +57,7 @@ const ChatFeed = () => {
         <Message type="image" />
         <Message />
         <Message me />
+
         <Message me />
         <Message me />
         <Message me />
@@ -52,9 +66,48 @@ const ChatFeed = () => {
         <Message />
         <Message me />
         <Message me />
+        <Message type="image" />
+        <Message status={1} />
+        <Message me />
+        <Message me />
+        <Message me />
+        <Message me status={1} />
+        <Message />
+        <TimeLine />
+        <Message />
+        <Message me />
+        <Message me />
+        <TimeLine />
+        <Message />
+        <Message me />
+
+        <Message type="image" />
+        <Message />
+        <Message me />
+
+        <Message me />
+        <Message me />
+        <Message me />
+        <Message />
+        <TimeLine />
+        <Message />
+        <Message me />
+        <Message me />
+        <Message type="image" />
+        <Message status={1} />
+        <Message me />
+        <Message me />
+        <Message me />
+        <Message me status={1} />
+        <Message />
+        <TimeLine />
+        <Message />
+        <Message me />
+        <Message me />
+        <div style={{ float: "left", clear: "both" }} ref={messagesEnd}></div>
       </div>
 
-      <span className="goToBottom">
+      <span className="goToBottom" onClick={scrollToBottom}>
         <IoIosArrowDown />
       </span>
       <NewMessageForm />

@@ -12,9 +12,14 @@ import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import copy from "copy-to-clipboard";
 
-const Message = ({ me, type }) => {
+import { iconsTouch } from "../../data/Data";
+
+//status : 0 binh thuong, 1 thu hoi, 2 bi xoa
+const Message = ({ me, type, status }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [showIcons, setShowIcons] = React.useState(false);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -29,89 +34,135 @@ const Message = ({ me, type }) => {
     handleClose();
   };
 
+  // React.useEffect(() => {
+  //   const handleClick = (e) =>{
+  //       console.log(e.target);
+  //   }
+  //   window.addEventListener('click', handleClick);
+
+  //   // cleanup this component
+  //   return () => {
+  //     window.removeEventListener('click', handleClick);
+  //   };
+  // }, []);
+
+  //click hide/show list icon
+  const handleToggle = () => {
+    setShowIcons(!showIcons);
+  };
+
   return (
     <div
       className="message"
       style={me ? { flexDirection: "row-reverse" } : null}
     >
-      <Avatar
-        className="avatar"
-        alt="Remy Sharp"
-        src="/static/images/avatar/1.jpg"
-      />
-      {type === "image" ? (
-        <div className="messImg">
-          <img src={avt} alt="image" />
+      <Avatar className="avatar" alt="Remy Sharp" src={avt} />
+      {status === 1 ? (
+        <div
+          className="message_text"
+          style={me ? { backgroundColor: "#e5efff" } : {}}
+        >
+          <p className="textMess" style={{ color: "#abb4bc" }}>
+            Tin nhắn đã được thu hồi
+          </p>
+          <p className="timeMess">13:33</p>
         </div>
       ) : (
-        <div className="message_text">
-          <p className="textMess">buổi chiều tràn đầy năng lượng nhé ❤️</p>
-          <p className="timeMess">13:33</p>
-          <div className="icon_list">
-            {/* <div className="icons_react">
-            <span>
-              {" "}
-              <AiOutlineLike />
+        <>
+          {type === "image" ? (
+            <div className="messImg">
+              <img src={avt} alt="image" />
+            </div>
+          ) : (
+            <div
+              className="message_text"
+              style={me ? { backgroundColor: "#e5efff" } : {}}
+            >
+              <p className="textMess">buổi chiều tràn đầy năng lượng nhé ❤️</p>
+              <p className="timeMess">13:33</p>
+              <div className="icon_list">
+                {showIcons ? (
+                  <div
+                    className="icons_react"
+                    style={me ? { right: "50%" } : { left: "50%" }}
+                  >
+                    {iconsTouch.map((icon) => {
+                      return (
+                        <img
+                          key={icon.id}
+                          src={icon.url}
+                          alt="icon.name"
+                          className="icon_face"
+                        />
+                      );
+                    })}
+                  </div>
+                ) : null}
+
+                <span
+                  className="icon_react"
+                  style={!me ? { right: "20px" } : {}}
+                  onClick={() => handleToggle()}
+                >
+                  <AiOutlineLike />
+                </span>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+      {status === 1 ? null : (
+        <>
+          <div className="option">
+            <span
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              title="Thêm"
+            >
+              <BiDotsHorizontalRounded />
             </span>
-            <span>
-              <FcLike />
-            </span>
-          </div> */}
-            <span className="icon_react">
-              <AiOutlineLike />
+            <span title="Trả lời">
+              <MdFormatQuote />
             </span>
           </div>
-        </div>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={copyToClipboard}>
+              <span style={{ fontSize: "16px", marginRight: "6px" }}>
+                <FaRegCopy />
+              </span>
+              Copy tin nhắn
+            </MenuItem>
+            <Divider />
+            {me ? (
+              <MenuItem style={{ color: "#E64848" }} onClick={handleClose}>
+                <span style={{ fontSize: "16px", marginRight: "6px" }}>
+                  <IoReloadOutline />
+                </span>
+                Thu hồi tin nhắn
+              </MenuItem>
+            ) : null}
+
+            <MenuItem onClick={handleClose}>
+              <span style={{ color: "#E64848" }}>
+                <span style={{ fontSize: "16px", marginRight: "6px" }}>
+                  <AiOutlineDelete />
+                </span>
+                Xóa ở phía tôi
+              </span>
+            </MenuItem>
+          </Menu>
+        </>
       )}
-
-      <div className="option">
-        <span
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-          onClick={handleClick}
-          title="Thêm"
-        >
-          <BiDotsHorizontalRounded />
-        </span>
-        <span title="Trả lời">
-          <MdFormatQuote />
-        </span>
-      </div>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem onClick={copyToClipboard}>
-          <span style={{ fontSize: "16px", marginRight: "6px" }}>
-            <FaRegCopy />
-          </span>
-          Copy tin nhắn
-        </MenuItem>
-        <Divider />
-        {me ? (
-          <MenuItem style={{ color: "#E64848" }} onClick={handleClose}>
-            <span style={{ fontSize: "16px", marginRight: "6px" }}>
-              <IoReloadOutline />
-            </span>
-            Thu hồi tin nhắn
-          </MenuItem>
-        ) : null}
-
-        <MenuItem onClick={handleClose}>
-          <span style={{ color: "#E64848" }}>
-            <span style={{ fontSize: "16px", marginRight: "6px" }}>
-              <AiOutlineDelete />
-            </span>
-            Xóa ở phía tôi
-          </span>
-        </MenuItem>
-      </Menu>
     </div>
   );
 };

@@ -14,6 +14,7 @@ import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to us
 import "simplebar/dist/simplebar.css";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import love from "../../images/love.jpg";
 const TabInfomation = () => {
   return (
     <div data-simplebar className="tab_infomation">
@@ -23,11 +24,7 @@ const TabInfomation = () => {
         </div>
         <div className="tab_info-content">
           <div className="content_top">
-            <Avatar
-              className="avatarCustom"
-              alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
-            />
+            <Avatar className="avatarCustom" alt="Remy Sharp" src={love} />
             <p>Anh nguyen</p>
           </div>
           <div className="content_icons">
