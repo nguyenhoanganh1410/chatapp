@@ -7,7 +7,7 @@ import { SearchComponent } from "stipop-react-sdk";
 import Context from "../../store/Context";
 import { useContext } from "react";
 
-const NewMessageForm = () => {
+const NewMessageForm = ({ userChatting }) => {
   const [showStickers, setShowStickers] = useState(false);
   const [focusInput, setFocusInput] = useState(false);
   const { state, depatch } = useContext(Context);
@@ -33,7 +33,12 @@ const NewMessageForm = () => {
           onFocus={() => handleFocus()}
           onBlur={(e) => handleBlur(e)}
           type="text"
-          placeholder="Nhập @, để nhắn tới Phan Đình Phương"
+          placeholder={
+            "Nhập @, để nhắn tới " +
+            userChatting?.last_name +
+            " " +
+            userChatting?.first_name 
+          }
         />
         <span style={{ color: "#333", fontSize: "20px" }} title="Gửi hình ảnh">
           <GrImage />

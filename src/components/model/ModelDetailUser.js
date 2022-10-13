@@ -103,10 +103,6 @@ const ModelDetailUser = ({ openModelUser, setOpenModelUser, friend }) => {
                   <span>Giới tính:</span>
                   <span>{user?.sex === 1 ? "Nam" : "Nữ"}</span>
                 </p>
-                {/* <p>
-                  <span>Ngày sinh:</span>
-                  <span>{user?.date_of_birth}</span>
-                </p> */}
               </div>
               {friend ? (
                 <React.Fragment>

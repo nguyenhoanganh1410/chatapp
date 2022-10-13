@@ -3,14 +3,110 @@ import Avatar from "@mui/material/Avatar";
 import avt from "../../images/av.jpg";
 import "./UserSearchCardStyle.scss";
 import "./ChatCardStyle.scss";
+import Contex from "../../store/Context";
+import {
+  SetSearchedUser,
+  SetSearchingStatus,
+  SetShowTabHistorySearch,
+  SetUserChatting,
+} from "../../store/Actions";
+import UserSearchedService from "../../services/UserSearchedService";
+import useLogic from "../../hooks/useLogic";
 const UserSearchCard = ({ u }) => {
+  const { state, depatch } = React.useContext(Contex);
+  //detructering...
+  const {
+    userChatting,
+    searchingStatus,
+    user,
+    showTabHistorySearch,
+    searchedUsers,
+  } = state;
+  //console.log(userChatting);
   //delete user out the history search
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    // alert(u.uid);
+    //khong phai trang thai tim kiem
+    if (!searchingStatus) {
+      UserSearchedService.getById(user.uid).then(function (snapshot) {
+        const { users } = snapshot.data();
+        // console.log(snapshot.data());
+
+        //xoa user co theo id khoi array
+        const newUsers = users.filter((val, idx) => {
+          return val.email !== u.email;
+        });
+        //console.log(newUsers);
+        const object = {
+          users: newUsers,
+        };
+
+        UserSearchedService.create(user.uid, object).then(function (snapshot) {
+          console.log("2-succesfully!!!");
+          depatch(SetSearchedUser(newUsers));
+        });
+      });
+    }
+  };
 
   //click -> chat
-  const handleChat = () => {};
+
+  //10/11/2022 - 10:17 am
+  //auth: Anh Nguyen
+  const handleChat = () => {
+    //có 2 trường hợp:
+    //TH1: click vào user dang tìm kiếm -> add user đó vào lịch sử tìm kiếm -> mở cuộc hội thoại
+    //đang tìm kiếm: searchingStatus = true
+    if (searchingStatus) {
+      //thêm user đang tìm kiếm vào lịch sử tìm kiếm
+      UserSearchedService.getById(user.uid).then(function (snapshot) {
+        //console.log(snapshot.data());
+        if (!snapshot.data()) {
+          const object = {
+            users: [u],
+          };
+
+          UserSearchedService.create(user.uid, object).then(function (
+            snapshot
+          ) {
+            console.log("1-succesfully!!!");
+          });
+        } else {
+          const { users } = snapshot.data();
+          // console.log(snapshot.data());
+          const USERS = [...users, u];
+          // console.log(USERS);
+          //loc nhung user trung nhau
+
+          const newUsers = USERS.filter((val, idx) => {
+            return idx === USERS.findIndex((v) => val.email === v.email);
+          });
+          //console.log(newUsers);
+          const object = {
+            users: newUsers,
+          };
+
+          UserSearchedService.create(user.uid, object).then(function (
+            snapshot
+          ) {
+            console.log("2-succesfully!!!");
+          });
+        }
+      });
+
+      depatch(SetSearchingStatus(false));
+    }
+
+    //TH2: click vào user trong lịch sử tìm kiếm -> mở cuộc hội thoai
+    depatch(SetUserChatting(u));
+
+    //đóng tab tìm kiếm
+    depatch(SetShowTabHistorySearch(false));
+    console.log("Click user card");
+  };
+
   return (
-    <div className="card_chat">
+    <div className="card_chat" key={u?.email}>
       <div
         className="card_group"
         style={{ alignItems: "normal" }}

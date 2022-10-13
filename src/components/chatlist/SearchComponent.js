@@ -2,7 +2,6 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { MdOutlineCancel } from "react-icons/md";
 import { MdPersonAddAlt } from "react-icons/md";
 import { BsPeople } from "react-icons/bs";
-
 import "./SearchComponentStyle.scss";
 import React, { useRef, useState } from "react";
 import Context from "../../store/Context";
@@ -13,6 +12,7 @@ import {
   SetUserSearched,
 } from "../../store/Actions";
 import UserService from "../../services/UserService";
+
 const SearchComponent = () => {
   const groupSearchRef = useRef();
   const [active, setActive] = useState(false);
@@ -21,6 +21,9 @@ const SearchComponent = () => {
   const { state, depatch } = React.useContext(Context);
   //detructering...
   const { showTabHistorySearch, userSearched, searchingStatus } = state;
+
+  //mang danh sach cac user duoc search
+  const [arrayUser, setArrayUser] = useState([]);
 
   const handleOnClick = (e) => {
     //add clss active
@@ -83,10 +86,13 @@ const SearchComponent = () => {
         //neu khong tim thay user can tim va userSearched != null
         //=> set userSearched = null
         if (querySnapshot.empty && userSearched) {
-          depatch(SetUserSearched(null));
+          depatch(SetUserSearched([]));
         }
+        const arrUsers = [];
         querySnapshot.forEach((doc) => {
-          depatch(SetUserSearched(doc.data()));
+          arrUsers.push(doc.data());
+
+          depatch(SetUserSearched(arrUsers));
         });
       })
       .catch((error) => {
@@ -98,7 +104,7 @@ const SearchComponent = () => {
   const handleDelete = (e) => {
     setSerachText("");
 
-    depatch(SetUserSearched(null));
+    depatch(SetUserSearched([]));
     depatch(SetSearchingStatus(false));
   };
 

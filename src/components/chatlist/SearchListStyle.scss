@@ -1,6 +1,21 @@
+.search_list::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .search_list::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+  }
+  
+  .search_list::-webkit-scrollbar-thumb {
+    background-color: var(--N60);
+    height: 20px;
+    border-radius: 100px;
+  }
 .search_list{
     overflow-y: auto;
     position: relative;
+
     p{
         padding:  1rem;
         padding-bottom: 0;

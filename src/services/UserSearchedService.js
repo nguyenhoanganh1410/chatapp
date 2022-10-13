@@ -6,8 +6,8 @@ const db = firebase.firestore().collection("/UserSearched");
 const getById = (id) => {
   return db.doc(id).get();
 };
-const create = (data) => {
-  return db.add(data);
+const create = (id, data) => {
+  return db.doc(id).set(data);
 };
 const update = (id, value) => {
   return db.doc(id).update(value);

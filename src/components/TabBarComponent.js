@@ -36,7 +36,7 @@ const TabBarComponent = () => {
   const { state, depatch } = React.useContext(Contex);
   //detructering...
   const { user, indexTab } = state;
-  console.log("index tab " + indexTab);
+  //console.log("index tab " + indexTab);
   //show model
   const [openAlert, setOpenAlert] = React.useState(false);
 

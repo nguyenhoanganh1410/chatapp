@@ -8,12 +8,13 @@ import Alert from "@mui/material/Alert";
 import Contex from "../store/Context";
 import TabInfomation from "../components/chatfeed/TabInfomation";
 import ListRequestComponent from "../components/friend/ListRequestComponent";
+import HomeComponent from "../components/Home/HomeComponent";
 
 const HomePage = () => {
   const { state, depatch } = React.useContext(Contex);
 
   //detructering...
-  const { showAlert, user, showTabInfo, indexTab } = state;
+  const { userChatting, showAlert, user, showTabInfo, indexTab } = state;
 
   // It is a hook imported from 'react-i18next'
   const { t } = useTranslation();
@@ -26,25 +27,31 @@ const HomePage = () => {
       <TabBarComponent />
       <ChatList />
       {indexTab === 0 ? (
-        <div
-          style={
-            showTabInfo
-              ? {
-                  display: "grid",
-                  gridTemplateColumns: "1.95fr 1.05fr",
-                  flexGrow: "1",
-                }
-              : {
-                  display: "grid",
+        <React.Fragment>
+          {userChatting ? (
+            <div
+              style={
+                showTabInfo
+                  ? {
+                      display: "grid",
+                      gridTemplateColumns: "1.95fr 1.05fr",
+                      flexGrow: "1",
+                    }
+                  : {
+                      display: "grid",
 
-                  flexGrow: "1",
-                }
-          }
-          className="chat_main"
-        >
-          <ChatFeed />
-          {showTabInfo ? <TabInfomation /> : null}
-        </div>
+                      flexGrow: "1",
+                    }
+              }
+              className="chat_main"
+            >
+              <ChatFeed />
+              {showTabInfo ? <TabInfomation /> : null}
+            </div>
+          ) : (
+            <HomeComponent />
+          )}
+        </React.Fragment>
       ) : (
         <ListRequestComponent />
       )}

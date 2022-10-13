@@ -12,8 +12,14 @@ import { IoIosArrowDown } from "react-icons/io";
 
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 import "simplebar/dist/simplebar.css";
+import Contex from "../../store/Context";
 
 const ChatFeed = () => {
+  const { state, depatch } = React.useContext(Contex);
+
+  //detructering...
+  const { userChatting } = state;
+
   const messagesEnd = useRef();
   const scrollToBottom = () => {
     messagesEnd.current.scrollIntoView({ behavior: "smooth" });
@@ -30,7 +36,7 @@ const ChatFeed = () => {
 
   return (
     <div className="chat_feed">
-      <ChatHeader />
+      <ChatHeader userChatting={userChatting} />
       <div
         data-simplebar
         className="message_content"
@@ -38,13 +44,26 @@ const ChatFeed = () => {
       >
         <div className="card_title">
           <div className="title_top">
-            <Avatar
-              className="avatar"
-              alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
-            />
+            {userChatting?.avatar ? (
+              <Avatar
+                className=""
+                src={userChatting?.avatar}
+                alt={userChatting?.first_name}
+              />
+            ) : (
+              <Avatar
+                className=""
+                style={{ textTransform: "capitalize" }}
+                src={userChatting?.avatar}
+              >
+                {userChatting?.last_name[0]}
+              </Avatar>
+            )}
+
             <div className="topContent">
-              <p>Peter Nguyen</p>
+              <p style={{ textTransform: "capitalize" }}>
+                {userChatting?.last_name + " " + userChatting?.first_name}
+              </p>
               <p>Hãy bắt đầu cùng nhau chia sẻ những...</p>
             </div>
           </div>
@@ -110,7 +129,7 @@ const ChatFeed = () => {
       <span className="goToBottom" onClick={scrollToBottom}>
         <IoIosArrowDown />
       </span>
-      <NewMessageForm />
+      <NewMessageForm userChatting={userChatting} />
     </div>
   );
 };

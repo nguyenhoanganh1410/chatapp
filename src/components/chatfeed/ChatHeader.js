@@ -7,7 +7,7 @@ import Context from "../../store/Context";
 import { SetShowTabInfo } from "../../store/Actions";
 import ModelDetailUser from "../model/ModelDetailUser";
 import love from "../../images/love.jpg";
-const ChatHeader = () => {
+const ChatHeader = ({ userChatting }) => {
   const { state, depatch } = React.useContext(Context);
   const [openModelUser, setOpenModelUser] = React.useState(false);
 
@@ -24,14 +24,34 @@ const ChatHeader = () => {
   return (
     <div className="chat_header">
       <div className="chat_header-info">
-        <Avatar
+        {userChatting?.avatar ? (
+          <Avatar
+            className="avt"
+            src={userChatting?.avatar}
+            alt={userChatting?.first_name}
+            onClick={() => handleShowInfo()}
+          />
+        ) : (
+          <Avatar
+            className="avt"
+            style={{ textTransform: "capitalize" }}
+            src={userChatting?.avatar}
+            onClick={() => handleShowInfo()}
+          >
+            {userChatting?.last_name[0]}
+          </Avatar>
+        )}
+
+        {/* <Avatar
           className="avt"
           alt="Remy Sharp"
-          src={love}
+          src={userChatting?.avatar}
           onClick={() => handleShowInfo()}
-        />
+        /> */}
         <div className="info_text">
-          <span className="info_name">anh nguyen</span>
+          <span className="info_name">
+            {userChatting?.last_name + " " + userChatting?.first_name}
+          </span>
           <span className="info_hour">truy cập 1 giờ trước</span>
         </div>
       </div>

@@ -10,6 +10,8 @@ import {
   SET_SEARCHINGSTATUS,
   SET_SHOWTABINFO,
   SET_INDEXTAB,
+  SET_USERCHATTING,
+  SET_SEARCHEDUSERS,
 } from "./Actions";
 
 //innite state
@@ -23,7 +25,8 @@ const initState = {
   showTabInfo: false,
 
   //user is searching
-  userSearched: null,
+  // userSearched: null,
+  userSearched: [],
   loadingSearchFunc: true,
 
   // state searching currently
@@ -33,6 +36,12 @@ const initState = {
   //1: tab friend
   //2: something
   indexTab: 0,
+
+  //user is chatting
+  userChatting: null,
+
+  //list of searched users
+  searchedUsers: [],
 };
 
 //depatch
@@ -93,6 +102,16 @@ const Reducer = (state, action) => {
       return {
         ...state,
         indexTab: action.payload,
+      };
+    case SET_USERCHATTING:
+      return {
+        ...state,
+        userChatting: action.payload,
+      };
+    case SET_SEARCHEDUSERS:
+      return {
+        ...state,
+        searchedUsers: action.payload,
       };
   }
 };

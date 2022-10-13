@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import UserSearchedService from "../../services/UserSearchedService";
 import UserService from "../../services/UserService";
 import Contex from "../../store/Context";
-import ChatCard from "./ChatCard";
+
 import "./ChatListStyle.scss";
 import "./SearchListStyle.scss";
 import UserSearchCard from "./UserSearchCard";
 
 import Skeleton from "@mui/material/Skeleton";
-import { SetLoadingSearchFunc } from "../../store/Actions";
+import { SetLoadingSearchFunc, SetSearchedUser } from "../../store/Actions";
 
 import { FcSearch } from "react-icons/fc";
 
@@ -17,23 +17,32 @@ import searchIcon from "../../images/searchIcon.png";
 const SearchList = () => {
   const { state, depatch } = React.useContext(Contex);
   //detructering...
-  const { user, userSearched, loadingSearchFunc, searchingStatus } = state;
+  const {
+    user,
+    userSearched,
+    loadingSearchFunc,
+    searchingStatus,
+    searchedUsers,
+  } = state;
+  // console.log(userSearched);
 
-  const [listUser, setListUser] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   //get list user was searched
   useEffect(() => {
-    UserSearchedService.getById(user.uid).then(function (snapshot) {
+    UserSearchedService.getById(user?.uid).then(function (snapshot) {
       // console.log("d" + snapshot.data().first_name);
-      const { users } = snapshot.data();
-      // console.log(users);
-      setListUser(users);
-
-      depatch(SetLoadingSearchFunc(false));
+      if (snapshot.data()) {
+        const { users } = snapshot.data();
+        console.log(snapshot.data());
+        // console.log(users);
+        //set list of seared users
+        depatch(SetSearchedUser(users));
+        depatch(SetLoadingSearchFunc(false));
+      }
     });
 
-    if (listUser.length === 0) {
+    if (searchedUsers.length === 0) {
       depatch(SetLoadingSearchFunc(false));
     }
   }, []);
@@ -50,10 +59,12 @@ const SearchList = () => {
       ) : (
         <div className="listChatCard">
           {searchingStatus ? (
-            userSearched ? (
+            userSearched?.length != 0 ? (
               <>
                 <p>Tìm kiếm bằng gmail: </p>
-                <UserSearchCard u={userSearched} />
+                {userSearched?.map((val) => {
+                  return <UserSearchCard u={val} />;
+                })}
               </>
             ) : (
               <div className="blockNotResult">
@@ -66,8 +77,8 @@ const SearchList = () => {
           ) : (
             <React.Fragment>
               <p>Tìm kiếm gần đây</p>
-              {listUser.length != 0 ? (
-                listUser.map((u) => {
+              {searchedUsers ? (
+                searchedUsers?.map((u) => {
                   return <UserSearchCard u={u} />;
                 })
               ) : (

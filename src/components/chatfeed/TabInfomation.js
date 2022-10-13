@@ -15,7 +15,14 @@ import "simplebar/dist/simplebar.css";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import love from "../../images/love.jpg";
+import Contex from "../../store/Context";
+import { useContext } from "react";
 const TabInfomation = () => {
+  const { state, depatch } = useContext(Contex);
+
+  //detructering...
+  const { userChatting } = state;
+
   return (
     <div data-simplebar className="tab_infomation">
       <div>
@@ -24,8 +31,23 @@ const TabInfomation = () => {
         </div>
         <div className="tab_info-content">
           <div className="content_top">
-            <Avatar className="avatarCustom" alt="Remy Sharp" src={love} />
-            <p>Anh nguyen</p>
+            {/* //<Avatar className="avatarCustom" alt="Remy Sharp" src={love} /> */}
+            {userChatting?.avatar ? (
+              <Avatar
+                className="avatarCustom"
+                src={userChatting?.avatar}
+                alt={userChatting?.first_name}
+              />
+            ) : (
+              <Avatar
+                className="avatarCustom"
+                style={{ textTransform: "capitalize" }}
+                src={userChatting?.avatar}
+              >
+                {userChatting?.last_name[0]}
+              </Avatar>
+            )}
+            <p style={{textTransform:"capitalize"}}>{userChatting?.last_name + " " + userChatting?.first_name}</p>
           </div>
           <div className="content_icons">
             <div className="block_icon">
