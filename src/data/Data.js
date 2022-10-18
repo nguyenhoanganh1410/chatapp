@@ -4,6 +4,14 @@ import { RiContactsBook2Line } from "react-icons/ri";
 import bn3 from "../images/bn3.jpg";
 import bn2 from "../images/bn2.jpg";
 import bn1 from "../images/bn1.jpg";
+
+import fake1 from "../images/av.jpg";
+export const fakeImages = [
+  {
+    id: "fakeimage1",
+    image: fake1,
+  },
+];
 export const arrIconOption = [
   {
     id: "iconOption1",

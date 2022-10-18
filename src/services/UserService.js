@@ -8,6 +8,7 @@ const getById = (id) => {
 const getUserByEmail = (email) => {
   return db.where("email", "==", email).get();
 };
+
 const create = (data, id) => {
   return db.doc(id).set(data);
 };

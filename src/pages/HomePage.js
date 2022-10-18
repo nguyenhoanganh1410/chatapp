@@ -9,8 +9,15 @@ import Contex from "../store/Context";
 import TabInfomation from "../components/chatfeed/TabInfomation";
 import ListRequestComponent from "../components/friend/ListRequestComponent";
 import HomeComponent from "../components/Home/HomeComponent";
+import ModelShowListImage from "../components/model/ModelShowListImage";
 
 const HomePage = () => {
+  //width, height of current screen
+  const [dimensions, setDimensions] = React.useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
+  console.log(dimensions);
   const { state, depatch } = React.useContext(Contex);
 
   //detructering...
@@ -19,13 +26,22 @@ const HomePage = () => {
   // It is a hook imported from 'react-i18next'
   const { t } = useTranslation();
 
-  useEffect(() => {
-    document.title = t("homepage");
-  }, []);
+  // useEffect(() => {
+  //   document.title = t("homepage");
+  // }, []);
+  // React.useEffect(() => {
+  //   function handleResize() {
+  //     setDimensions({
+  //       height: window.innerHeight,
+  //       width: window.innerWidth,
+  //     });
+  //   }
+  //   window.addEventListener("resize", handleResize);
+  // }, [dimensions]);
   return (
     <React.Fragment>
       <TabBarComponent />
-      <ChatList />
+      {dimensions.width < 800 ? null : <ChatList />}
       {indexTab === 0 ? (
         <React.Fragment>
           {userChatting ? (
@@ -72,6 +88,7 @@ const HomePage = () => {
           Cập nhật thông tin thành công.
         </Alert>
       )}
+      {/* <ModelShowListImage /> */}
     </React.Fragment>
   );
 };

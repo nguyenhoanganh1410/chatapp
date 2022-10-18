@@ -7,7 +7,6 @@ import TextField from "@mui/material/TextField";
 
 import Context from "../../store/Context";
 
-
 import { useNavigate } from "react-router-dom";
 
 import firebase from "../../firebase";
@@ -90,9 +89,10 @@ const LoginForm = () => {
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-
+        const { uid } = user;
+        const userCurrent = { uid, ...userTemp };
         //lưu thông tin user vao firestore
-        UserService.create(userTemp, user.uid)
+        UserService.create(userCurrent, user.uid)
           .then((querySnapshot) => {
             navigate("/loading");
             //sign in
@@ -110,6 +110,11 @@ const LoginForm = () => {
           .catch((error) => {
             console.log("Error put user infomation into firebase: ", error);
           });
+
+        // send verification mail.
+        // userCredential.user.sendEmailVerification();
+        // firebase.auth().signOut();
+        // alert("Email sent");
       })
       .catch((error) => {
         var errorCode = error.code;

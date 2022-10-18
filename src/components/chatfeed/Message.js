@@ -13,12 +13,18 @@ import Divider from "@mui/material/Divider";
 import copy from "copy-to-clipboard";
 
 import { iconsTouch } from "../../data/Data";
+import Contex from "../../store/Context";
 
 //status : 0 binh thuong, 1 thu hoi, 2 bi xoa
-const Message = ({ me, type, status }) => {
+const Message = ({ type, status, mess }) => {
+  const { state, depatch } = React.useContext(Contex);
+  //detructering...
+  const { userChatting, idConversation, user } = state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const [showIcons, setShowIcons] = React.useState(false);
+
+  const [me, setMe] = React.useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,17 +40,22 @@ const Message = ({ me, type, status }) => {
     handleClose();
   };
 
-  // React.useEffect(() => {
-  //   const handleClick = (e) =>{
-  //       console.log(e.target);
-  //   }
-  //   window.addEventListener('click', handleClick);
+  React.useEffect(() => {
+    // const handleClick = (e) =>{
+    //     console.log(e.target);
+    // }
+    // window.addEventListener('click', handleClick);
 
-  //   // cleanup this component
-  //   return () => {
-  //     window.removeEventListener('click', handleClick);
-  //   };
-  // }, []);
+    // // cleanup this component
+    // return () => {
+    //   window.removeEventListener('click', handleClick);
+    // };
+    if (user.uid === mess.userId) {
+      setMe(true);
+    } else {
+      setMe(false);
+    }
+  }, []);
 
   //click hide/show list icon
   const handleToggle = () => {
@@ -69,17 +80,23 @@ const Message = ({ me, type, status }) => {
         </div>
       ) : (
         <>
-          {type === "image" ? (
+          {mess.type === "FILE" ? (
             <div className="messImg">
-              <img src={avt} alt="image" />
+              <img src={mess.content} alt="image" />
             </div>
           ) : (
             <div
               className="message_text"
               style={me ? { backgroundColor: "#e5efff" } : {}}
             >
-              <p className="textMess">buổi chiều tràn đầy năng lượng nhé ❤️</p>
-              <p className="timeMess">13:33</p>
+              <p className="textMess">{mess.content}</p>
+              <p className="timeMess">
+                {mess.createdAt
+                  .toLocaleString("en-US", {
+                    timeZone: "Asia/Ho_Chi_Minh",
+                  })
+                  .slice(11, 16)}
+              </p>
               <div className="icon_list">
                 {showIcons ? (
                   <div

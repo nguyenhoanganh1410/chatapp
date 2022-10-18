@@ -13,13 +13,15 @@ import { IoIosArrowDown } from "react-icons/io";
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 import "simplebar/dist/simplebar.css";
 import Contex from "../../store/Context";
+import messageApi from "../../api/messageApi";
 
 const ChatFeed = () => {
   const { state, depatch } = React.useContext(Contex);
-
+  const [messages, setMessages] = useState([]);
+  //console.log(messages);
   //detructering...
-  const { userChatting } = state;
-
+  const { userChatting, idConversation, user } = state;
+  // console.log(userChatting.uid);
   const messagesEnd = useRef();
   const scrollToBottom = () => {
     messagesEnd.current.scrollIntoView({ behavior: "smooth" });
@@ -32,13 +34,31 @@ const ChatFeed = () => {
   useEffect(() => {
     //scroll last message
     scrollToBottom();
-  }, []);
+  });
 
+  useEffect(() => {
+    //call api get all message
+    //set state
+    const featchMessages = async () => {
+      try {
+        const response = await messageApi.getMess(idConversation, user.uid);
+        const { data, info, friendStatus, size, totalPages } = response;
+
+        if (response) {
+          setMessages(data[0].messages);
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+
+    featchMessages();
+  }, [userChatting]);
   return (
     <div className="chat_feed">
       <ChatHeader userChatting={userChatting} />
       <div
-        data-simplebar
+       // data-simplebar
         className="message_content"
         onScroll={() => handleScroll()}
       >
@@ -69,7 +89,10 @@ const ChatFeed = () => {
           </div>
           <div className="title_image"></div>
         </div>
-        <TimeLine />
+        {messages.map((mess) => {
+          return <Message key={mess._id}  mess={mess}/>;
+        })}
+        {/* <TimeLine />
         <Message />
         <Message me />
 
@@ -84,45 +107,8 @@ const ChatFeed = () => {
         <TimeLine />
         <Message />
         <Message me />
-        <Message me />
-        <Message type="image" />
-        <Message status={1} />
-        <Message me />
-        <Message me />
-        <Message me />
-        <Message me status={1} />
-        <Message />
-        <TimeLine />
-        <Message />
-        <Message me />
-        <Message me />
-        <TimeLine />
-        <Message />
-        <Message me />
+        <Message me /> */}
 
-        <Message type="image" />
-        <Message />
-        <Message me />
-
-        <Message me />
-        <Message me />
-        <Message me />
-        <Message />
-        <TimeLine />
-        <Message />
-        <Message me />
-        <Message me />
-        <Message type="image" />
-        <Message status={1} />
-        <Message me />
-        <Message me />
-        <Message me />
-        <Message me status={1} />
-        <Message />
-        <TimeLine />
-        <Message />
-        <Message me />
-        <Message me />
         <div style={{ float: "left", clear: "both" }} ref={messagesEnd}></div>
       </div>
 

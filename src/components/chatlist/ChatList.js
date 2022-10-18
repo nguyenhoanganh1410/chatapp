@@ -14,9 +14,11 @@ import SearchList from "./SearchList";
 import Contex from "../../store/Context";
 import ChatCardGroup from "./ChatCardGroup";
 import ListFriend from "../friend/ListFriend";
+import conversationApi from "../../api/conversationApi";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
+  const [listConversation, setListConversation] = React.useState([]);
 
   return (
     <div
@@ -49,16 +51,40 @@ function a11yProps(index) {
 }
 
 const ChatList = () => {
+  const [conversations, setConversations] = React.useState([]);
+  console.log(conversations);
   const { state, depatch } = React.useContext(Contex);
   //detructering...
-  const { showTabHistorySearch, indexTab } = state;
+  const { showTabHistorySearch, indexTab, user } = state;
+  //console.log("chatlist " + user);
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  React.useEffect(() => {
+    //get api set list conversation
+    //fetch product in wishlist
+    const fetchConversations = async () => {
+      try {
+        const response = await conversationApi.getConversations(user.uid);
+
+        const { data, page, size, totalPages } = response;
+        console.log(data);
+        if (response) {
+          setConversations(data);
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+
+    fetchConversations();
+  }, [user]);
+
   return (
-    <div className="chatlist" >
+    <div className="chatlist">
       <SearchComponent />
       {showTabHistorySearch ? (
         <SearchList />
@@ -78,12 +104,29 @@ const ChatList = () => {
               </Box>
 
               <TabPanel value={value} index={0}>
-                <div data-simplebar className="listChatCard">
-                  <ChatCardGroup />
+                <div className="listChatCard">
+                  {/* {conversations?.map((conversation) => {
+                    return <ChatCard conversation={conversation} />;
+                  })} */}
+                  {conversations ? (
+                    conversations?.map((conversation) => {
+                      return (
+                        <ChatCard
+                          conversation={conversation}
+                          key={Math.random()}
+                        />
+                      );
+                    })
+                  ) : (
+                    <p style={{ fontWeight: "500" }}>Không có</p>
+                  )}
+                  {/* <ChatCardGroup />
                   <ChatCard />
                   <ChatCard status />
                   <ChatCard status />
                   <ChatCard />
+                  <ChatCard /> */}
+                  {/* <ChatCardGroup />
                   <ChatCard />
                   <ChatCard />
                   <ChatCard />
@@ -94,15 +137,25 @@ const ChatList = () => {
                   <ChatCard />
                   <ChatCard />
                   <ChatCard />
-                  <ChatCard />
-                  <ChatCard />
-                  <ChatCard />
-                  <ChatCard />
+                  <ChatCard /> */}
                 </div>
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <div data-simplebar className="listChatCard">
-                  <ChatCard status />
+                <div className="listChatCard">
+                  {conversations ? (
+                    conversations?.map((conversation) => {
+                      if (conversation.conversations.numberUnread > 0) {
+                        return (
+                          <ChatCard
+                            conversation={conversation}
+                            key={Math.random()}
+                          />
+                        );
+                      }
+                    })
+                  ) : (
+                    <p style={{ fontWeight: "500" }}>Không có</p>
+                  )}
                 </div>
               </TabPanel>
             </Box>

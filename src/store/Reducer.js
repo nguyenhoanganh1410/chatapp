@@ -12,6 +12,7 @@ import {
   SET_INDEXTAB,
   SET_USERCHATTING,
   SET_SEARCHEDUSERS,
+  SET_IDCONVERSATION,
 } from "./Actions";
 
 //innite state
@@ -39,6 +40,8 @@ const initState = {
 
   //user is chatting
   userChatting: null,
+  //id cua cuoc hoi thoai dang chat
+  idConversation: null,
 
   //list of searched users
   searchedUsers: [],
@@ -112,6 +115,11 @@ const Reducer = (state, action) => {
       return {
         ...state,
         searchedUsers: action.payload,
+      };
+    case SET_IDCONVERSATION:
+      return {
+        ...state,
+        idConversation: action.payload,
       };
   }
 };
