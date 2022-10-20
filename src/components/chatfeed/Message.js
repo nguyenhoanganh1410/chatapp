@@ -41,15 +41,7 @@ const Message = ({ type, status, mess }) => {
   };
 
   React.useEffect(() => {
-    // const handleClick = (e) =>{
-    //     console.log(e.target);
-    // }
-    // window.addEventListener('click', handleClick);
-
-    // // cleanup this component
-    // return () => {
-    //   window.removeEventListener('click', handleClick);
-    // };
+   
     if (user.uid === mess.userId) {
       setMe(true);
     } else {
@@ -67,7 +59,43 @@ const Message = ({ type, status, mess }) => {
       className="message"
       style={me ? { flexDirection: "row-reverse" } : null}
     >
-      <Avatar className="avatar" alt="Remy Sharp" src={avt} />
+      {me ? (
+        <React.Fragment>
+          {user?.avatar ? (
+            <Avatar
+              className="avatar"
+              src={user?.avatar}
+              alt={user?.first_name}
+            />
+          ) : (
+            <Avatar
+              className="avatar"
+              style={{ textTransform: "capitalize" }}
+              src={user?.avatar}
+            >
+              {user?.last_name[0]}
+            </Avatar>
+          )}
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          {userChatting?.avatar ? (
+            <Avatar
+              className="avatar"
+              src={userChatting?.avatar}
+              alt={userChatting?.first_name}
+            />
+          ) : (
+            <Avatar
+              className="avatar"
+              style={{ textTransform: "capitalize" }}
+              src={userChatting?.avatar}
+            >
+              {userChatting?.last_name[0]}
+            </Avatar>
+          )}
+        </React.Fragment>
+      )}
       {status === 1 ? (
         <div
           className="message_text"

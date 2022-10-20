@@ -1,6 +1,16 @@
 import axiosClient from "./axiosClient";
 
 const conversationApi = {
+
+    // GET: /conversation?senderID=Ix7UVDUIrmRYOB6uGFc715drn24&receiverID=ztpYIbpqoiYVDVsf0h9Clzg7QgW2
+    //res: false or conversationID
+  getConversation: (senderID, receiverID) => {
+    //console.log(id);
+    const url = `/conversation?senderID=${senderID}&receiverID=${receiverID}`;
+    return axiosClient.get(url);
+   
+  },
+
   // GET: /users/login
   // send username, password
   // res: token, user
@@ -13,29 +23,16 @@ const conversationApi = {
     // );
     //http://13.228.206.211:3005/conversation/634c48221a479239b4810cb6
   },
-  // getConversations1: () => {
-  //   //console.log(id);
-  //   // return axiosClient.get("/conversation", {
-  //   //   params: {
-  //   //     user: id,
-  //   //   },
-  //   // });
-  //   return axiosClient.get(
-  //     "http://13.228.206.211:3005/conversation/user/ztpYIbpqoiYVDVsf0h9Clzg7QgW2"
-  //   );
-  //   //http://13.228.206.211:3005/conversation/634c48221a479239b4810cb6
-  // },
 
-  //POST /users/me
-  //send token
-  //res: user
-  // me: () => {
-  //   return axiosClientNew.get("users/me");
-  // },
+  //[POST] /individuals/:userId`: Tạo cuộc trò chuyện cá nhân
+  // -params:userId.
+  // -body:userFriendId:(Ix7UVDUIrmRYOB6uGFc715drn2H3)
 
-  // logout: () => {
-  //   return axiosClientNew.post("users/me/logout");
-  // },
+  createConversation: (meId, userFriendId) => {
+    return axiosClient.post(`/individuals/${meId}`, {
+      userFriendId,
+    });
+  },
 };
 
 export default conversationApi;

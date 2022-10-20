@@ -1,17 +1,18 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import avt from "../../images/av.jpg";
 import "./UserSearchCardStyle.scss";
 import "./ChatCardStyle.scss";
 import Contex from "../../store/Context";
 import {
+  SetIdConversation,
   SetSearchedUser,
   SetSearchingStatus,
   SetShowTabHistorySearch,
   SetUserChatting,
 } from "../../store/Actions";
 import UserSearchedService from "../../services/UserSearchedService";
-import useLogic from "../../hooks/useLogic";
+import conversationApi from "../../api/conversationApi";
+
 const UserSearchCard = ({ u }) => {
   const { state, depatch } = React.useContext(Contex);
   //detructering...
@@ -21,6 +22,7 @@ const UserSearchCard = ({ u }) => {
     user,
     showTabHistorySearch,
     searchedUsers,
+    idConversation,
   } = state;
   //console.log(userChatting);
   //delete user out the history search
@@ -70,6 +72,7 @@ const UserSearchCard = ({ u }) => {
             snapshot
           ) {
             console.log("1-succesfully!!!");
+            depatch(SetIdConversation(null));
           });
         } else {
           const { users } = snapshot.data();
@@ -90,12 +93,39 @@ const UserSearchCard = ({ u }) => {
             snapshot
           ) {
             console.log("2-succesfully!!!");
+            depatch(SetIdConversation(null));
           });
         }
       });
 
       depatch(SetSearchingStatus(false));
     }
+
+    //featch id conversation with id sender: user and receiver : u
+    const featchConversation = async () => {
+      try {
+        const response = await conversationApi.getConversation(user.uid, u.uid);
+        console.log(response);
+        if (response.data === false) {
+          console.log("chua co ");
+          depatch(SetIdConversation(null));
+        } else {
+          depatch(SetIdConversation(response));
+        }
+
+        // if (typeof response === "string") {
+        // console.log("string string");
+        // depatch(SetIdConversation(response));
+        // } else {
+        //   console.log("obj obj");
+        //   depatch(SetIdConversation(null));
+        // }
+      } catch (error) {
+        console.log("Failed to fetch conversation id: ", error);
+      }
+    };
+
+    featchConversation();
 
     //TH2: click vào user trong lịch sử tìm kiếm -> mở cuộc hội thoai
     depatch(SetUserChatting(u));

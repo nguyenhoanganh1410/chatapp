@@ -26,6 +26,20 @@
             color:var(--shades-left-bar)
         }
     }
+    .message_content::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      .message_content::-webkit-scrollbar-track {
+        background-color: #e4e4e4;
+        border-radius: 100px;
+      }
+      
+      .message_content::-webkit-scrollbar-thumb {
+        background-color: var(--N60);
+        height: 20px;
+        border-radius: 100px;
+      }
     .message_content{
         
         .card_title{

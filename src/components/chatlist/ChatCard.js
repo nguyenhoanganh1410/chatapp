@@ -18,7 +18,7 @@ const ChatCard = ({ conversation }) => {
   //custom hook
   const { handleDate } = useDateLogic();
   //detructering...
-  const { user, userSearched, idConversation } = state;
+  const { user, userSearched, idConversation, userChatting } = state;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -59,8 +59,17 @@ const ChatCard = ({ conversation }) => {
   // );
   // console.log(result);
   // //=> 12
+  //card_chat card_chat_active
+  
   return (
-    <div className="card_chat" onClick={() => handleShowChat()}>
+    <div
+      className={
+        userChatting?.uid === inFo?.userIdFriend
+          ? "card_chat card_chat_active"
+          : "card_chat"
+      }
+      onClick={() => handleShowChat()}
+    >
       <div className="card_group">
         {inFo?.avatar ? (
           <Avatar className="avt" src={inFo?.avatar} alt={inFo?.firstName} />

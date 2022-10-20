@@ -18,10 +18,10 @@ import messageApi from "../../api/messageApi";
 const ChatFeed = () => {
   const { state, depatch } = React.useContext(Contex);
   const [messages, setMessages] = useState([]);
-  //console.log(messages);
+  console.log(messages);
   //detructering...
   const { userChatting, idConversation, user } = state;
-  // console.log(userChatting.uid);
+  console.log(idConversation);
   const messagesEnd = useRef();
   const scrollToBottom = () => {
     messagesEnd.current.scrollIntoView({ behavior: "smooth" });
@@ -58,7 +58,7 @@ const ChatFeed = () => {
     <div className="chat_feed">
       <ChatHeader userChatting={userChatting} />
       <div
-       // data-simplebar
+        // data-simplebar
         className="message_content"
         onScroll={() => handleScroll()}
       >
@@ -90,7 +90,7 @@ const ChatFeed = () => {
           <div className="title_image"></div>
         </div>
         {messages.map((mess) => {
-          return <Message key={mess._id}  mess={mess}/>;
+          return <Message key={mess._id} mess={mess} />;
         })}
         {/* <TimeLine />
         <Message />
