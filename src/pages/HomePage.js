@@ -10,7 +10,12 @@ import TabInfomation from "../components/chatfeed/TabInfomation";
 import ListRequestComponent from "../components/friend/ListRequestComponent";
 import HomeComponent from "../components/Home/HomeComponent";
 import ModelShowListImage from "../components/model/ModelShowListImage";
+import {io} from 'socket.io-client';
 
+
+const socket = io("https://13.228.206.211", {
+  transports: ["websocket"]
+});
 const HomePage = () => {
   //width, height of current screen
   const [dimensions, setDimensions] = React.useState({
@@ -23,8 +28,17 @@ const HomePage = () => {
   //detructering...
   const { userChatting, showAlert, user, showTabInfo, indexTab } = state;
 
+
   // It is a hook imported from 'react-i18next'
   const { t } = useTranslation();
+
+
+  if(user!=null) {
+    console.log("user",user);
+    socket.emit('start',user );
+    
+  }
+
 
   // useEffect(() => {
   //   document.title = t("homepage");
