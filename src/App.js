@@ -17,7 +17,9 @@ import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 import UserService from "./services/UserService";
 import RegisterPage from "./pages/RegisterPage";
 import GetPassWordPage from "./pages/GetPassWordPage";
+
 function App() {
+  
   const navigate = useNavigate();
   const { state, depatch } = useContext(Contex);
   const [loading, setLoading] = useState(true);

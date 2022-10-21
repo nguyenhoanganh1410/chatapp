@@ -14,11 +14,16 @@ import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to us
 import "simplebar/dist/simplebar.css";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
+// import {socket} from '../../store/socketClient';
 
-const ChatFeed = () => {
+const ChatFeed = ({socket}) => {
+
   const { state, depatch } = React.useContext(Contex);
   const [messages, setMessages] = useState([]);
+  // const [arrivalMess, setArrivalMess] = useState(null);
+
   console.log(messages);
+
   //detructering...
   const { userChatting, idConversation, user } = state;
   console.log(idConversation);
@@ -30,6 +35,20 @@ const ChatFeed = () => {
   const handleScroll = () => {
     console.log("scroll");
   };
+
+  // useEffect(() => {
+  //   if(socket.current){
+  //     console.log("get");
+  //     socket.current.on("get-message", (data) => {
+  //       console.log("data"+data);
+  //       setArrivalMess(data.message);
+  //     })
+  //   }
+  // },[]);
+
+  // useEffect(() => {
+  //   arrivalMess && idConversation === arrivalMess.conversationId && setMessages((prev) => [...prev, arrivalMess]);
+  // },[arrivalMess,idConversation]);
 
   useEffect(() => {
     //scroll last message
@@ -115,7 +134,7 @@ const ChatFeed = () => {
       <span className="goToBottom" onClick={scrollToBottom}>
         <IoIosArrowDown />
       </span>
-      <NewMessageForm userChatting={userChatting} />
+      <NewMessageForm userChatting={userChatting}  idConversation={idConversation} messages={messages} setMessages={setMessages} socket={socket} />
     </div>
   );
 };

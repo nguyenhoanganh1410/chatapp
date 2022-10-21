@@ -11,6 +11,11 @@ const messageApi = {
     const url = `/conversation/${id}?receiverId=${uid}`;
     return axiosClient.get(url);
   },
+
+  addTextMess:(mess)=>{
+    const url = `/messages/text`;
+    return axiosClient.post(url, mess);
+  }
 };
 
 export default messageApi;

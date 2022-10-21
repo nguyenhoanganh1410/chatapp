@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useContext,useRef } from "react";
 import ChatFeed from "../components/chatfeed/ChatFeed";
 import ChatList from "../components/chatlist/ChatList";
 import TabBarComponent from "../components/TabBarComponent";
@@ -10,13 +10,13 @@ import TabInfomation from "../components/chatfeed/TabInfomation";
 import ListRequestComponent from "../components/friend/ListRequestComponent";
 import HomeComponent from "../components/Home/HomeComponent";
 import ModelShowListImage from "../components/model/ModelShowListImage";
-import {io} from 'socket.io-client';
+import io from "socket.io-client";
+// import {init} from '../store/socketClient';
 
-
-const socket = io("https://13.228.206.211", {
-  transports: ["websocket"]
-});
 const HomePage = () => {
+  const socket = useRef();
+  // let socket = init();
+
   //width, height of current screen
   const [dimensions, setDimensions] = React.useState({
     height: window.innerHeight,
@@ -28,16 +28,21 @@ const HomePage = () => {
   //detructering...
   const { userChatting, showAlert, user, showTabInfo, indexTab } = state;
 
+  useEffect(() => {
+    if(user){
+      socket.current = io("http://localhost:5005");
+      socket.current.emit("add-user", user.uid);
+      socket.current.on("get-users", users => {
+        console.log(users);
+      })
+      socket.current.emit("start", user);
+    }
+  },[user]);
+
 
   // It is a hook imported from 'react-i18next'
   const { t } = useTranslation();
 
-
-  if(user!=null) {
-    console.log("user",user);
-    socket.emit('start',user );
-    
-  }
 
 
   // useEffect(() => {
@@ -55,7 +60,7 @@ const HomePage = () => {
   return (
     <React.Fragment>
       <TabBarComponent />
-      {dimensions.width < 800 ? null : <ChatList />}
+      {dimensions.width < 800 ? null : <ChatList socket={socket} />}
       {indexTab === 0 ? (
         <React.Fragment>
           {userChatting ? (
@@ -75,7 +80,7 @@ const HomePage = () => {
               }
               className="chat_main"
             >
-              <ChatFeed />
+              <ChatFeed socket={socket} />
               {showTabInfo ? <TabInfomation /> : null}
             </div>
           ) : (

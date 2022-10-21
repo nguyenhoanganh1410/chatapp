@@ -5,15 +5,27 @@ import { GrImage } from "react-icons/gr";
 import { useState, useRef } from "react";
 import { SearchComponent } from "stipop-react-sdk";
 import Context from "../../store/Context";
-import { useContext } from "react";
+import { useContext,useEffect } from "react";
+import messageApi from "../../api/messageApi";
+// import {socket} from '../../store/socketClient';
+import io from "socket.io-client";
+// import {init} from '../../store/socketClient';
 
-const NewMessageForm = ({ userChatting }) => {
+
+const NewMessageForm = ({ userChatting,idConversation,messages,setMessages,socket }) => {
+  
+  // const [socket,setSocket] = useState(null);
   const [showStickers, setShowStickers] = useState(false);
   const [focusInput, setFocusInput] = useState(false);
   const { state, depatch } = useContext(Context);
+  const[newMessage,setNewMessage]=useState("");
+  const [arrivalMess, setArrivalMess] = useState(null);
 
-  //detructering...
   const { user } = state;
+
+ 
+  //detructering...
+  
   const divMessage = useRef();
   const handleFocus = (params) => {
     divMessage.current.classList.add("booderTop");
@@ -26,12 +38,56 @@ const NewMessageForm = ({ userChatting }) => {
     setShowStickers(!showStickers);
   };
 
+  const onFormSubmit=async (e) => {
+    e.preventDefault();
+    try {
+    const newMess ={
+      userId:user.uid,
+      content:newMessage,
+      conversationId:idConversation,
+      type:"TEXT"
+    }
+    const messSave = await messageApi.addTextMess(newMess);
+    
+    if(socket.current){
+      socket.current.emit("send-message",{
+        senderId:user.uid,
+        receiverId:userChatting.uid,
+        message:messSave
+      });
+      console.log("send");
+    }
+      setMessages([...messages,messSave]);
+      setNewMessage("");
+    }
+    catch (error) {
+      console.log("Failed to fetch conversation list: ", error);
+    }
+
+  };
+
+  useEffect(() => {
+      socket.current.on('get-message', ({senderId,message}) => {
+        console.log("get");
+        console.log("data"+{message});
+        setArrivalMess(
+          message
+        );
+      })
+  },[]);
+
+  useEffect(() => {
+    arrivalMess &&  setMessages((prev) => [...prev, arrivalMess]);
+  },[arrivalMess]);
+
   return (
     <div className="new_message" ref={divMessage}>
-      <form>
+      <form onSubmit={onFormSubmit}>
         <input
           onFocus={() => handleFocus()}
           onBlur={(e) => handleBlur(e)}
+          onChange={(e)=>setNewMessage(e.target.value)}
+          value={newMessage}
           type="text"
           placeholder={
             "Nhập @, để nhắn tới " +

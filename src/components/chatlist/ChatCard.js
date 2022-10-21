@@ -13,7 +13,7 @@ import UserService from "../../services/UserService";
 import { differenceInHours } from "date-fns";
 import useDateLogic from "../../hooks/useDateLogic";
 
-const ChatCard = ({ conversation }) => {
+const ChatCard = ({ conversation,socket,setConversations }) => {
   const { state, depatch } = React.useContext(Contex);
   //custom hook
   const { handleDate } = useDateLogic();
@@ -35,8 +35,20 @@ const ChatCard = ({ conversation }) => {
     alert("updating...");
   };
 
+
+  React.useEffect(() => {
+        if(socket.current){
+          socket.current.on('get-last-message', (data) => {
+            console.log(data);
+            setConversations(data);
+          });
+        }
+    }, [user]);
+
   //click 1 conversation -> show chat feed
   const handleShowChat = () => {
+
+    // socket.current.emit("join-room", conversations._id);
     //featch user by id
     UserService.getById(inFo.userIdFriend)
       .then(function (snapshot) {

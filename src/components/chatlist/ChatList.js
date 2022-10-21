@@ -15,6 +15,7 @@ import Contex from "../../store/Context";
 import ChatCardGroup from "./ChatCardGroup";
 import ListFriend from "../friend/ListFriend";
 import conversationApi from "../../api/conversationApi";
+// import {socket} from '../../store/socketClient';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -50,7 +51,9 @@ function a11yProps(index) {
   };
 }
 
-const ChatList = () => {
+const ChatList = ({socket}) => {
+ 
+  // console.log(socket);
   const [conversations, setConversations] = React.useState([]);
   //console.log(conversations);
   const { state, depatch } = React.useContext(Contex);
@@ -62,6 +65,17 @@ const ChatList = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+//   React.useEffect(() => {
+//     if(socket.current){
+//       socket.current.on('get-last-message', (data) => {
+//         console.log(data);
+//         setConversations(data);
+//       });
+//     }
+// }, [user]);
+
+
 
   React.useEffect(() => {
     //get api set list conversation
@@ -114,6 +128,8 @@ const ChatList = () => {
                         <ChatCard
                           conversation={conversation}
                           key={Math.random()}
+                          socket={socket}
+                          setConversations={setConversations}
                         />
                       );
                     })
