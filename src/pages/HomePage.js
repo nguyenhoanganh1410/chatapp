@@ -30,7 +30,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if(user){
-      socket.current = io("http://localhost:5005");
+      socket.current = io("https://13.228.206.211");
       socket.current.emit("add-user", user.uid);
       socket.current.on("get-users", users => {
         console.log(users);
