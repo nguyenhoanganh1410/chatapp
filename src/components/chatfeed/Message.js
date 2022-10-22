@@ -119,11 +119,12 @@ const Message = ({ type, status, mess }) => {
             >
               <p className="textMess">{mess.content}</p>
               <p className="timeMess">
-                {mess.createdAt
+                {new Date(mess.createdAt)
                   .toLocaleString("en-US", {
                     timeZone: "Asia/Ho_Chi_Minh",
                   })
-                  .slice(11, 16)}
+                  .slice(11, 23)
+                  }
               </p>
               <div className="icon_list">
                 {showIcons ? (

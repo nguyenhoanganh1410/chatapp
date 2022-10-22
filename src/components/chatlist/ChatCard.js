@@ -39,8 +39,18 @@ const ChatCard = ({ conversation,socket,setConversations }) => {
   React.useEffect(() => {
         if(socket.current){
           socket.current.on('get-last-message', (data) => {
-            console.log(data);
-            setConversations(data);
+            
+            // setConversations(data);
+            const {listSender,listReceiver}=data;
+
+            if(listSender[0].inFo.userIdFriend!== user.uid){
+              setConversations(listSender);
+              console.log("S"+listSender[0]);
+            }else if(listReceiver[0].inFo.userIdFriend!== user.uid){
+              setConversations(listReceiver);
+              console.log("R"+listReceiver[0]);
+            }
+
           });
         }
     }, [user]);
@@ -102,7 +112,7 @@ const ChatCard = ({ conversation,socket,setConversations }) => {
                 ? "Bạn:"
                 : `${inFo?.firstName + " " + inFo?.lastName} : `}{" "}
             </span>
-            <span className={conversations.numberUnread ? "active" : ""}>
+            <span className={conversations.mb.numberUnread ? "active" : ""}>
               {conversations.lastMessage[0].content}
             </span>
           </p>
