@@ -57,7 +57,7 @@ const NewMessageForm = ({ userChatting,idConversation,messages,setMessages,socke
       });
       console.log("send");
     }
-      setMessages([...messages,messSave]);
+      // setMessages([...messages,messSave]);
       setNewMessage("");
     }
     catch (error) {
