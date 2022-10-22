@@ -160,7 +160,7 @@ const ChatList = ({socket}) => {
                 <div className="listChatCard">
                   {conversations ? (
                     conversations?.map((conversation) => {
-                      if (conversation.conversations.numberUnread > 0) {
+                      if (conversation.conversations.mb.numberUnread > 0) {
                         return (
                           <ChatCard
                             conversation={conversation}

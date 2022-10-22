@@ -13,7 +13,7 @@ import UserService from "../../services/UserService";
 import { differenceInHours } from "date-fns";
 import useDateLogic from "../../hooks/useDateLogic";
 
-const ChatCard = ({ conversation,socket,setConversations }) => {
+const ChatCard = ({ conversation, socket, setConversations }) => {
   const { state, depatch } = React.useContext(Contex);
   //custom hook
   const { handleDate } = useDateLogic();
@@ -25,7 +25,7 @@ const ChatCard = ({ conversation,socket,setConversations }) => {
   // console.log(conversation);
 
   const { inFo, conversations } = conversation;
-  console.log(conversations.mb.numberUnread)
+  console.log(conversations.mb.numberUnread);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -36,29 +36,25 @@ const ChatCard = ({ conversation,socket,setConversations }) => {
     alert("updating...");
   };
 
-
   React.useEffect(() => {
-        if(socket.current){
-          socket.current.on('get-last-message', (data) => {
-            
-            // setConversations(data);
-            const {listSender,listReceiver}=data;
+    if (socket.current) {
+      socket.current.on("get-last-message", (data) => {
+        // setConversations(data);
+        const { listSender, listReceiver } = data;
 
-            if(listSender[0].inFo.userIdFriend!== user.uid){
-              setConversations(listSender);
-              console.log(listSender[0]);
-            }else if(listReceiver[0].inFo.userIdFriend!== user.uid){
-              setConversations(listReceiver);
-              console.log(listReceiver[0]);
-            }
-
-          });
+        if (listSender[0].inFo.userIdFriend !== user.uid) {
+          setConversations(listSender);
+          console.log(listSender[0]);
+        } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
+          setConversations(listReceiver);
+          console.log(listReceiver[0]);
         }
-    }, [user]);
+      });
+    }
+  }, [user]);
 
   //click 1 conversation -> show chat feed
   const handleShowChat = () => {
-
     socket.current.emit("join-room", conversations._id);
     //featch user by id
     UserService.getById(inFo.userIdFriend)
@@ -83,7 +79,7 @@ const ChatCard = ({ conversation,socket,setConversations }) => {
   // console.log(result);
   // //=> 12
   //card_chat card_chat_active
-  
+
   return (
     <div
       className={
@@ -114,7 +110,9 @@ const ChatCard = ({ conversation,socket,setConversations }) => {
                 : `${inFo?.firstName + " " + inFo?.lastName} : `}{" "}
             </span>
             <span className={conversations.mb.numberUnread ? "active" : ""}>
-              {conversations.lastMessage[0].content}
+              {conversations.lastMessage[0].content.length > 20
+                ? conversations.lastMessage[0].content.slice(0, 20) + "..."
+                : conversations.lastMessage[0].content }
             </span>
           </p>
         </div>
