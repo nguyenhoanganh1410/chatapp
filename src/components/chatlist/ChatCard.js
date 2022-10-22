@@ -48,7 +48,7 @@ const ChatCard = ({ conversation,socket,setConversations }) => {
   //click 1 conversation -> show chat feed
   const handleShowChat = () => {
 
-    // socket.current.emit("join-room", conversations._id);
+    socket.current.emit("join-room", conversations._id);
     //featch user by id
     UserService.getById(inFo.userIdFriend)
       .then(function (snapshot) {
