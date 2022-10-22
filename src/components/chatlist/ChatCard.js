@@ -25,6 +25,7 @@ const ChatCard = ({ conversation,socket,setConversations }) => {
   // console.log(conversation);
 
   const { inFo, conversations } = conversation;
+  console.log(conversations.mb.numberUnread)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -45,10 +46,10 @@ const ChatCard = ({ conversation,socket,setConversations }) => {
 
             if(listSender[0].inFo.userIdFriend!== user.uid){
               setConversations(listSender);
-              console.log("S"+listSender[0]);
+              console.log(listSender[0]);
             }else if(listReceiver[0].inFo.userIdFriend!== user.uid){
               setConversations(listReceiver);
-              console.log("R"+listReceiver[0]);
+              console.log(listReceiver[0]);
             }
 
           });
@@ -131,9 +132,9 @@ const ChatCard = ({ conversation,socket,setConversations }) => {
             )
           )}
         </div>
-        {conversations.numberUnread > 0 ? (
+        {conversations.mb.numberUnread > 0 ? (
           <span className="numberNotification">
-            {conversations.numberUnread}
+            {conversations.mb.numberUnread}
           </span>
         ) : null}
         <span

@@ -36,15 +36,14 @@ const ChatFeed = ({socket}) => {
     console.log("scroll");
   };
 
-  // useEffect(() => {
-  //   if(socket.current){
-  //     console.log("get");
-  //     socket.current.on("get-message", (data) => {
-  //       console.log("data"+data);
-  //       setArrivalMess(data.message);
-  //     })
-  //   }
-  // },[]);
+  useEffect(() => {
+    if(socket.current){
+      socket.current.emit("seen-message",{
+        conversationId:idConversation,
+        userId:user.uid
+      }) 
+    }
+  },[idConversation]);
 
   // useEffect(() => {
   //   arrivalMess && idConversation === arrivalMess.conversationId && setMessages((prev) => [...prev, arrivalMess]);
