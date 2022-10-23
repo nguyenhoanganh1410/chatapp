@@ -40,11 +40,12 @@ const ChatFeed = ({ socket }) => {
   // useEffect(() => {
   //   if (socket.current) {
   //     socket.current.emit("seen-message", {
+  //       isSeen:true,
   //       conversationId: idConversation,
   //       userId: user.uid,
   //     });
   //   }
-  // }, [idConversation]);
+  // }, []);
 
   // useEffect(() => {
   //   arrivalMess && idConversation === arrivalMess.conversationId && setMessages((prev) => [...prev, arrivalMess]);

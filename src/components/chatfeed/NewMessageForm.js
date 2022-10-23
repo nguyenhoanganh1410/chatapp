@@ -78,6 +78,7 @@ const NewMessageForm = ({
                 senderId: user.uid,
                 receiverId: userChatting.uid,
                 message: messSave,
+                idCon: response,
               });
               console.log("send");
             }
@@ -110,6 +111,7 @@ const NewMessageForm = ({
             senderId: user.uid,
             receiverId: userChatting.uid,
             message: messSave,
+            idCon: idConversation,
           });
           console.log("send");
         }

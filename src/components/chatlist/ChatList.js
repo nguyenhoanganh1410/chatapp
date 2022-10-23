@@ -66,14 +66,13 @@ const ChatList = ({socket}) => {
     setValue(newValue);
   };
 
-//   React.useEffect(() => {
-//     if(socket.current){
-//       socket.current.on('get-last-message', (data) => {
-//         console.log(data);
-//         setConversations(data);
-//       });
-//     }
-// }, [user]);
+  React.useEffect(() => {
+    if(socket.current){
+      const ids = conversations.map((ele) => ele.conversations._id);
+      console.log(ids);
+      socket.current.emit("join-conversations", ids);
+    }
+}, [conversations]);
 
 
 
