@@ -11,6 +11,7 @@ import messageApi from "../../api/messageApi";
 import io from "socket.io-client";
 import conversationApi from "../../api/conversationApi";
 // import {init} from '../../store/socketClient';
+import { SetIdConversation } from "../../store/Actions";
 
 const NewMessageForm = ({
   userChatting,
@@ -60,7 +61,9 @@ const NewMessageForm = ({
             user.uid,
             userChatting.uid
           );
+          depatch(SetIdConversation(response))
           console.log("id conversation moi tao ---> " + response);
+          socket.current.emit("join-room", response);
           try {
             const newMess = {
               userId: user.uid,
@@ -118,17 +121,17 @@ const NewMessageForm = ({
     }
   };
 
-  useEffect(() => {
-    socket.current?.on("get-message", ({ senderId, message }) => {
-      console.log("get");
-      console.log("data" + { message });
-      setArrivalMess(message);
-    });
-  }, []);
+  // useEffect(() => {
+  //   socket.current?.on("get-message", ({ senderId, message }) => {
+  //     console.log("get");
+  //     console.log( message );
+  //     setArrivalMess(message);
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    arrivalMess && setMessages((prev) => [...prev, arrivalMess]);
-  }, [arrivalMess]);
+  // useEffect(() => {
+  //   arrivalMess && setMessages((prev) => [...prev, arrivalMess]);
+  // }, [arrivalMess]);
 
   return (
     <div className="new_message" ref={divMessage}>

@@ -22,6 +22,7 @@ const ChatFeed = ({ socket }) => {
   const [messages, setMessages] = useState([]);
   const [statusLoadMessage, setStatusLoadMessage] = useState(true);
   // const [arrivalMess, setArrivalMess] = useState(null);
+  const [arrivalMess, setArrivalMess] = useState(null);
 
   //console.log("chetfeed message ---->" + messages);
   //detructering...
@@ -36,18 +37,32 @@ const ChatFeed = ({ socket }) => {
   //   console.log("scroll");
   // };
 
-  useEffect(() => {
-    if (socket.current) {
-      socket.current.emit("seen-message", {
-        conversationId: idConversation,
-        userId: user.uid,
-      });
-    }
-  }, [idConversation]);
+  // useEffect(() => {
+  //   if (socket.current) {
+  //     socket.current.emit("seen-message", {
+  //       conversationId: idConversation,
+  //       userId: user.uid,
+  //     });
+  //   }
+  // }, [idConversation]);
 
   // useEffect(() => {
   //   arrivalMess && idConversation === arrivalMess.conversationId && setMessages((prev) => [...prev, arrivalMess]);
   // },[arrivalMess,idConversation]);
+
+  useEffect(() => {
+    socket.current?.on("get-message", ({ senderId, message }) => {
+      console.log("get");
+      console.log( message );
+      setArrivalMess(message);
+    });
+  }, []);
+
+  useEffect(() => {
+    arrivalMess && idConversation === arrivalMess.conversationId && setMessages((prev) => [...prev, arrivalMess]);
+  }, [arrivalMess,idConversation]);
+
+  console.log(arrivalMess);
 
   useEffect(() => {
     //scroll last message
