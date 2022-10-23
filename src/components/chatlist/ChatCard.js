@@ -25,7 +25,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
   // console.log(conversation);
 
   const { inFo, conversations } = conversation;
-  console.log(conversations.mb.numberUnread);
+  // console.log(conversations.mb.numberUnread);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -42,12 +42,12 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
         // setConversations(data);
         const { listSender, listReceiver } = data;
 
-        if (listSender[0].inFo.userIdFriend !== user.uid) {
+        if (listSender[0].inFo.userIdFriend !== user?.uid) {
           setConversations(listSender);
-          console.log(listSender[0]);
-        } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
+         // console.log(listSender[0]);
+        } else if (listReceiver[0].inFo.userIdFriend !== user?.uid) {
           setConversations(listReceiver);
-          console.log(listReceiver[0]);
+          //console.log(listReceiver[0]);
         }
       });
     }
@@ -71,15 +71,6 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
         console.log(err.message);
       });
   };
-  // How many hours are between 2 July 2014 06:50:00 and 2 July 2014 19:00:00?
-  // const result = differenceInHours(
-  //   new Date(),
-  //   new Date("2022-10-17T14:30:53.856Z".replace("Z", ""))
-  // );
-  // console.log(result);
-  // //=> 12
-  //card_chat card_chat_active
-
   return (
     <div
       className={
@@ -105,14 +96,14 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
           <h6 className="">{inFo?.firstName + " " + inFo?.lastName}</h6>
           <p>
             <span>
-              {conversations.lastMessage[0].userId === user.uid
+              {conversations?.lastMessage[0]?.userId === user?.uid
                 ? "Bạn:"
                 : `${inFo?.firstName + " " + inFo?.lastName} : `}{" "}
             </span>
             <span className={conversations.mb.numberUnread ? "active" : ""}>
-              {conversations.lastMessage[0].content.length > 20
-                ? conversations.lastMessage[0].content.slice(0, 20) + "..."
-                : conversations.lastMessage[0].content }
+              {conversations?.lastMessage[0]?.content.length > 20
+                ? conversations?.lastMessage[0]?.content.slice(0, 20) + "..."
+                : conversations?.lastMessage[0]?.content}
             </span>
           </p>
         </div>
@@ -120,17 +111,19 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
 
       <div className="group_right">
         <div className="card_time">
-          {handleDate(
-            new Date(),
-            new Date(
-              `${conversations.lastMessage[0].updatedAt}`.toLocaleString(
-                "en-US",
-                { timeZone: "Asia/Ho_Chi_Minh" }
+          {conversations?.lastMessage[0]?.updatedAt
+            ? handleDate(
+                new Date(),
+                new Date(
+                  `${conversations?.lastMessage[0]?.updatedAt}`.toLocaleString(
+                    "en-US",
+                    { timeZone: "Asia/Ho_Chi_Minh" }
+                  )
+                )
               )
-            )
-          )}
+            : ''}
         </div>
-        {conversations.mb.numberUnread > 0 ? (
+        {conversations?.mb.numberUnread > 0 ? (
           <span className="numberNotification">
             {conversations.mb.numberUnread}
           </span>

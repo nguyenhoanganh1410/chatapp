@@ -1,5 +1,23 @@
 .chat_feed{
-    
+    .meassage_loadingStatus{
+
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .circle_loading{
+           // font-size: 18px;
+        }
+        p{
+            margin-top: 16px;
+            font-size: 12px;
+            color: rgba(0,0,0,0.5);
+        }
+    }
     
     height: 100vh;
    // background: hsla(0,2%,90%,.43);

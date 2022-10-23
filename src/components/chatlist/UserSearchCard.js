@@ -113,13 +113,8 @@ const UserSearchCard = ({ u }) => {
           depatch(SetIdConversation(response));
         }
 
-        // if (typeof response === "string") {
-        // console.log("string string");
-        // depatch(SetIdConversation(response));
-        // } else {
-        //   console.log("obj obj");
-        //   depatch(SetIdConversation(null));
-        // }
+        //set userChangting = user currently clicked
+        depatch(SetUserChatting(u));
       } catch (error) {
         console.log("Failed to fetch conversation id: ", error);
       }
@@ -127,12 +122,9 @@ const UserSearchCard = ({ u }) => {
 
     featchConversation();
 
-    //TH2: click vào user trong lịch sử tìm kiếm -> mở cuộc hội thoai
-    depatch(SetUserChatting(u));
-
     //đóng tab tìm kiếm
-    depatch(SetShowTabHistorySearch(false));
-    console.log("Click user card");
+    // depatch(SetShowTabHistorySearch(false));
+    // console.log("Click user card");
   };
 
   return (

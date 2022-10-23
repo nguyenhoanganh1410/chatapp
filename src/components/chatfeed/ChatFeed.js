@@ -14,36 +14,36 @@ import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to us
 import "simplebar/dist/simplebar.css";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
+import CircularProgress from "@mui/material/CircularProgress";
 // import {socket} from '../../store/socketClient';
 
-const ChatFeed = ({socket}) => {
-
+const ChatFeed = ({ socket }) => {
   const { state, depatch } = React.useContext(Contex);
   const [messages, setMessages] = useState([]);
+  const [statusLoadMessage, setStatusLoadMessage] = useState(true);
   // const [arrivalMess, setArrivalMess] = useState(null);
 
-  console.log(messages);
-
+  //console.log("chetfeed message ---->" + messages);
   //detructering...
   const { userChatting, idConversation, user } = state;
-  console.log(idConversation);
+  ////console.log("chetfeed id conversation ---->" + idConversation);
   const messagesEnd = useRef();
   const scrollToBottom = () => {
     messagesEnd.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleScroll = () => {
-    console.log("scroll");
-  };
+  // const handleScroll = () => {
+  //   console.log("scroll");
+  // };
 
   useEffect(() => {
-    if(socket.current){
-      socket.current.emit("seen-message",{
-        conversationId:idConversation,
-        userId:user.uid
-      }) 
+    if (socket.current) {
+      socket.current.emit("seen-message", {
+        conversationId: idConversation,
+        userId: user.uid,
+      });
     }
-  },[idConversation]);
+  }, [idConversation]);
 
   // useEffect(() => {
   //   arrivalMess && idConversation === arrivalMess.conversationId && setMessages((prev) => [...prev, arrivalMess]);
@@ -55,30 +55,34 @@ const ChatFeed = ({socket}) => {
   });
 
   useEffect(() => {
+    setStatusLoadMessage(true)
     //call api get all message
     //set state
     const featchMessages = async () => {
       try {
         const response = await messageApi.getMess(idConversation, user.uid);
         const { data, info, friendStatus, size, totalPages } = response;
+        //console.log(response);
 
         if (response) {
           setMessages(data[0].messages);
         }
+        setStatusLoadMessage(false)
       } catch (error) {
+        setMessages([]);
+        setStatusLoadMessage(false)
         console.log("Failed to fetch conversation list: ", error);
       }
     };
 
     featchMessages();
-  }, [userChatting]);
+  }, [userChatting, idConversation]);
   return (
     <div className="chat_feed">
       <ChatHeader userChatting={userChatting} />
       <div
         // data-simplebar
         className="message_content"
-        onScroll={() => handleScroll()}
       >
         <div className="card_title">
           <div className="title_top">
@@ -133,7 +137,19 @@ const ChatFeed = ({socket}) => {
       <span className="goToBottom" onClick={scrollToBottom}>
         <IoIosArrowDown />
       </span>
-      <NewMessageForm userChatting={userChatting}  idConversation={idConversation} messages={messages} setMessages={setMessages} socket={socket} />
+      {statusLoadMessage ? (
+        <div className="meassage_loadingStatus">
+          <CircularProgress className="circle_loading" />
+          <p>Đang tải tin nhắn</p>
+        </div>
+      ) : null}
+      <NewMessageForm
+        userChatting={userChatting}
+        idConversation={idConversation}
+        messages={messages}
+        setMessages={setMessages}
+        socket={socket}
+      />
     </div>
   );
 };
