@@ -44,10 +44,10 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
 
         if (listSender[0].inFo.userIdFriend !== user.uid) {
           setConversations(listSender);
-          console.log(listSender);
+          console.log("S"+{listSender});
         } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
           setConversations(listReceiver);
-          console.log(listReceiver);
+          console.log("R"+listReceiver);
         }
       });
     }
@@ -55,10 +55,10 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
 
   //click 1 conversation -> show chat feed
   const handleShowChat = () => {
-    console.log("chat"+conversations._id);
-    console.log("old"+idConversation);
+    // console.log("chat"+conversations._id);
+    // console.log("old"+idConversation);
     
-    socket.current.emit("leave-room", idConversation);
+    // socket.current.emit("leave-room", idConversation);
     
     //featch user by id
     UserService.getById(inFo.userIdFriend)
@@ -76,7 +76,11 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
         console.log(err.message);
       });
 
-      socket.current.emit("join-room", conversations._id);
+      // socket.current.emit("join-room", {
+      //   idCon:conversations._id,
+      //   isNew:false
+      // });
+      
   };
   // How many hours are between 2 July 2014 06:50:00 and 2 July 2014 19:00:00?
   // const result = differenceInHours(

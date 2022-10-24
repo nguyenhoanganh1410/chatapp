@@ -67,12 +67,31 @@ const ChatList = ({socket}) => {
   };
 
   React.useEffect(() => {
+    if (socket.current) {
+      socket.current.on("get-last-message", (data) => {
+        // setConversations(data);
+        const { listSender, listReceiver } = data;
+
+        if (listSender[0].inFo.userIdFriend !== user.uid) {
+          setConversations(listSender);
+          console.log(listSender);
+        } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
+          setConversations(listReceiver);
+          console.log(listReceiver);
+        }
+      });
+    }
+  }, [user]);
+
+  React.useEffect(() => {
     if(socket.current){
       const ids = conversations.map((ele) => ele.conversations._id);
       console.log(ids);
       socket.current.emit("join-conversations", ids);
     }
 }, [conversations]);
+
+
 
 
 

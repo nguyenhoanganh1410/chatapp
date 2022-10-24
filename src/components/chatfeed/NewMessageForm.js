@@ -63,7 +63,9 @@ const NewMessageForm = ({
           );
           depatch(SetIdConversation(response))
           console.log("id conversation moi tao ---> " + response);
-          socket.current.emit("join-room", response);
+          socket.current.emit("join-room", {
+            idCon:response,
+            isNew:true});
           try {
             const newMess = {
               userId: user.uid,
