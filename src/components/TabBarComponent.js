@@ -19,7 +19,12 @@ import { RiContactsBook2Line } from "react-icons/ri";
 import { arrIconOption } from "../data/Data";
 import ModelDetailUser from "./model/ModelDetailUser";
 import Contex from "../store/Context";
-import { SetIndexTab, SetUser } from "../store/Actions";
+import {
+  SetIdConversation,
+  SetIndexTab,
+  SetUser,
+  SetUserChatting,
+} from "../store/Actions";
 
 import { useNavigate } from "react-router-dom";
 
@@ -84,6 +89,8 @@ const TabBarComponent = () => {
   const handleLogout = (e) => {
     //show model
     setOpenAlert(true);
+    depatch(SetIdConversation(null));
+    depatch(SetUserChatting(null));
   };
 
   const handleLogoutMain = () => {

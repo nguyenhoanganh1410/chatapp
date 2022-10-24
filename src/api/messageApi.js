@@ -12,10 +12,17 @@ const messageApi = {
     return axiosClient.get(url);
   },
 
-  addTextMess:(mess)=>{
+  addTextMess: (mess) => {
     const url = `/messages/text`;
     return axiosClient.post(url, mess);
-  }
+  },
+
+  reMess: (id) => {
+    const url = `/messages/reMessage`;
+    return axiosClient.post(url, {
+      idMessage: id,
+    });
+  },
 };
 
 export default messageApi;

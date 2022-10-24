@@ -14,6 +14,7 @@ import copy from "copy-to-clipboard";
 
 import { iconsTouch } from "../../data/Data";
 import Contex from "../../store/Context";
+import messageApi from "../../api/messageApi";
 
 //status : 0 binh thuong, 1 thu hoi, 2 bi xoa
 const Message = ({ type, status, mess }) => {
@@ -41,7 +42,6 @@ const Message = ({ type, status, mess }) => {
   };
 
   React.useEffect(() => {
-   
     if (user.uid === mess.userId) {
       setMe(true);
     } else {
@@ -52,6 +52,33 @@ const Message = ({ type, status, mess }) => {
   //click hide/show list icon
   const handleToggle = () => {
     setShowIcons(!showIcons);
+  };
+  //console.log("id meesss --->" + mess._id);
+  const handleReMessage = () => {
+    handleClose();
+    // console.log("id meesss --->" + mess._id);
+    //call api thu hoi tin nhan
+    const reMessage = async () => {
+      try {
+        const response = await messageApi.reMess(mess._id);
+        console.log("thu hoi id meesss --->" + mess._id);
+
+        //
+
+        
+        // const { data, info, friendStatus, size, totalPages } = response;
+        // //console.log(response);
+
+        // if (response) {
+        //   setMessages(data[0].messages);
+        // }
+        // setStatusLoadMessage(false)
+      } catch (error) {
+        console.log("Failed to remove message: ", error);
+      }
+    };
+
+    reMessage();
   };
 
   return (
@@ -96,7 +123,7 @@ const Message = ({ type, status, mess }) => {
           )}
         </React.Fragment>
       )}
-      {status === 1 ? (
+      {mess.isDeleted ? (
         <div
           className="message_text"
           style={me ? { backgroundColor: "#e5efff" } : {}}
@@ -104,11 +131,18 @@ const Message = ({ type, status, mess }) => {
           <p className="textMess" style={{ color: "#abb4bc" }}>
             Tin nhắn đã được thu hồi
           </p>
-          <p className="timeMess">13:33</p>
+          <p className="timeMess">
+            {" "}
+            {new Date(mess.createdAt)
+              .toLocaleString("en-US", {
+                timeZone: "Asia/Ho_Chi_Minh",
+              })
+              .slice(11, 23)}
+          </p>
         </div>
       ) : (
         <>
-          {mess.type === "FILE" ? (
+          {mess.type === "IMAGE" ? (
             <div className="messImg">
               <img src={mess.content} alt="image" />
             </div>
@@ -123,8 +157,7 @@ const Message = ({ type, status, mess }) => {
                   .toLocaleString("en-US", {
                     timeZone: "Asia/Ho_Chi_Minh",
                   })
-                  .slice(11, 23)
-                  }
+                  .slice(11, 23)}
               </p>
               <div className="icon_list">
                 {showIcons ? (
@@ -190,7 +223,10 @@ const Message = ({ type, status, mess }) => {
             </MenuItem>
             <Divider />
             {me ? (
-              <MenuItem style={{ color: "#E64848" }} onClick={handleClose}>
+              <MenuItem
+                style={{ color: "#E64848" }}
+                onClick={() => handleReMessage()}
+              >
                 <span style={{ fontSize: "16px", marginRight: "6px" }}>
                   <IoReloadOutline />
                 </span>

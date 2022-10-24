@@ -116,12 +116,12 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
           <h6 className="">{inFo?.firstName + " " + inFo?.lastName}</h6>
           <p>
             <span>
-              {conversations.lastMessage[0].userId === user.uid
+              {conversations?.lastMessage[0].userId === user?.uid
                 ? "Bạn:"
                 : `${inFo?.firstName + " " + inFo?.lastName} : `}{" "}
             </span>
-            <span className={conversations.mb.numberUnread ? "active" : ""}>
-              {conversations.lastMessage[0].content.length > 20
+            <span className={conversations?.mb.numberUnread ? "active" : ""}>
+              {conversations?.lastMessage[0].content.length > 20
                 ? conversations.lastMessage[0].content.slice(0, 20) + "..."
                 : conversations.lastMessage[0].content }
             </span>
