@@ -20,6 +20,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 const ChatFeed = ({ socket }) => {
   const { state, depatch } = React.useContext(Contex);
   const [messages, setMessages] = useState([]);
+  const [idReMessage, setIdReMessage] = useState("");
   const [statusLoadMessage, setStatusLoadMessage] = useState(true);
   // const [arrivalMess, setArrivalMess] = useState(null);
   const [arrivalMess, setArrivalMess] = useState(null);
@@ -57,7 +58,24 @@ const ChatFeed = ({ socket }) => {
       console.log( message );
       setArrivalMess(message);
     });
+    
+    socket.current?.on("reMessage", (data) => {
+      setIdReMessage(data)
+    });
+    
   }, []);
+
+  useEffect(() => {
+    const newMess = messages.map(mess =>{
+      if(mess._id === idReMessage){
+        return {...mess, isDeleted: true}
+      }
+      return mess
+    })
+    console.log(newMess);
+    setMessages(newMess)
+  }, [idReMessage]);
+
 
   useEffect(() => {
     arrivalMess && idConversation === arrivalMess.conversationId && setMessages((prev) => [...prev, arrivalMess]);
@@ -128,7 +146,7 @@ const ChatFeed = ({ socket }) => {
           <div className="title_image"></div>
         </div>
         {messages.map((mess) => {
-          return <Message key={mess._id} mess={mess} />;
+          return <Message key={mess._id} mess={mess}  socket={socket}/>;
         })}
         {/* <TimeLine />
         <Message />

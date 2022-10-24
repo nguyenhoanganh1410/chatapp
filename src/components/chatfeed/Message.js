@@ -17,7 +17,7 @@ import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 
 //status : 0 binh thuong, 1 thu hoi, 2 bi xoa
-const Message = ({ type, status, mess }) => {
+const Message = ({ type, status, mess,socket }) => {
   const { state, depatch } = React.useContext(Contex);
   //detructering...
   const { userChatting, idConversation, user } = state;
@@ -62,6 +62,12 @@ const Message = ({ type, status, mess }) => {
       try {
         const response = await messageApi.reMess(mess._id);
         console.log("thu hoi id meesss --->" + mess._id);
+        socket.current.emit("reMessage", {
+          idMessage:mess._id,
+          idCon:idConversation
+        });
+
+        
 
         //
 
