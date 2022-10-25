@@ -27,7 +27,8 @@ const NewMessageForm = ({
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMess, setArrivalMess] = useState(null);
   const [selectedFile, setSelectedFile] = useState();
-	const [isFilePicked, setIsFilePicked] = useState(false);
+  const [isFilePicked, setIsFilePicked] = useState(false);
+  const [newMessageSticker, setNewMessageSticker] = useState("");
 
   const { user } = state;
   const inputChooseIMG = useRef();
@@ -45,15 +46,14 @@ const NewMessageForm = ({
     setShowStickers(!showStickers);
   };
 
-
-// SEND FILE
-const changeHandler = async(event) => {
-    const file = event.target.files[0]
-		// setSelectedFile(event.target.files[0]);
-		setIsFilePicked(true);
+  // SEND FILE
+  const changeHandler = async (event) => {
+    const file = event.target.files[0];
+    // setSelectedFile(event.target.files[0]);
+    setIsFilePicked(true);
     let TYPE = file.type.split("/")[0].trim().toUpperCase();
     let SIZE = file.size / 1024 / 1024;
-    if(file){
+    if (file) {
       if (!idConversation) {
         console.log("chua co conversation ---> create");
         //tao cuoc tro chuyen
@@ -63,21 +63,21 @@ const changeHandler = async(event) => {
               user.uid,
               userChatting.uid
             );
-            depatch(SetIdConversation(response))
+            depatch(SetIdConversation(response));
             console.log("id conversation moi tao ---> " + response);
             socket.current.emit("join-room", {
-              idCon:response,
-              isNew:true});
+              idCon: response,
+              isNew: true,
+            });
 
-  
-              const formData = new FormData();
-              formData.append('userId', user.uid);
-              formData.append('file', file);
-              formData.append('type', TYPE);
-              formData.append('conversationId', response);
+            const formData = new FormData();
+            formData.append("userId", user.uid);
+            formData.append("file", file);
+            formData.append("type", TYPE);
+            formData.append("conversationId", response);
             try {
               const messSave = await messageApi.addFileMess(formData);
-  
+
               if (socket.current) {
                 socket.current.emit("send-message", {
                   senderId: user.uid,
@@ -96,22 +96,21 @@ const changeHandler = async(event) => {
             console.log("Failed to create the conversation: ", error);
           }
         };
-  
+
         createConversation();
-      }else{
-  
+      } else {
         //th2: đã có cuộc trò chuyện
         console.log(" co conversation ---> create");
         console.log(TYPE);
         const formData2 = new FormData();
-              formData2.append('userId', user.uid);
-              formData2.append('file', file);
-              formData2.append('type', TYPE);
-              formData2.append('conversationId', idConversation);
+        formData2.append("userId", user.uid);
+        formData2.append("file", file);
+        formData2.append("type", TYPE);
+        formData2.append("conversationId", idConversation);
         try {
           const messSave = await messageApi.addFileMess(formData2);
           console.log("TYPE");
-    
+
           if (socket.current) {
             socket.current.emit("send-message", {
               senderId: user.uid,
@@ -128,15 +127,93 @@ const changeHandler = async(event) => {
         }
       }
     }
-    
-	};
+  };
 
   const onHandlChoiseFile = () => {
     inputChooseIMG.current.click();
-  }
+  };
 
+  //handle send sticker
+  const handleSendSticker = async (url) => {
+    //console.log(url?.url)
+    //set text = url of sticker
+    setNewMessageSticker(url?.url);
+    //ckeck
+    //ckeck
+    //th1: chưa từng trò chuyện, có idConversation == null
+    if (!idConversation) {
+      console.log("chua co conversation ---> create");
+      //tao cuoc tro chuyen
+      const createConversation = async () => {
+        try {
+          const response = await conversationApi.createConversation(
+            user.uid,
+            userChatting.uid
+          );
+          depatch(SetIdConversation(response));
+          console.log("id conversation moi tao ---> " + response);
+          socket.current.emit("join-room", {
+            idCon: response,
+            isNew: true,
+          });
+          try {
+            const newMess = {
+              userId: user.uid,
+              content: newMessageSticker,
+              conversationId: response,
+              type: "TEXT",
+            };
+            const messSave = await messageApi.addTextMess(newMess);
 
+            if (socket.current) {
+              socket.current.emit("send-message", {
+                senderId: user.uid,
+                receiverId: userChatting.uid,
+                message: messSave,
+                idCon: response,
+              });
+              console.log("send");
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        } catch (error) {
+          console.log("Failed to create the conversation: ", error);
+        }
+      };
 
+      createConversation();
+    } else {
+      //th2: đã có cuộc trò chuyện
+      console.log(" co conversation ---> create");
+      try {
+        const newMess = {
+          userId: user.uid,
+          content: newMessageSticker,
+          conversationId: idConversation,
+          type: "TEXT",
+        };
+
+        //call api save db
+        const messSave = await messageApi.addTextMess(newMess);
+
+        //gui len socket
+        if (socket.current) {
+          socket.current.emit("send-message", {
+            senderId: user.uid,
+            receiverId: userChatting.uid,
+            message: messSave,
+            idCon: idConversation,
+          });
+          console.log("send");
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    }
+    setNewMessageSticker("");
+    setShowStickers(false);
+  };
   const onFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -155,13 +232,16 @@ const changeHandler = async(event) => {
             user.uid,
             userChatting.uid
           );
-          depatch(SetIdConversation(response))
+          depatch(SetIdConversation(response));
           console.log("id conversation moi tao ---> " + response);
 
+          //join a room with name = id conversation
           socket.current.emit("join-room", {
-            idCon:response,
-            isNew:true});
+            idCon: response,
+            isNew: true,
+          });
           try {
+            //create new message
             const newMess = {
               userId: user.uid,
               content: newMessage,
@@ -190,8 +270,7 @@ const changeHandler = async(event) => {
       };
 
       createConversation();
-    }else{
-
+    } else {
       //th2: đã có cuộc trò chuyện
       console.log(" co conversation ---> create");
       try {
@@ -202,7 +281,7 @@ const changeHandler = async(event) => {
           type: "TEXT",
         };
         const messSave = await messageApi.addTextMess(newMess);
-  
+
         if (socket.current) {
           socket.current.emit("send-message", {
             senderId: user.uid,
@@ -249,17 +328,17 @@ const changeHandler = async(event) => {
           }
         />
         <span style={{ color: "#333", fontSize: "20px" }} title="Gửi hình ảnh">
-        <input
-                type="file"
-                ref={inputChooseIMG}
-                hidden
-                onChange={changeHandler}
-        ></input>
+          <input
+            type="file"
+            ref={inputChooseIMG}
+            hidden
+            onChange={changeHandler}
+          ></input>
           <GrImage onClick={onHandlChoiseFile} />
           {/* <button onClick={submitFile}>Submit</button> */}
         </span>
         {/* <input type="file" onChange={changeHandler} /> */}
-        
+
         <span
           style={{ color: "#333" }}
           title="Biểu cảm"
@@ -278,7 +357,7 @@ const changeHandler = async(event) => {
             apikey: "110a13915f6cb9503c563964f58cee2d",
             userId: user?.uid || Math.random(),
           }}
-          stickerClick={(url) => console.log(url)}
+          stickerClick={(url) => handleSendSticker(url)}
         />
       ) : null}
     </div>
