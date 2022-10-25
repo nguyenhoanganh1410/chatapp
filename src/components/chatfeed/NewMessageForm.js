@@ -26,6 +26,7 @@ const NewMessageForm = ({
   const { state, depatch } = useContext(Context);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMess, setArrivalMess] = useState(null);
+  const [newMessageSticker, setNewMessageSticker] = useState("");
 
   const { user } = state;
 
@@ -43,6 +44,87 @@ const NewMessageForm = ({
     setShowStickers(!showStickers);
   };
 
+  //handle send sticker
+  const handleSendSticker = async (url) => {
+    //console.log(url?.url)
+    //set text = url of sticker
+    setNewMessageSticker(url?.url);
+    //ckeck
+    //ckeck
+    //th1: chưa từng trò chuyện, có idConversation == null
+    if (!idConversation) {
+      console.log("chua co conversation ---> create");
+      //tao cuoc tro chuyen
+      const createConversation = async () => {
+        try {
+          const response = await conversationApi.createConversation(
+            user.uid,
+            userChatting.uid
+          );
+          depatch(SetIdConversation(response));
+          console.log("id conversation moi tao ---> " + response);
+          socket.current.emit("join-room", {
+            idCon: response,
+            isNew: true,
+          });
+          try {
+            const newMess = {
+              userId: user.uid,
+              content: newMessageSticker,
+              conversationId: response,
+              type: "TEXT",
+            };
+            const messSave = await messageApi.addTextMess(newMess);
+
+            if (socket.current) {
+              socket.current.emit("send-message", {
+                senderId: user.uid,
+                receiverId: userChatting.uid,
+                message: messSave,
+                idCon: response,
+              });
+              console.log("send");
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        } catch (error) {
+          console.log("Failed to create the conversation: ", error);
+        }
+      };
+
+      createConversation();
+    } else {
+      //th2: đã có cuộc trò chuyện
+      console.log(" co conversation ---> create");
+      try {
+        const newMess = {
+          userId: user.uid,
+          content: newMessageSticker,
+          conversationId: idConversation,
+          type: "TEXT",
+        };
+
+        //call api save db
+        const messSave = await messageApi.addTextMess(newMess);
+
+        //gui len socket
+        if (socket.current) {
+          socket.current.emit("send-message", {
+            senderId: user.uid,
+            receiverId: userChatting.uid,
+            message: messSave,
+            idCon: idConversation,
+          });
+          console.log("send");
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    }
+    setNewMessageSticker("");
+    setShowStickers(false);
+  };
   const onFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -61,12 +143,16 @@ const NewMessageForm = ({
             user.uid,
             userChatting.uid
           );
-          depatch(SetIdConversation(response))
+          depatch(SetIdConversation(response));
           console.log("id conversation moi tao ---> " + response);
+
+          //join a room with name = id conversation
           socket.current.emit("join-room", {
-            idCon:response,
-            isNew:true});
+            idCon: response,
+            isNew: true,
+          });
           try {
+            //create new message 
             const newMess = {
               userId: user.uid,
               content: newMessage,
@@ -95,8 +181,7 @@ const NewMessageForm = ({
       };
 
       createConversation();
-    }else{
-
+    } else {
       //th2: đã có cuộc trò chuyện
       console.log(" co conversation ---> create");
       try {
@@ -107,7 +192,7 @@ const NewMessageForm = ({
           type: "TEXT",
         };
         const messSave = await messageApi.addTextMess(newMess);
-  
+
         if (socket.current) {
           socket.current.emit("send-message", {
             senderId: user.uid,
@@ -174,7 +259,7 @@ const NewMessageForm = ({
             apikey: "110a13915f6cb9503c563964f58cee2d",
             userId: user?.uid || Math.random(),
           }}
-          stickerClick={(url) => console.log(url)}
+          stickerClick={(url) => handleSendSticker(url)}
         />
       ) : null}
     </div>

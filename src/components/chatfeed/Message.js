@@ -17,7 +17,7 @@ import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 
 //status : 0 binh thuong, 1 thu hoi, 2 bi xoa
-const Message = ({ type, status, mess,socket }) => {
+const Message = ({ type, status, mess, socket }) => {
   const { state, depatch } = React.useContext(Contex);
   //detructering...
   const { userChatting, idConversation, user } = state;
@@ -63,15 +63,12 @@ const Message = ({ type, status, mess,socket }) => {
         const response = await messageApi.reMess(mess._id);
         console.log("thu hoi id meesss --->" + mess._id);
         socket.current.emit("reMessage", {
-          idMessage:mess._id,
-          idCon:idConversation
+          idMessage: mess._id,
+          idCon: idConversation,
         });
-
-        
 
         //
 
-        
         // const { data, info, friendStatus, size, totalPages } = response;
         // //console.log(response);
 
@@ -154,44 +151,63 @@ const Message = ({ type, status, mess,socket }) => {
             </div>
           ) : (
             <div
-              className="message_text"
+              className={
+                mess.content.includes("https://img.stipop.io")
+                  ? "message_text bg-trans"
+                  : "message_text"
+              }
               style={me ? { backgroundColor: "#e5efff" } : {}}
             >
-              <p className="textMess">{mess.content}</p>
-              <p className="timeMess">
-                {new Date(mess.createdAt)
-                  .toLocaleString("en-US", {
-                    timeZone: "Asia/Ho_Chi_Minh",
-                  })
-                  .slice(11, 23)}
-              </p>
-              <div className="icon_list">
-                {showIcons ? (
-                  <div
-                    className="icons_react"
-                    style={me ? { right: "50%" } : { left: "50%" }}
-                  >
-                    {iconsTouch.map((icon) => {
-                      return (
-                        <img
-                          key={icon.id}
-                          src={icon.url}
-                          alt="icon.name"
-                          className="icon_face"
-                        />
-                      );
-                    })}
-                  </div>
-                ) : null}
+              {mess.content.includes("https://img.stipop.io") ? (
+                <div className="messSticker">
+                  <img src={mess.content} alt="image" />
+                  <p className="timeMessSticker">
+                    {new Date(mess.createdAt)
+                      .toLocaleString("en-US", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })
+                      .slice(11, 23)}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <p className="textMess">{mess.content}</p>
+                  <p className="timeMess">
+                    {new Date(mess.createdAt)
+                      .toLocaleString("en-US", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })
+                      .slice(11, 23)}
+                  </p>
+                  <div className="icon_list">
+                    {showIcons ? (
+                      <div
+                        className="icons_react"
+                        style={me ? { right: "50%" } : { left: "50%" }}
+                      >
+                        {iconsTouch.map((icon) => {
+                          return (
+                            <img
+                              key={icon.id}
+                              src={icon.url}
+                              alt="icon.name"
+                              className="icon_face"
+                            />
+                          );
+                        })}
+                      </div>
+                    ) : null}
 
-                <span
-                  className="icon_react"
-                  style={!me ? { right: "20px" } : {}}
-                  onClick={() => handleToggle()}
-                >
-                  <AiOutlineLike />
-                </span>
-              </div>
+                    <span
+                      className="icon_react"
+                      style={!me ? { right: "20px" } : {}}
+                      onClick={() => handleToggle()}
+                    >
+                      <AiOutlineLike />
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </>

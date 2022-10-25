@@ -44,10 +44,10 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
 
         if (listSender[0].inFo.userIdFriend !== user.uid) {
           setConversations(listSender);
-          console.log("S"+{listSender});
+          console.log("S" + { listSender });
         } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
           setConversations(listReceiver);
-          console.log("R"+listReceiver);
+          console.log("R" + listReceiver);
         }
       });
     }
@@ -57,9 +57,9 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
   const handleShowChat = () => {
     // console.log("chat"+conversations._id);
     // console.log("old"+idConversation);
-    
+
     // socket.current.emit("leave-room", idConversation);
-    
+
     //featch user by id
     UserService.getById(inFo.userIdFriend)
       .then(function (snapshot) {
@@ -70,17 +70,15 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
         depatch(SetUserChatting(snapshot.data()));
         //set id conversation current
         depatch(SetIdConversation(conversations._id));
-        
       })
       .catch((err) => {
         console.log(err.message);
       });
 
-      // socket.current.emit("join-room", {
-      //   idCon:conversations._id,
-      //   isNew:false
-      // });
-      
+    // socket.current.emit("join-room", {
+    //   idCon:conversations._id,
+    //   isNew:false
+    // });
   };
   // How many hours are between 2 July 2014 06:50:00 and 2 July 2014 19:00:00?
   // const result = differenceInHours(
@@ -121,9 +119,18 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
                 : `${inFo?.firstName + " " + inFo?.lastName} : `}{" "}
             </span>
             <span className={conversations?.mb.numberUnread ? "active" : ""}>
-              {conversations?.lastMessage[0].content.length > 20
-                ? conversations.lastMessage[0].content.slice(0, 20) + "..."
-                : conversations.lastMessage[0].content }
+              {conversations?.lastMessage[0]?.content.includes(
+                "https://img.stipop.io"
+              ) ? (
+                "Sticker"
+              ) : (
+                <>
+                  {conversations?.lastMessage[0]?.content.length > 20
+                    ? conversations?.lastMessage[0]?.content.slice(0, 20) +
+                      "..."
+                    : conversations?.lastMessage[0]?.content}
+                </>
+              )}
             </span>
           </p>
         </div>
