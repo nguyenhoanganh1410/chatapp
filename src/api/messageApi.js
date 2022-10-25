@@ -17,6 +17,11 @@ const messageApi = {
     return axiosClient.post(url, mess);
   },
 
+  addFileMess: (mess) => {
+    const url = `/messages/files`;
+    return axiosClient.post(url, mess);
+  },
+
   reMess: (id) => {
     const url = `/messages/reMessage`;
     return axiosClient.post(url, {
