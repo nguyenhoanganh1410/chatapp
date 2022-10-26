@@ -63,6 +63,12 @@ const ChatFeed = ({ socket }) => {
   }, [messageSent]);
 
   useEffect(() => {
+
+    socket.current.emit("join-room", {
+      idCon:idConversation,
+      isNew:false
+    });
+
     socket.current?.on("get-message", ({ senderId, message }) => {
       //console.log("get");
       console.log("mess nhan dc ---> ");
@@ -77,6 +83,18 @@ const ChatFeed = ({ socket }) => {
       setIdReMessage(data);
     });
   }, []);
+    
+  // }, [userChatting]);
+
+  useEffect(() => {
+      if (socket.current) {
+        socket.current.emit("seen-message", {
+          conversationId: idConversation,
+          userId: user.uid,
+        });
+      }
+    }, []);
+  
 
   //cap nhat mess da thu hoi len giao dien
   useEffect(() => {

@@ -35,6 +35,10 @@ const HomePage = () => {
       // socket.current = io("http://localhost:5005");
      // console.log(socket);
       socket.current.emit("start", user);
+
+      socket.current.on("join-room",(idConversation)=>{
+        console.log("join")
+      } );
     }
   }, [user]);
 
