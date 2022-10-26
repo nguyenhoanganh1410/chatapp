@@ -15,6 +15,7 @@ import {
   SET_IDCONVERSATION,
   SET_MESSAGESENT,
   SET_STATUSMESSAGE,
+  SET_IDMESSAGEDELETEDWITHME,
 } from "./Actions";
 
 //innite state
@@ -57,6 +58,8 @@ const initState = {
   //đã xem
 
   statusMessage: "đã gửi",
+
+  idMessageDeletedWithMe: "",
 };
 
 //depatch
@@ -142,6 +145,11 @@ const Reducer = (state, action) => {
       return {
         ...state,
         statusMessage: action.payload,
+      };
+    case SET_IDMESSAGEDELETEDWITHME:
+      return {
+        ...state,
+        idMessageDeletedWithMe: action.payload,
       };
   }
 };

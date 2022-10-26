@@ -16,6 +16,7 @@ import { iconsTouch } from "../../data/Data";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { useState } from "react";
+import { SetIdMessageDeletedWithMe } from "../../store/Actions";
 
 //status : 0 binh thuong, 1 thu hoi, 2 bi xoa
 const Message = ({ isLastMessage, status, mess, socket }) => {
@@ -48,6 +49,11 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
     } else {
       setMe(false);
     }
+
+    //if user.id co trong mang deletedByUserIds -> khong render this message
+    // if(mess.deletedByUserIds.includes(user.uid)){
+    //   setDeleted(true)
+    // }
   }, []);
 
   //click hide/show list icon
@@ -85,206 +91,230 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
     reMessage();
   };
 
+  const deleteMessageWithMe = () => {
+    handleClose();
+    const deleteMess = async () => {
+      try {
+        console.log("delete with me id meesss --->" + mess._id);
+        depatch(SetIdMessageDeletedWithMe(mess._id));
+        const response = await messageApi.deleteMessage(mess._id, user.uid);
+      } catch (error) {
+        console.log("Failed to remove message: ", error);
+      }
+    };
+
+    deleteMess();
+  };
+
   return (
-    <div
-      className="message"
-      style={me ? { flexDirection: "row-reverse" } : null}
-    >
-      {me ? (
-        <React.Fragment>
-          {user?.avatar ? (
-            <Avatar
-              className="avatar"
-              src={user?.avatar}
-              alt={user?.first_name}
-            />
-          ) : (
-            <Avatar
-              className="avatar"
-              style={{ textTransform: "capitalize" }}
-              src={user?.avatar}
-            >
-              {user?.last_name[0]}
-            </Avatar>
-          )}
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          {userChatting?.avatar ? (
-            <Avatar
-              className="avatar"
-              src={userChatting?.avatar}
-              alt={userChatting?.first_name}
-            />
-          ) : (
-            <Avatar
-              className="avatar"
-              style={{ textTransform: "capitalize" }}
-              src={userChatting?.avatar}
-            >
-              {userChatting?.last_name[0]}
-            </Avatar>
-          )}
-        </React.Fragment>
-      )}
-      {mess.isDeleted ? (
-        <div
-          className="message_text"
-          style={me ? { backgroundColor: "#e5efff" } : {}}
-        >
-          <p className="textMess" style={{ color: "#abb4bc" }}>
-            Tin nhắn đã được thu hồi
-          </p>
-          <p className="timeMess">
-            {" "}
-            {new Date(mess.createdAt)
-              .toLocaleString("en-US", {
-                timeZone: "Asia/Ho_Chi_Minh",
-              })
-              .slice(11, 23)}
-          </p>
-        </div>
-      ) : (
+    <>
+      {!mess?.deletedByUserIds?.includes(user.uid) ? (
         <>
-          {mess.type === "IMAGE" ? (
-            <div className="messImg">
-              <img src={mess.content} alt="image" />
-            </div>
-          ) : (
-            <div
-              className={
-                mess.content.includes("https://img.stipop.io")
-                  ? "message_text bg-trans"
-                  : "message_text"
-              }
-              style={me ? { backgroundColor: "#e5efff" } : {}}
-            >
-              {mess.content.includes("https://img.stipop.io") ? (
-                <div className="messSticker">
-                  <img src={mess.content} alt="image" />
-                  <p className="timeMessSticker">
-                    {new Date(mess.createdAt)
-                      .toLocaleString("en-US", {
-                        timeZone: "Asia/Ho_Chi_Minh",
-                      })
-                      .slice(11, 23)}
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <p className="textMess">{mess.content}</p>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <p className="timeMess">
-                      {new Date(mess.createdAt)
-                        .toLocaleString("en-US", {
-                          timeZone: "Asia/Ho_Chi_Minh",
-                        })
-                        .slice(11, 23)}
-                    </p>
-                    {isLastMessage && mess?.userId === user?.uid ? (
-                      <p
-                        style={{
-                          fontSize: "12px",
-                          textTransform: "capitalize",
-                          marginLeft: "8px",
-                        }}
-                        className="timeMess"
-                      >
-                        {statusMessage}
-                      </p>
-                    ) : null}
-                  </div>
-                  <div className="icon_list">
-                    {showIcons ? (
-                      <div
-                        className="icons_react"
-                        style={me ? { right: "50%" } : { left: "50%" }}
-                      >
-                        {iconsTouch.map((icon) => {
-                          return (
-                            <img
-                              key={icon.id}
-                              src={icon.url}
-                              alt="icon.name"
-                              className="icon_face"
-                            />
-                          );
-                        })}
-                      </div>
-                    ) : null}
-
-                    <span
-                      className="icon_react"
-                      style={!me ? { right: "20px" } : {}}
-                      onClick={() => handleToggle()}
-                    >
-                      <AiOutlineLike />
-                    </span>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-        </>
-      )}
-      {status === 1 ? null : (
-        <>
-          <div className="option">
-            <span
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-              title="Thêm"
-            >
-              <BiDotsHorizontalRounded />
-            </span>
-            <span title="Trả lời">
-              <MdFormatQuote />
-            </span>
-          </div>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
+          <div
+            className="message"
+            style={me ? { flexDirection: "row-reverse" } : null}
           >
-            <MenuItem onClick={copyToClipboard}>
-              <span style={{ fontSize: "16px", marginRight: "6px" }}>
-                <FaRegCopy />
-              </span>
-              Copy tin nhắn
-            </MenuItem>
-            <Divider />
             {me ? (
-              <MenuItem
-                style={{ color: "#E64848" }}
-                onClick={() => handleReMessage()}
+              <React.Fragment>
+                {user?.avatar ? (
+                  <Avatar
+                    className="avatar"
+                    src={user?.avatar}
+                    alt={user?.first_name}
+                  />
+                ) : (
+                  <Avatar
+                    className="avatar"
+                    style={{ textTransform: "capitalize" }}
+                    src={user?.avatar}
+                  >
+                    {user?.last_name[0]}
+                  </Avatar>
+                )}
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                {userChatting?.avatar ? (
+                  <Avatar
+                    className="avatar"
+                    src={userChatting?.avatar}
+                    alt={userChatting?.first_name}
+                  />
+                ) : (
+                  <Avatar
+                    className="avatar"
+                    style={{ textTransform: "capitalize" }}
+                    src={userChatting?.avatar}
+                  >
+                    {userChatting?.last_name[0]}
+                  </Avatar>
+                )}
+              </React.Fragment>
+            )}
+            {mess.isDeleted ? (
+              <div
+                className="message_text"
+                style={me ? { backgroundColor: "#e5efff" } : {}}
               >
-                <span style={{ fontSize: "16px", marginRight: "6px" }}>
-                  <IoReloadOutline />
-                </span>
-                Thu hồi tin nhắn
-              </MenuItem>
-            ) : null}
+                <p className="textMess" style={{ color: "#abb4bc" }}>
+                  Tin nhắn đã được thu hồi
+                </p>
+                <p className="timeMess">
+                  {" "}
+                  {new Date(mess.createdAt)
+                    .toLocaleString("en-US", {
+                      timeZone: "Asia/Ho_Chi_Minh",
+                    })
+                    .slice(11, 23)}
+                </p>
+              </div>
+            ) : (
+              <>
+                {mess.type === "IMAGE" ? (
+                  <div className="messImg">
+                    <img src={mess.content} alt="image" />
+                  </div>
+                ) : (
+                  <div
+                    className={
+                      mess.content.includes("https://img.stipop.io")
+                        ? "message_text bg-trans"
+                        : "message_text"
+                    }
+                    style={me ? { backgroundColor: "#e5efff" } : {}}
+                  >
+                    {mess.content.includes("https://img.stipop.io") ? (
+                      <div className="messSticker">
+                        <img src={mess.content} alt="image" />
+                        <p className="timeMessSticker">
+                          {new Date(mess.createdAt)
+                            .toLocaleString("en-US", {
+                              timeZone: "Asia/Ho_Chi_Minh",
+                            })
+                            .slice(11, 23)}
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        <p className="textMess">{mess.content}</p>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <p className="timeMess">
+                            {new Date(mess.createdAt)
+                              .toLocaleString("en-US", {
+                                timeZone: "Asia/Ho_Chi_Minh",
+                              })
+                              .slice(11, 23)}
+                          </p>
+                          {isLastMessage && mess?.userId === user?.uid ? (
+                            <p
+                              style={{
+                                fontSize: "12px",
+                                textTransform: "capitalize",
+                                marginLeft: "8px",
+                              }}
+                              className="timeMess"
+                            >
+                              {statusMessage}
+                            </p>
+                          ) : null}
+                        </div>
+                        <div className="icon_list">
+                          {showIcons ? (
+                            <div
+                              className="icons_react"
+                              style={me ? { right: "50%" } : { left: "50%" }}
+                            >
+                              {iconsTouch.map((icon) => {
+                                return (
+                                  <img
+                                    key={icon.id}
+                                    src={icon.url}
+                                    alt="icon.name"
+                                    className="icon_face"
+                                  />
+                                );
+                              })}
+                            </div>
+                          ) : null}
 
-            <MenuItem onClick={handleClose}>
-              <span style={{ color: "#E64848" }}>
-                <span style={{ fontSize: "16px", marginRight: "6px" }}>
-                  <AiOutlineDelete />
-                </span>
-                Xóa ở phía tôi
-              </span>
-            </MenuItem>
-          </Menu>
+                          <span
+                            className="icon_react"
+                            style={!me ? { right: "20px" } : {}}
+                            onClick={() => handleToggle()}
+                          >
+                            <AiOutlineLike />
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+            {status === 1 ? null : (
+              <>
+                <div className="option">
+                  <span
+                    aria-controls={open ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                    title="Thêm"
+                  >
+                    <BiDotsHorizontalRounded />
+                  </span>
+                  <span title="Trả lời">
+                    <MdFormatQuote />
+                  </span>
+                </div>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem onClick={copyToClipboard}>
+                    <span style={{ fontSize: "16px", marginRight: "6px" }}>
+                      <FaRegCopy />
+                    </span>
+                    Copy tin nhắn
+                  </MenuItem>
+                  <Divider />
+                  {me ? (
+                    <MenuItem
+                      style={{ color: "#E64848" }}
+                      onClick={() => handleReMessage()}
+                    >
+                      <span style={{ fontSize: "16px", marginRight: "6px" }}>
+                        <IoReloadOutline />
+                      </span>
+                      Thu hồi tin nhắn
+                    </MenuItem>
+                  ) : null}
+
+                  <MenuItem onClick={() => deleteMessageWithMe()}>
+                    <span style={{ color: "#E64848" }}>
+                      <span style={{ fontSize: "16px", marginRight: "6px" }}>
+                        <AiOutlineDelete />
+                      </span>
+                      Xóa ở phía tôi
+                    </span>
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+          </div>
         </>
-      )}
-    </div>
+      ) : null}{" "}
+    </>
   );
 };
 

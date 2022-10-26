@@ -16,10 +16,17 @@ export const SET_SEARCHEDUSERS = "set_SearchUsers";
 export const SET_IDCONVERSATION = "set_IdConversation";
 export const SET_MESSAGESENT = "set_MessageSent";
 export const SET_STATUSMESSAGE = "set_StatusMessage";
+export const SET_IDMESSAGEDELETEDWITHME = "set_IdMessageDeletedWithMe";
 
 export const SetMessageSent = (payload) => {
   return {
     type: SET_MESSAGESENT,
+    payload,
+  };
+};
+export const SetIdMessageDeletedWithMe = (payload) => {
+  return {
+    type: SET_IDMESSAGEDELETEDWITHME,
     payload,
   };
 };

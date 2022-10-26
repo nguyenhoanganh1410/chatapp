@@ -22,6 +22,15 @@ const messageApi = {
     return axiosClient.post(url, mess);
   },
 
+  //delete a message
+  deleteMessage: (idMessage, idUser) => {
+    const url = `/messages/deleteMessage`;
+    return axiosClient.post(url, {
+      idMessage: idMessage,
+      userId: idUser,
+    });
+  },
+
   reMess: (id) => {
     const url = `/messages/reMessage`;
     return axiosClient.post(url, {

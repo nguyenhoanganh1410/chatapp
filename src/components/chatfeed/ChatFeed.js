@@ -15,7 +15,11 @@ import "simplebar/dist/simplebar.css";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import CircularProgress from "@mui/material/CircularProgress";
-import { SetMessageSent, SetStatusMessage } from "../../store/Actions";
+import {
+  SetIdMessageDeletedWithMe,
+  SetMessageSent,
+  SetStatusMessage,
+} from "../../store/Actions";
 // import {socket} from '../../store/socketClient';
 
 const ChatFeed = ({ socket }) => {
@@ -30,9 +34,15 @@ const ChatFeed = ({ socket }) => {
 
   //console.log("chetfeed message ---->" + messages);
   //detructering...
-  const { userChatting, idConversation, user, messageSent } = state;
+  const {
+    userChatting,
+    idConversation,
+    user,
+    messageSent,
+    idMessageDeletedWithMe,
+  } = state;
   // console.log(" message ---->");
-  // console.log(messageSent);
+  console.log(idMessageDeletedWithMe);
   const messagesEnd = useRef();
 
   const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
@@ -101,15 +111,30 @@ const ChatFeed = ({ socket }) => {
 
   //cap nhat mess da thu hoi len giao dien
   useEffect(() => {
-    const newMess = messages.map((mess) => {
-      if (mess._id === idReMessage) {
-        return { ...mess, isDeleted: true };
-      }
-      return mess;
-    });
-    console.log(newMess);
-    setMessages(newMess);
+    if (idReMessage) {
+      const newMess = messages.map((mess) => {
+        if (mess._id === idReMessage) {
+          return { ...mess, isDeleted: true };
+        }
+        return mess;
+      });
+      //console.log(newMess);
+      setMessages(newMess);
+    }
   }, [idReMessage]);
+
+  //cap nhat mess da xoa phia toi len giao dien
+  useEffect(() => {
+    if (idMessageDeletedWithMe) {
+      console.log("useEffcet delete message start");
+      const newMess = messages.filter((mess) => {
+        return mess._id != idMessageDeletedWithMe;
+      });
+      console.log(newMess);
+      setMessages(newMess);
+      depatch(SetIdMessageDeletedWithMe(""));
+    }
+  }, [idMessageDeletedWithMe]);
 
   useEffect(() => {
     //xoa di message cuoi cung cua array (message mẫu)
