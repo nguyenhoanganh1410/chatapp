@@ -13,6 +13,8 @@ import {
   SET_USERCHATTING,
   SET_SEARCHEDUSERS,
   SET_IDCONVERSATION,
+  SET_MESSAGESENT,
+  SET_STATUSMESSAGE,
 } from "./Actions";
 
 //innite state
@@ -45,6 +47,16 @@ const initState = {
 
   //list of searched users
   searchedUsers: [],
+
+  //tin nhan dc gui
+  messageSent: "",
+
+  //trang thai cua tin nhan
+  //đã gửi
+  //đã nhận
+  //đã xem
+
+  statusMessage: "đã gửi",
 };
 
 //depatch
@@ -120,6 +132,16 @@ const Reducer = (state, action) => {
       return {
         ...state,
         idConversation: action.payload,
+      };
+    case SET_MESSAGESENT:
+      return {
+        ...state,
+        messageSent: action.payload,
+      };
+    case SET_STATUSMESSAGE:
+      return {
+        ...state,
+        statusMessage: action.payload,
       };
   }
 };

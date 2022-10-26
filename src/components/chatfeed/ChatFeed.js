@@ -15,20 +15,23 @@ import "simplebar/dist/simplebar.css";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import CircularProgress from "@mui/material/CircularProgress";
+import { SetStatusMessage } from "../../store/Actions";
 // import {socket} from '../../store/socketClient';
 
 const ChatFeed = ({ socket }) => {
   const { state, depatch } = React.useContext(Contex);
   const [messages, setMessages] = useState([]);
+  // console.log(messages);
   const [idReMessage, setIdReMessage] = useState("");
   const [statusLoadMessage, setStatusLoadMessage] = useState(true);
   // const [arrivalMess, setArrivalMess] = useState(null);
-  const [arrivalMess, setArrivalMess] = useState(null);
+  const [arrivalMess, setArrivalMess] = useState("");
 
   //console.log("chetfeed message ---->" + messages);
   //detructering...
-  const { userChatting, idConversation, user } = state;
-  ////console.log("chetfeed id conversation ---->" + idConversation);
+  const { userChatting, idConversation, user, messageSent } = state;
+  // console.log(" message ---->");
+  // console.log(messageSent);
   const messagesEnd = useRef();
   const scrollToBottom = () => {
     messagesEnd.current.scrollIntoView({ behavior: "smooth" });
@@ -48,40 +51,63 @@ const ChatFeed = ({ socket }) => {
   //   }
   // }, []);
 
-  // useEffect(() => {
-  //   arrivalMess && idConversation === arrivalMess.conversationId && setMessages((prev) => [...prev, arrivalMess]);
-  // },[arrivalMess,idConversation]);
+  //khi tin nhan duoc gui thi them tin nhan do vao messages -> render
+  useEffect(() => {
+    // console.log("useEffect --->");
+    // console.log(messageSent);
+    if (messageSent != "" && idConversation === messageSent.conversationId) {
+      setMessages((prev) => [...prev, messageSent]);
+    }
+    // messageSent &&
+    //   idConversation === messageSent.conversationId &&
+  }, [messageSent]);
 
   useEffect(() => {
     socket.current?.on("get-message", ({ senderId, message }) => {
-      console.log("get");
-      console.log( message );
+      //console.log("get");
+      console.log("mess nhan dc ---> ");
+      console.log(message);
       setArrivalMess(message);
+
+      //set statusMessage = da nhan
+      // depatch(SetStatusMessage("đã nhận"));
     });
-    
+
     socket.current?.on("reMessage", (data) => {
-      setIdReMessage(data)
+      setIdReMessage(data);
     });
-    
   }, []);
 
+  //cap nhat mess da thu hoi len giao dien
   useEffect(() => {
-    const newMess = messages.map(mess =>{
-      if(mess._id === idReMessage){
-        return {...mess, isDeleted: true}
+    const newMess = messages.map((mess) => {
+      if (mess._id === idReMessage) {
+        return { ...mess, isDeleted: true };
       }
-      return mess
-    })
+      return mess;
+    });
     console.log(newMess);
-    setMessages(newMess)
+    setMessages(newMess);
   }, [idReMessage]);
 
-
   useEffect(() => {
-    arrivalMess && idConversation === arrivalMess.conversationId && setMessages((prev) => [...prev, arrivalMess]);
-  }, [arrivalMess,idConversation]);
+    //xoa di message cuoi cung cua array (message mẫu)
+    if (messageSent != "") {
+      const messagesCurrent = messages.filter((val, idx) => {
+        return idx !== messages.length - 1;
+      });
+      // console.log(messagesCurrent);
+      arrivalMess &&
+        idConversation === arrivalMess.conversationId &&
+        setMessages((prev) => [...messagesCurrent, arrivalMess]);
+    } else {
+      arrivalMess &&
+        idConversation === arrivalMess.conversationId &&
+        setMessages((prev) => [...prev, arrivalMess]);
+    }
+  }, [arrivalMess, idConversation]);
 
-  console.log(arrivalMess);
+  // console.log(arrivalMess);
 
   useEffect(() => {
     //scroll last message
@@ -89,7 +115,7 @@ const ChatFeed = ({ socket }) => {
   });
 
   useEffect(() => {
-    setStatusLoadMessage(true)
+    setStatusLoadMessage(true);
     //call api get all message
     //set state
     const featchMessages = async () => {
@@ -101,10 +127,10 @@ const ChatFeed = ({ socket }) => {
         if (response) {
           setMessages(data[0].messages);
         }
-        setStatusLoadMessage(false)
+        setStatusLoadMessage(false);
       } catch (error) {
         setMessages([]);
-        setStatusLoadMessage(false)
+        setStatusLoadMessage(false);
         console.log("Failed to fetch conversation list: ", error);
       }
     };
@@ -145,8 +171,20 @@ const ChatFeed = ({ socket }) => {
           </div>
           <div className="title_image"></div>
         </div>
-        {messages.map((mess) => {
-          return <Message key={mess._id} mess={mess}  socket={socket}/>;
+        {messages.map((mess, idx) => {
+          //neu la tin nhan cuoi cung
+          //truyen 1 trang thai la isLastMessage
+          if (idx === messages?.length - 1) {
+            return (
+              <Message
+                key={mess._id}
+                mess={mess}
+                socket={socket}
+                isLastMessage
+              />
+            );
+          }
+          return <Message key={mess._id} mess={mess} socket={socket} />;
         })}
         {/* <TimeLine />
         <Message />

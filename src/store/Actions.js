@@ -14,6 +14,23 @@ export const SET_INDEXTAB = "set_IndexTab";
 export const SET_USERCHATTING = "set_UserChatting";
 export const SET_SEARCHEDUSERS = "set_SearchUsers";
 export const SET_IDCONVERSATION = "set_IdConversation";
+export const SET_MESSAGESENT = "set_MessageSent";
+export const SET_STATUSMESSAGE = "set_StatusMessage";
+
+export const SetMessageSent = (payload) => {
+  return {
+    type: SET_MESSAGESENT,
+    payload,
+  };
+};
+
+export const SetStatusMessage = (payload) => {
+  return {
+    type: SET_STATUSMESSAGE,
+    payload,
+  };
+};
+
 export const SetIsSignedIn = (payload) => {
   return {
     type: SET_ISSIGNEDIN,

@@ -9,9 +9,7 @@ const conversationApi = {
     return axiosClient.get(url);
   },
 
-  // GET: /users/login
-  // send username, password
-  // res: token, user
+  // GET:
   getConversations: (id) => {
     //console.log(id);
     const url = `/conversation/user/${id}`;

@@ -1,4 +1,4 @@
-import React, { useEffect,useContext,useRef } from "react";
+import React, { useEffect, useContext, useRef } from "react";
 import ChatFeed from "../components/chatfeed/ChatFeed";
 import ChatList from "../components/chatlist/ChatList";
 import TabBarComponent from "../components/TabBarComponent";
@@ -15,6 +15,7 @@ import io from "socket.io-client";
 
 const HomePage = () => {
   const socket = useRef();
+  //console.log(socket);
   // let socket = init();
 
   //width, height of current screen
@@ -22,26 +23,23 @@ const HomePage = () => {
     height: window.innerHeight,
     width: window.innerWidth,
   });
-  console.log(dimensions);
+  //console.log(dimensions);
   const { state, depatch } = React.useContext(Contex);
 
   //detructering...
   const { userChatting, showAlert, user, showTabInfo, indexTab } = state;
 
   useEffect(() => {
-    if(user){
-       socket.current = io("https://13.228.206.211");
+    if (user) {
+      socket.current = io("https://13.228.206.211");
       // socket.current = io("http://localhost:5005");
-
+     // console.log(socket);
       socket.current.emit("start", user);
     }
-  },[user]);
-
+  }, [user]);
 
   // It is a hook imported from 'react-i18next'
   const { t } = useTranslation();
-
-
 
   // useEffect(() => {
   //   document.title = t("homepage");

@@ -15,12 +15,13 @@ import copy from "copy-to-clipboard";
 import { iconsTouch } from "../../data/Data";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
+import { useState } from "react";
 
 //status : 0 binh thuong, 1 thu hoi, 2 bi xoa
-const Message = ({ type, status, mess, socket }) => {
+const Message = ({ isLastMessage, status, mess, socket }) => {
   const { state, depatch } = React.useContext(Contex);
   //detructering...
-  const { userChatting, idConversation, user } = state;
+  const { userChatting, idConversation, user, statusMessage } = state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const [showIcons, setShowIcons] = React.useState(false);
@@ -172,13 +173,29 @@ const Message = ({ type, status, mess, socket }) => {
               ) : (
                 <>
                   <p className="textMess">{mess.content}</p>
-                  <p className="timeMess">
-                    {new Date(mess.createdAt)
-                      .toLocaleString("en-US", {
-                        timeZone: "Asia/Ho_Chi_Minh",
-                      })
-                      .slice(11, 23)}
-                  </p>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <p className="timeMess">
+                      {new Date(mess.createdAt)
+                        .toLocaleString("en-US", {
+                          timeZone: "Asia/Ho_Chi_Minh",
+                        })
+                        .slice(11, 23)}
+                    </p>
+                    {isLastMessage && mess?.userId === user?.uid ? (
+                      <p
+                        style={{
+                          fontSize: "12px",
+                          textTransform: "capitalize",
+                          marginLeft: "8px",
+                        }}
+                        className="timeMess"
+                      >
+                        {statusMessage}
+                      </p>
+                    ) : null}
+                  </div>
                   <div className="icon_list">
                     {showIcons ? (
                       <div

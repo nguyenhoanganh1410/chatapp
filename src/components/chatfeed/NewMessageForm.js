@@ -11,7 +11,7 @@ import messageApi from "../../api/messageApi";
 import io from "socket.io-client";
 import conversationApi from "../../api/conversationApi";
 // import {init} from '../../store/socketClient';
-import { SetIdConversation } from "../../store/Actions";
+import { SetIdConversation, SetMessageSent } from "../../store/Actions";
 
 const NewMessageForm = ({
   userChatting,
@@ -30,7 +30,7 @@ const NewMessageForm = ({
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [newMessageSticker, setNewMessageSticker] = useState("");
 
-  const { user } = state;
+  const { user, messageSent } = state;
   const inputChooseIMG = useRef();
   //detructering...
 
@@ -189,14 +189,16 @@ const NewMessageForm = ({
       try {
         const newMess = {
           userId: user.uid,
-          content: newMessageSticker,
+          content: url?.url,
           conversationId: idConversation,
           type: "TEXT",
         };
 
+        console.log(newMess);
+
         //call api save db
         const messSave = await messageApi.addTextMess(newMess);
-
+        console.log(messSave);
         //gui len socket
         if (socket.current) {
           socket.current.emit("send-message", {
@@ -214,6 +216,8 @@ const NewMessageForm = ({
     setNewMessageSticker("");
     setShowStickers(false);
   };
+
+  //gui 1 tin nhan dang text
   const onFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -221,6 +225,7 @@ const NewMessageForm = ({
     if (!newMessage) {
       return;
     }
+
     //ckeck
     //th1: chưa từng trò chuyện, có idConversation == null
     if (!idConversation) {
@@ -248,6 +253,10 @@ const NewMessageForm = ({
               conversationId: response,
               type: "TEXT",
             };
+
+            //set messageSent
+            depatch(SetMessageSent({ ...newMess, _id: Math.random() + "1" }));
+
             const messSave = await messageApi.addTextMess(newMess);
 
             if (socket.current) {
@@ -255,7 +264,7 @@ const NewMessageForm = ({
                 senderId: user.uid,
                 receiverId: userChatting.uid,
                 message: messSave,
-                // idCon: response,
+                idCon: response,
               });
               console.log("send");
             }
@@ -280,6 +289,16 @@ const NewMessageForm = ({
           conversationId: idConversation,
           type: "TEXT",
         };
+        //set messageSent
+        depatch(
+          SetMessageSent({
+            ...newMess,
+            _id: Math.random() + "1",
+            createdAt: new Date(),
+          })
+        );
+
+        //call api add a message into db
         const messSave = await messageApi.addTextMess(newMess);
 
         if (socket.current) {
@@ -287,7 +306,7 @@ const NewMessageForm = ({
             senderId: user.uid,
             receiverId: userChatting.uid,
             message: messSave,
-            // idCon: idConversation,
+            idCon: idConversation,
           });
           console.log("send");
         }

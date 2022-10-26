@@ -12,17 +12,19 @@ import Contex from "../../store/Context";
 import UserService from "../../services/UserService";
 import { differenceInHours } from "date-fns";
 import useDateLogic from "../../hooks/useDateLogic";
+import useCheckFile from "../../hooks/useCheckFile";
 
 const ChatCard = ({ conversation, socket, setConversations }) => {
   const { state, depatch } = React.useContext(Contex);
   //custom hook
   const { handleDate } = useDateLogic();
+  const { checkUrlIsImage } = useCheckFile();
   //detructering...
   const { user, userSearched, idConversation, userChatting } = state;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   // const [isChatting, setIsChatting] = React.useState(false);
-  
+
   const open = Boolean(anchorEl);
   // console.log(conversation);
 
@@ -40,12 +42,11 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
 
   React.useEffect(() => {
     socket.current.on("get-last", (data) => {
-
       // setConversations(data);
-        console.log(data);
-        setConversations(data);
+      console.log(data);
+      setConversations(data);
     });
-}, []);
+  }, []);
 
   React.useEffect(() => {
     if (socket.current) {
@@ -64,11 +65,8 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
     }
   }, [user]);
 
- 
-
   //click 1 conversation -> show chat feed
   const handleShowChat = () => {
-    
     // console.log("chat"+conversations._id);
     // console.log("old"+idConversation);
 
@@ -89,20 +87,16 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
         console.log(err.message);
       });
 
+    socket.current.emit("seen-message", {
+      conversationId: conversations._id,
+      userId: user.uid,
+    });
 
-      socket.current.emit("seen-message", {
-        conversationId: conversations._id,
-        userId: user.uid,
-      });
-     
-
-      if(idConversation !== conversations._id)
+    if (idConversation !== conversations._id)
       socket.current.emit("join-room", {
-        idCon:conversations._id,
-        isNew:false
+        idCon: conversations._id,
+        isNew: false,
       });
-      
-
   };
   // How many hours are between 2 July 2014 06:50:00 and 2 July 2014 19:00:00?
   // const result = differenceInHours(
@@ -149,10 +143,16 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
                 "Sticker"
               ) : (
                 <>
-                  {conversations?.lastMessage[0]?.content.length > 20
-                    ? conversations?.lastMessage[0]?.content.slice(0, 20) +
-                      "..."
-                    : conversations?.lastMessage[0]?.content}
+                  {checkUrlIsImage(conversations?.lastMessage[0]?.content) ? (
+                    "hình ảnh"
+                  ) : (
+                    <>
+                      {conversations?.lastMessage[0]?.content.length > 20
+                        ? conversations?.lastMessage[0]?.content.slice(0, 20) +
+                          "..."
+                        : conversations?.lastMessage[0]?.content}
+                    </>
+                  )}
                 </>
               )}
             </span>
@@ -174,7 +174,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
         </div>
         {conversations.mb.numberUnread > 0 ? (
           <span className="numberNotification">
-            { conversations.mb.numberUnread}
+            {conversations.mb.numberUnread}
           </span>
         ) : null}
         <span
