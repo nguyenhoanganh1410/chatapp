@@ -24,6 +24,7 @@ const ChatFeed = ({ socket }) => {
   // console.log(messages);
   const [idReMessage, setIdReMessage] = useState("");
   const [statusLoadMessage, setStatusLoadMessage] = useState(true);
+  const [statusLoadOldMessage, setStatusLoadOldMessage] = useState(false);
   // const [arrivalMess, setArrivalMess] = useState(null);
   const [arrivalMess, setArrivalMess] = useState("");
 
@@ -33,6 +34,10 @@ const ChatFeed = ({ socket }) => {
   // console.log(" message ---->");
   // console.log(messageSent);
   const messagesEnd = useRef();
+
+  const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
+  const [page, setPage] = React.useState(0);
+
   const scrollToBottom = () => {
     messagesEnd.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -57,14 +62,12 @@ const ChatFeed = ({ socket }) => {
     // console.log(messageSent);
     if (messageSent != "" && idConversation === messageSent.conversationId) {
       setMessages((prev) => [...prev, messageSent]);
-      
     }
     // messageSent &&
     //   idConversation === messageSent.conversationId &&
   }, [messageSent]);
 
   useEffect(() => {
-
     // socket.current.emit("join-room", {
     //   idCon:idConversation,
     //   isNew:false
@@ -84,7 +87,7 @@ const ChatFeed = ({ socket }) => {
       setIdReMessage(data);
     });
   }, []);
-    
+
   // }, [userChatting]);
 
   // useEffect(() => {
@@ -95,7 +98,6 @@ const ChatFeed = ({ socket }) => {
   //       });
   //     }
   //   }, []);
-  
 
   //cap nhat mess da thu hoi len giao dien
   useEffect(() => {
@@ -115,7 +117,7 @@ const ChatFeed = ({ socket }) => {
       const messagesCurrent = messages.filter((val, idx) => {
         return idx !== messages.length - 1;
       });
-      depatch(SetMessageSent(""))
+      depatch(SetMessageSent(""));
       // console.log(messagesCurrent);
       arrivalMess &&
         idConversation === arrivalMess.conversationId &&
@@ -140,13 +142,54 @@ const ChatFeed = ({ socket }) => {
     //set state
     const featchMessages = async () => {
       try {
-        const response = await messageApi.getMess(idConversation, user.uid);
-        const { data, info, friendStatus, size, totalPages } = response;
-        //console.log(response);
+        //cal api get total page
+        const response = await messageApi.getMess(
+          idConversation,
+          user.uid,
+          panigation.page,
+          panigation.size
+        );
+        const { totalPages } = response;
+        console.log(totalPages);
 
-        if (response) {
-          setMessages(data[0].messages);
+        //th1: so luong tin nhan < 30, page = 1
+        if (totalPages <= 1) {
+          setMessages(response.data[0].messages);
+          //update page current
+          setPage(totalPages);
+        } else {
+          const newPage = totalPages - 1;
+          //get 30 tin moi nhat
+          const currnetResponse = await messageApi.getMess(
+            idConversation,
+            user.uid,
+            newPage,
+            panigation.size
+          );
+
+          const { data, info, friendStatus, size } = currnetResponse;
+          //neu khong tra ve du 30 tin nhan -> lui 1 page
+          if (data[0].messages.length < 20) {
+            const cPage = newPage - 1;
+            //get 30 tin moi nhat
+            const newResponse = await messageApi.getMess(
+              idConversation,
+              user.uid,
+              cPage,
+              panigation.size + data[0].messages.length
+            );
+            if (newResponse) {
+              setMessages(newResponse.data[0].messages);
+              setPage(cPage);
+            }
+          } else {
+            setMessages(data[0].messages);
+            setPage(newPage);
+          }
         }
+
+        // //update page current
+        // setPage(newPage);
         setStatusLoadMessage(false);
       } catch (error) {
         setMessages([]);
@@ -157,12 +200,49 @@ const ChatFeed = ({ socket }) => {
 
     featchMessages();
   }, [userChatting, idConversation]);
+
+  //scroll to top -> load old message
+  const handelScroll = (e) => {
+    let element = e.target;
+
+    if (element.scrollTop === 0) {
+      console.log("current page " + page);
+      setStatusLoadOldMessage(true);
+      if (page > 0) {
+        //lui page ve 1 bac
+        const newPage = page - 1;
+        //featch data theo newPage
+        const featchMessages = async () => {
+          try {
+            //cal api get total page
+            const response = await messageApi.getMess(
+              idConversation,
+              user.uid,
+              newPage,
+              panigation.size
+            );
+            //add data vao messages( truoc nhung tin nhan cu)
+            const { data, info, friendStatus, size } = response;
+            setPage(newPage);
+            setStatusLoadOldMessage(false);
+            setMessages((prev) => [...data[0].messages, ...prev]);
+          } catch (error) {
+            setStatusLoadOldMessage(false);
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+
+        featchMessages();
+      }
+    }
+  };
   return (
     <div className="chat_feed">
       <ChatHeader userChatting={userChatting} />
       <div
         // data-simplebar
         className="message_content"
+        onScroll={(e) => handelScroll(e)}
       >
         <div className="card_title">
           <div className="title_top">
@@ -191,6 +271,13 @@ const ChatFeed = ({ socket }) => {
           </div>
           <div className="title_image"></div>
         </div>
+        {statusLoadOldMessage ? (
+          <div className="messageLoadingOldMessage">
+            <CircularProgress className="circle_loading" />
+            <p>Đang tải tin nhắn</p>
+          </div>
+        ) : null}
+
         {messages.map((mess, idx) => {
           //neu la tin nhan cuoi cung
           //truyen 1 trang thai la isLastMessage

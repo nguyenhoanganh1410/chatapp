@@ -6,9 +6,9 @@ const messageApi = {
   //id: id conversation
   //uid: receiverId
   //res: list mess
-  getMess: (id, uid) => {
+  getMess: (id, uid, page, size) => {
     //console.log(id);
-    const url = `/conversation/${id}?receiverId=${uid}`;
+    const url = `/conversation/${id}?receiverId=${uid}&page=${page}&size=${size}`;
     return axiosClient.get(url);
   },
 

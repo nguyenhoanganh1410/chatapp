@@ -1,10 +1,8 @@
 .chat_feed{
-    .meassage_loadingStatus{
+    .meassage_loadingStatus, .messageLoadingOldMessage{
 
         position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 5rem;
+       
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -17,6 +15,17 @@
             font-size: 12px;
             color: rgba(0,0,0,0.5);
         }
+    }
+    .meassage_loadingStatus{
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 5rem;
+
+    }
+    .messageLoadingOldMessage{
+        left: 50%;
+        transform: translateX(-50%);
+        top: 20rem;
     }
     
     height: 100vh;

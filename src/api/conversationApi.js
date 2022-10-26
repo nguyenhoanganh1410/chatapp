@@ -10,9 +10,9 @@ const conversationApi = {
   },
 
   // GET:
-  getConversations: (id) => {
+  getConversations: (id, page, size) => {
     //console.log(id);
-    const url = `/conversation/user/${id}`;
+    const url = `/conversation/user/${id}?page=${page}&size=${size}`;
     return axiosClient.get(url);
     // return axiosClient.get(
     //   `http://13.228.206.211:3005/conversation/user/${id}`

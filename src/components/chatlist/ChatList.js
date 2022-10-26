@@ -56,7 +56,7 @@ function a11yProps(index) {
 const ChatList = ({ socket }) => {
   // console.log(socket);
   const [conversations, setConversations] = React.useState([]);
- // console.log(conversations);
+  // console.log(conversations);
   const { state, depatch } = React.useContext(Contex);
   //detructering...
   const { showTabHistorySearch, indexTab, user } = state;
@@ -64,6 +64,8 @@ const ChatList = ({ socket }) => {
   const [value, setValue] = React.useState(0);
 
   const [loading, setLoading] = React.useState(true);
+
+  const [panigation, setPanigation] = React.useState({ page: 0, size: 10 });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -75,15 +77,10 @@ const ChatList = ({ socket }) => {
       // const ids = conversations.map((ele) => ele.conversations._id);
       // console.log("chayy");
       // socket.current.emit("join-conversations", ids);
-
-
       // socket.current.on("get-last-message", (data) => {
       //   console.log(data+"data");
-      
-
       //   // // setConversations(data);
       //   const { listSender, listReceiver } = data;
-
       //   if (listSender[0].inFo.userIdFriend !== user.uid) {
       //     setConversations(listSender);
       //     console.log(listSender);
@@ -93,22 +90,26 @@ const ChatList = ({ socket }) => {
       //   }
       // });
     }
-  }, [user,conversations]);
+  }, [user, conversations]);
 
-//   React.useEffect(() => {
-//     if(socket.current){
-//       const ids = conversations.map((ele) => ele.conversations._id);
-//       console.log(ids);
-//       socket.current.emit("join-conversations", ids);
-//     }
-// }, []);
+  //   React.useEffect(() => {
+  //     if(socket.current){
+  //       const ids = conversations.map((ele) => ele.conversations._id);
+  //       console.log(ids);
+  //       socket.current.emit("join-conversations", ids);
+  //     }
+  // }, []);
 
   React.useEffect(() => {
     //get api set list conversation
     //fetch product in wishlist
     const fetchConversations = async () => {
       try {
-        const response = await conversationApi.getConversations(user.uid);
+        const response = await conversationApi.getConversations(
+          user.uid,
+          panigation.page,
+          panigation.size
+        );
 
         const { data, page, size, totalPages } = response;
         console.log(data);
