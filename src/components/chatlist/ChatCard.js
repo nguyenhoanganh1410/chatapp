@@ -29,7 +29,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
   // console.log(conversation);
 
   const { inFo, conversations } = conversation;
-  console.log(conversations.mb.numberUnread);
+  console.log(conversation);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -53,7 +53,6 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       socket.current.on("get-last-message", (data) => {
         // setConversations(data);
         const { listSender, listReceiver } = data;
-
         if (listSender[0].inFo.userIdFriend !== user.uid) {
           setConversations(listSender);
           console.log("S" + { listSender });
@@ -86,6 +85,13 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       .catch((err) => {
         console.log(err.message);
       });
+
+      if (socket.current) {
+        socket.current.emit("seen-message", {
+          conversationId: idConversation,
+          userId: user.uid,
+        });
+      }
       
   };
   // How many hours are between 2 July 2014 06:50:00 and 2 July 2014 19:00:00?

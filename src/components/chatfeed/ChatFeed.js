@@ -15,7 +15,7 @@ import "simplebar/dist/simplebar.css";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import CircularProgress from "@mui/material/CircularProgress";
-import { SetStatusMessage } from "../../store/Actions";
+import { SetMessageSent, SetStatusMessage } from "../../store/Actions";
 // import {socket} from '../../store/socketClient';
 
 const ChatFeed = ({ socket }) => {
@@ -57,6 +57,7 @@ const ChatFeed = ({ socket }) => {
     // console.log(messageSent);
     if (messageSent != "" && idConversation === messageSent.conversationId) {
       setMessages((prev) => [...prev, messageSent]);
+      
     }
     // messageSent &&
     //   idConversation === messageSent.conversationId &&
@@ -64,10 +65,10 @@ const ChatFeed = ({ socket }) => {
 
   useEffect(() => {
 
-    socket.current.emit("join-room", {
-      idCon:idConversation,
-      isNew:false
-    });
+    // socket.current.emit("join-room", {
+    //   idCon:idConversation,
+    //   isNew:false
+    // });
 
     socket.current?.on("get-message", ({ senderId, message }) => {
       //console.log("get");
@@ -86,14 +87,14 @@ const ChatFeed = ({ socket }) => {
     
   // }, [userChatting]);
 
-  useEffect(() => {
-      if (socket.current) {
-        socket.current.emit("seen-message", {
-          conversationId: idConversation,
-          userId: user.uid,
-        });
-      }
-    }, []);
+  // useEffect(() => {
+  //     if (socket.current) {
+  //       socket.current.emit("seen-message", {
+  //         conversationId: idConversation,
+  //         userId: user.uid,
+  //       });
+  //     }
+  //   }, []);
   
 
   //cap nhat mess da thu hoi len giao dien
@@ -114,6 +115,7 @@ const ChatFeed = ({ socket }) => {
       const messagesCurrent = messages.filter((val, idx) => {
         return idx !== messages.length - 1;
       });
+      depatch(SetMessageSent(""))
       // console.log(messagesCurrent);
       arrivalMess &&
         idConversation === arrivalMess.conversationId &&
