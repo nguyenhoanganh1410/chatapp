@@ -53,6 +53,12 @@ const ChatFeed = ({ socket }) => {
   // },[arrivalMess,idConversation]);
 
   useEffect(() => {
+
+    socket.current.emit("join-room", {
+      idCon:idConversation,
+      isNew:false
+    });
+
     socket.current?.on("get-message", ({ senderId, message }) => {
       console.log("get");
       console.log( message );
@@ -63,7 +69,17 @@ const ChatFeed = ({ socket }) => {
       setIdReMessage(data)
     });
     
-  }, []);
+  }, [userChatting]);
+
+  useEffect(() => {
+      if (socket.current) {
+        socket.current.emit("seen-message", {
+          conversationId: idConversation,
+          userId: user.uid,
+        });
+      }
+    }, []);
+  
 
   useEffect(() => {
     const newMess = messages.map(mess =>{

@@ -68,6 +68,12 @@ const ChatList = ({socket}) => {
 
   React.useEffect(() => {
     if (socket.current) {
+
+      const ids = conversations.map((ele) => ele.conversations._id);
+      console.log(ids);
+      socket.current.emit("join-conversations", ids);
+
+
       socket.current.on("get-last-message", (data) => {
         // setConversations(data);
         const { listSender, listReceiver } = data;
@@ -81,19 +87,15 @@ const ChatList = ({socket}) => {
         }
       });
     }
-  }, [user]);
+  }, [user,conversations]);
 
-  React.useEffect(() => {
-    if(socket.current){
-      const ids = conversations.map((ele) => ele.conversations._id);
-      console.log(ids);
-      socket.current.emit("join-conversations", ids);
-    }
-}, [conversations]);
-
-
-
-
+//   React.useEffect(() => {
+//     if(socket.current){
+//       const ids = conversations.map((ele) => ele.conversations._id);
+//       console.log(ids);
+//       socket.current.emit("join-conversations", ids);
+//     }
+// }, []);
 
   React.useEffect(() => {
     //get api set list conversation

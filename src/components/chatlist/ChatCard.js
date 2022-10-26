@@ -89,18 +89,6 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       .catch((err) => {
         console.log(err.message);
       });
-
-      socket.current.emit("seen-message", {
-        conversationId: conversations._id,
-        userId: user.uid,
-      });
-     
-
-      if(idConversation !== conversations._id)
-      socket.current.emit("join-room", {
-        idCon:conversations._id,
-        isNew:false
-      });
       
   };
   // How many hours are between 2 July 2014 06:50:00 and 2 July 2014 19:00:00?

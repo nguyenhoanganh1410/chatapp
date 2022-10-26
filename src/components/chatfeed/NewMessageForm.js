@@ -175,7 +175,8 @@ const changeHandler = async(event) => {
                 senderId: user.uid,
                 receiverId: userChatting.uid,
                 message: messSave,
-                // idCon: response,
+                idCon: response,
+                isNew:true
               });
               console.log("send");
             }
@@ -208,7 +209,8 @@ const changeHandler = async(event) => {
             senderId: user.uid,
             receiverId: userChatting.uid,
             message: messSave,
-            // idCon: idConversation,
+            idCon: idConversation,
+            isNew:false
           });
           console.log("send");
         }
