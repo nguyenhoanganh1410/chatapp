@@ -6,7 +6,8 @@ const useCheckFile = () => {
   };
 
   const checkUrlIsDocx = (url) => {
-    return /\.(docx)$/.test(url);
+    console.log(url.includes(".docx"));
+    return url.includes(".docx");
   };
   return {
     checkUrlIsImage: checkUrlIsImage,

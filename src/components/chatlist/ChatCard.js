@@ -18,7 +18,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
   const { state, depatch } = React.useContext(Contex);
   //custom hook
   const { handleDate } = useDateLogic();
-  const { checkUrlIsImage } = useCheckFile();
+  const { checkUrlIsImage, checkUrlIsDocx } = useCheckFile();
   //detructering...
   const { user, userSearched, idConversation, userChatting } = state;
 
@@ -86,13 +86,12 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
         console.log(err.message);
       });
 
-      if (socket.current) {
-        socket.current.emit("seen-message", {
-          conversationId: idConversation,
-          userId: user.uid,
-        });
-      }
-      
+    if (socket.current) {
+      socket.current.emit("seen-message", {
+        conversationId: idConversation,
+        userId: user.uid,
+      });
+    }
   };
   // How many hours are between 2 July 2014 06:50:00 and 2 July 2014 19:00:00?
   // const result = differenceInHours(
@@ -143,10 +142,20 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
                     "hình ảnh"
                   ) : (
                     <>
-                      {conversations?.lastMessage[0]?.content.length > 20
-                        ? conversations?.lastMessage[0]?.content.slice(0, 20) +
-                          "..."
-                        : conversations?.lastMessage[0]?.content}
+                      {checkUrlIsDocx(
+                        conversations?.lastMessage[0]?.content
+                      ) ? (
+                        "file docx"
+                      ) : (
+                        <>
+                          {conversations?.lastMessage[0]?.content.length > 20
+                            ? conversations?.lastMessage[0]?.content.slice(
+                                0,
+                                20
+                              ) + "..."
+                            : conversations?.lastMessage[0]?.content}
+                        </>
+                      )}
                     </>
                   )}
                 </>
