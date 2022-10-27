@@ -120,7 +120,6 @@ const LoginForm = () => {
           >
             {loading ? (
               <span>
-                {" "}
                 <CircularProgress />
               </span>
             ) : null}

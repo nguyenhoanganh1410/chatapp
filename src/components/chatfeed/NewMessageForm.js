@@ -265,7 +265,7 @@ const NewMessageForm = ({
                 receiverId: userChatting.uid,
                 message: messSave,
                 idCon: response,
-                isNew:true
+                isNew: true,
               });
               console.log("send");
             }
@@ -308,7 +308,7 @@ const NewMessageForm = ({
             receiverId: userChatting.uid,
             message: messSave,
             idCon: idConversation,
-            isNew:false
+            isNew: false,
           });
           console.log("send");
         }
@@ -374,6 +374,7 @@ const NewMessageForm = ({
       </form>
       {showStickers ? (
         <SearchComponent
+          className="searchIcons"
           params={{
             apikey: "110a13915f6cb9503c563964f58cee2d",
             userId: user?.uid || Math.random(),

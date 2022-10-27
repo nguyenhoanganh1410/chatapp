@@ -17,6 +17,8 @@ import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { useState } from "react";
 import { SetIdMessageDeletedWithMe } from "../../store/Actions";
+import WordsComponent from "../filecomponent/WordsComponent";
+import useCheckFile from "../../hooks/useCheckFile";
 
 //status : 0 binh thuong, 1 thu hoi, 2 bi xoa
 const Message = ({ isLastMessage, status, mess, socket }) => {
@@ -28,6 +30,8 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
   const [showIcons, setShowIcons] = React.useState(false);
 
   const [me, setMe] = React.useState(false);
+
+  const { checkUrlIsDocx } = useCheckFile();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -153,7 +157,7 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
             )}
             {mess.isDeleted ? (
               <div
-                className="message_text"
+                className="massage_text"
                 style={me ? { backgroundColor: "#e5efff" } : {}}
               >
                 <p className="textMess" style={{ color: "#abb4bc" }}>
@@ -179,7 +183,16 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
                     className={
                       mess.content.includes("https://img.stipop.io")
                         ? "message_text bg-trans"
-                        : "message_text"
+                        : `${
+                            mess.type === "APPLICATION"
+                              ? "message_text cssFileDocx"
+                              : "message_text"
+                          }`
+                      // <>
+                      //   {mess.type === "APPLICATION"
+                      //     ? "message_text cssFileDocx"
+                      //     : "message_text"}
+                      // </>
                     }
                     style={me ? { backgroundColor: "#e5efff" } : {}}
                   >
@@ -196,7 +209,13 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
                       </div>
                     ) : (
                       <>
-                        <p className="textMess">{mess.content}</p>
+                        {/* <p className="textMess">{mess.content}</p> */}
+
+                        {mess.type === "APPLICATION" ? (
+                          <WordsComponent mess={mess} />
+                        ) : (
+                          <p className="textMess">{mess.content}</p>
+                        )}
                         <div
                           style={{
                             display: "flex",

@@ -20,6 +20,7 @@ import {
   SetMessageSent,
   SetStatusMessage,
 } from "../../store/Actions";
+import WordsComponent from "../filecomponent/WordsComponent";
 // import {socket} from '../../store/socketClient';
 
 const ChatFeed = ({ socket }) => {
@@ -318,6 +319,7 @@ const ChatFeed = ({ socket }) => {
           }
           return <Message key={mess._id} mess={mess} socket={socket} />;
         })}
+        {/* <WordsComponent /> */}
         {/* <TimeLine />
         <Message />
         <Message me />
@@ -325,6 +327,7 @@ const ChatFeed = ({ socket }) => {
         <Message type="image" />
         <Message />
         <Message me />
+        
 
         <Message me />
         <Message me />
