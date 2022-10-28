@@ -8,6 +8,7 @@ import Context from "../../store/Context";
 import { useContext, useEffect } from "react";
 import messageApi from "../../api/messageApi";
 // import {socket} from '../../store/socketClient';
+import addNotification from "react-push-notification";
 import io from "socket.io-client";
 import conversationApi from "../../api/conversationApi";
 // import {init} from '../../store/socketClient';
@@ -33,6 +34,7 @@ const NewMessageForm = ({
   const { user, messageSent } = state;
   const inputChooseIMG = useRef();
   //detructering...
+  console.log({user});
 
   const divMessage = useRef();
   const handleFocus = (params) => {
@@ -45,6 +47,16 @@ const NewMessageForm = ({
   const handleShowStickers = () => {
     setShowStickers(!showStickers);
   };
+
+  // const sendNotification = ({userName,content}) => {
+  //   console.log("userName");
+  //   addNotification({
+  //     title: userName,
+  //     message: content,
+  //     theme: "darkblue",
+  //     native: true, // when using native, your OS will handle theming.
+  //   });
+  // }
 
   // SEND FILE
   const changeHandler = async (event) => {
@@ -120,6 +132,8 @@ const NewMessageForm = ({
             });
             console.log("send");
           }
+
+          
           // setMessages([...messages,messSave]);
           setNewMessage("");
         } catch (error) {
@@ -302,18 +316,36 @@ const NewMessageForm = ({
         //call api add a message into db
         const messSave = await messageApi.addTextMess(newMess);
 
+        const notifi= addNotification({
+          title: user.first_name+""+user.last_name,
+          message: messSave.content,
+          duration:8000,
+          icon: 'https://chatapp-bucket.s3.ap-southeast-1.amazonaws.com/zale_1665942529351_New%20Text%20Document.png',
+          theme: "darkblue",
+          native: true, // when using native, your OS will handle theming.
+        });
+
         if (socket.current) {
           socket.current.emit("send-message", {
             senderId: user.uid,
             receiverId: userChatting.uid,
             message: messSave,
             idCon: idConversation,
-            isNew: false,
+            notifi: notifi,
           });
           console.log("send");
         }
+
+        // sendNotification({
+        //   userName: user.first_name,
+        //   content: messSave.content,
+        // });
         // setMessages([...messages,messSave]);
         setNewMessage("");
+
+        
+  
+
       } catch (error) {
         console.log("Failed to fetch conversation list: ", error);
       }

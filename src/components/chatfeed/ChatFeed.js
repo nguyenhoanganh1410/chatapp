@@ -87,15 +87,18 @@ const ChatFeed = ({ socket }) => {
 
     
 
-    socket.current?.on("get-message", ({ senderId, message }) => {
+    socket.current?.on("get-message", ({ senderId, message,notifi }) => {
       //console.log("get");
       console.log("mess nhan dc ---> ");
       console.log(message);
       setArrivalMess(message);
+      notifi();
 
       //set statusMessage = da nhan
       // depatch(SetStatusMessage("đã nhận"));
     });
+
+
 
     socket.current?.on("reMessage", (data) => {
       setIdReMessage(data);
