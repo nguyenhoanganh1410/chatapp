@@ -11,6 +11,7 @@ import ListRequestComponent from "../components/friend/ListRequestComponent";
 import HomeComponent from "../components/Home/HomeComponent";
 import ModelShowListImage from "../components/model/ModelShowListImage";
 import io from "socket.io-client";
+import ChatFeedGroup from "../components/chatfeed/ChatFeedGroup";
 // import {init} from '../store/socketClient';
 
 const HomePage = () => {
@@ -27,18 +28,18 @@ const HomePage = () => {
   const { state, depatch } = React.useContext(Contex);
 
   //detructering...
-  const { userChatting, showAlert, user, showTabInfo, indexTab } = state;
+  const { userChatting, groupChatting ,showAlert, user, showTabInfo, indexTab } = state;
 
   useEffect(() => {
     if (user) {
       socket.current = io("https://13.228.206.211");
       // socket.current = io("http://localhost:5005");
-     // console.log(socket);
+      // console.log(socket);
       socket.current.emit("start", user);
 
-      socket.current.on("join-room",(idConversation)=>{
-        console.log("join")
-      } );
+      socket.current.on("join-room", (idConversation) => {
+        console.log("join");
+      });
     }
   }, [user]);
 
@@ -84,7 +85,32 @@ const HomePage = () => {
               {showTabInfo ? <TabInfomation /> : null}
             </div>
           ) : (
-            <HomeComponent />
+            // <HomeComponent />
+            <React.Fragment>
+              {groupChatting ? (
+                <div
+                  style={
+                    showTabInfo
+                      ? {
+                          display: "grid",
+                          gridTemplateColumns: "1.95fr 1.05fr",
+                          flexGrow: "1",
+                        }
+                      : {
+                          display: "grid",
+
+                          flexGrow: "1",
+                        }
+                  }
+                  className="chat_main"
+                >
+                  <ChatFeedGroup socket={socket} />
+                  {showTabInfo ? <TabInfomation /> : null}
+                </div>
+              ) : (
+                <HomeComponent />
+              )}
+            </React.Fragment>
           )}
         </React.Fragment>
       ) : (

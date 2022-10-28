@@ -17,6 +17,15 @@ export const SET_IDCONVERSATION = "set_IdConversation";
 export const SET_MESSAGESENT = "set_MessageSent";
 export const SET_STATUSMESSAGE = "set_StatusMessage";
 export const SET_IDMESSAGEDELETEDWITHME = "set_IdMessageDeletedWithMe";
+export const SET_GROUPCHATTING = "set_GroupChatting";
+
+export const SetGroupChatting = (payload) => {
+  return {
+    type: SET_GROUPCHATTING,
+    payload,
+  };
+};
+
 
 export const SetMessageSent = (payload) => {
   return {

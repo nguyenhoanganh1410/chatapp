@@ -16,6 +16,7 @@ import {
   SET_MESSAGESENT,
   SET_STATUSMESSAGE,
   SET_IDMESSAGEDELETEDWITHME,
+  SET_GROUPCHATTING,
 } from "./Actions";
 
 //innite state
@@ -43,6 +44,9 @@ const initState = {
 
   //user is chatting
   userChatting: null,
+
+  //group chat
+  groupChatting : null,
   //id cua cuoc hoi thoai dang chat
   idConversation: null,
 
@@ -151,6 +155,11 @@ const Reducer = (state, action) => {
         ...state,
         idMessageDeletedWithMe: action.payload,
       };
+      case SET_GROUPCHATTING:
+        return {
+          ...state,
+          groupChatting: action.payload,
+        };
   }
 };
 

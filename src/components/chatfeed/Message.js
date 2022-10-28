@@ -110,6 +110,61 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
     deleteMess();
   };
 
+  //handle reaction message while this message had used icons
+  const handleClickReaction = () => {
+    setShowIcons(!showIcons);
+  };
+
+  //dem so luong reaction trong 1 tin nhan
+  const countReaction = () => {
+    if (mess.reacts.length > 0) {
+      console.log("count reaction message");
+      console.log(mess.reacts[0].react);
+      return mess.reacts.reduce((total, item) => {
+        return (
+          total +
+          item.react.reduce((sum, val) => {
+            return sum + val.quantity;
+          }, 0)
+        );
+      }, 0);
+    }
+    return null;
+  };
+
+  //handle reaction message
+  const handleReaction = (icon) => {
+    //close icon array
+    setShowIcons(false);
+
+    //update ui (react)
+    const reactionTmpMess = {
+      url: icon.url,
+      idMessage: mess._id,
+      userId: user.uid,
+      nameUser: user.lastName,
+    };
+
+    //gui qua socket in here
+
+    //call api reaction here
+    const addReactionMessage = async () => {
+      try {
+        const response = await messageApi.addReaction(
+          mess._id,
+          icon.url,
+          user.uid,
+          user.lastName
+        );
+        console.log("reaction  id meesss --->" + mess._id);
+      } catch (error) {
+        console.log("Failed to reaction message: ", error);
+      }
+    };
+
+    addReactionMessage();
+  };
+
   return (
     <>
       {!mess?.deletedByUserIds?.includes(user.uid) ? (
@@ -157,7 +212,7 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
             )}
             {mess.isDeleted ? (
               <div
-                className="massage_text"
+                className="message_text"
                 style={me ? { backgroundColor: "#e5efff" } : {}}
               >
                 <p className="textMess" style={{ color: "#abb4bc" }}>
@@ -174,13 +229,13 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
               </div>
             ) : (
               <>
-                {mess.type === "IMAGE" ? (
+                {mess?.type === "IMAGE" ? (
                   <div className="messImg">
                     <img src={mess.content} alt="image" />
                   </div>
                 ) : (
                   <>
-                    {mess.type === "VIDEO" ? (
+                    {mess?.type === "VIDEO" ? (
                       <video
                         src={mess.content}
                         width="300"
@@ -225,10 +280,10 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
                           <>
                             {/* <p className="textMess">{mess.content}</p> */}
 
-                            {mess.type === "APPLICATION" ? (
+                            {mess?.type === "APPLICATION" ? (
                               <WordsComponent mess={mess} />
                             ) : (
-                              <p className="textMess">{mess.content}</p>
+                              <p className="textMess">{mess?.content}</p>
                             )}
                             <div
                               style={{
@@ -256,22 +311,58 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
                                 </p>
                               ) : null}
                             </div>
-                            {/* <div className="reactionIcons">
-                            <div className="arr_icons">
-                              <div className="icon_face">
-                                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-react-17ab5.appspot.com/o/images%2Ficons%2Fheart.png?alt=media&token=215d6174-ff8a-4eec-8f32-11a22aff9297" />
+                            {mess?.reacts?.length > 0 ? (
+                              <div className="reactionIcons">
+                                <div className="arr_icons">
+                                  {mess.reacts[0].react.length > 2
+                                    ? mess.reacts[0].react
+                                        .slice(
+                                          mess.reacts[0].react.length - 2,
+                                          mess.reacts[0].react.length
+                                        )
+                                        .map((item) => {
+                                          return (
+                                            <div
+                                              className="icon_face"
+                                              key={Math.random()}
+                                            >
+                                              <img src={item.name} />
+                                            </div>
+                                          );
+                                        })
+                                    : mess.reacts[0].react.map((item) => {
+                                        return (
+                                          <div
+                                            className="icon_face"
+                                            key={Math.random()}
+                                          >
+                                            <img src={item.name} />
+                                          </div>
+                                        );
+                                      })}
+
+                                  {/* <div className="icon_face">
+                                    <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-react-17ab5.appspot.com/o/images%2Ficons%2Fheart.png?alt=media&token=215d6174-ff8a-4eec-8f32-11a22aff9297" />
+                                  </div>
+                                  <div className="icon_face">
+                                    <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-react-17ab5.appspot.com/o/images%2Ficons%2Flaughing.png?alt=media&token=69f6f404-63a9-4675-ae23-888bd8f16c02" />
+                                  </div> */}
+
+                                  <span>{countReaction()}</span>
+                                </div>
+                                <div
+                                  className="nowIcon"
+                                  onClick={handleClickReaction}
+                                >
+                                  <div
+                                    className="icon_face"
+                                    style={{ margin: 0 }}
+                                  >
+                                    <img src={mess.reacts[0].react[0].name} />
+                                  </div>
+                                </div>
                               </div>
-                              <div className="icon_face">
-                                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-react-17ab5.appspot.com/o/images%2Ficons%2Flaughing.png?alt=media&token=69f6f404-63a9-4675-ae23-888bd8f16c02" />
-                              </div>
-                              <span>39</span>
-                            </div>
-                            <div className="nowIcon">
-                              <div className="icon_face" style={{ margin: 0 }}>
-                                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-react-17ab5.appspot.com/o/images%2Ficons%2Flaughing.png?alt=media&token=69f6f404-63a9-4675-ae23-888bd8f16c02" />
-                              </div>
-                            </div>
-                          </div> */}
+                            ) : null}
                             <div className="icon_list">
                               {showIcons ? (
                                 <div
@@ -287,19 +378,22 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
                                         src={icon.url}
                                         alt="icon.name"
                                         className="icon_face"
+                                        onClick={() => handleReaction(icon)}
                                       />
                                     );
                                   })}
                                 </div>
                               ) : null}
 
-                              <span
-                                className="icon_react"
-                                style={!me ? { right: "20px" } : {}}
-                                onClick={() => handleToggle()}
-                              >
-                                <AiOutlineLike />
-                              </span>
+                              {mess?.reacts?.length === 0 ? (
+                                <span
+                                  className="icon_react"
+                                  style={!me ? { right: "20px" } : {}}
+                                  onClick={() => handleToggle()}
+                                >
+                                  <AiOutlineLike />
+                                </span>
+                              ) : null}
                             </div>
                           </>
                         )}

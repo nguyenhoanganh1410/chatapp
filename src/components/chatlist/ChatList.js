@@ -185,7 +185,7 @@ const ChatList = ({ socket }) => {
                       )}
                     </>
                   )}
-
+                  <ChatCardGroup />
                   {/* <ChatCardGroup />
                   <ChatCard />
                   <ChatCard status />

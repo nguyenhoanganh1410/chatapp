@@ -8,8 +8,11 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { RiArrowRightSLine } from "react-icons/ri";
 import AvatarGroup from "@mui/material/AvatarGroup";
-
+import { SetGroupChatting, SetUserChatting } from "../../store/Actions";
+import Contex from "../../store/Context";
 const ChatCardGroup = ({ status }) => {
+  const { state, depatch } = React.useContext(Contex);
+  const { groupChatting, userChatting, user } = state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -21,8 +24,14 @@ const ChatCardGroup = ({ status }) => {
   const handleShowOption = () => {
     alert("updating...");
   };
+
+  const handleGroupChat = () => {
+    //delete user chatting
+    depatch(SetUserChatting(null));
+    depatch(SetGroupChatting("group"));
+  };
   return (
-    <div className="card_chat">
+    <div className="card_chat" onClick={() => handleGroupChat()}>
       <div className="card_group">
         {/* <div className="group_avatar">
           <Avatar className="avt group_avatar" alt="Remy Sharp" src={avt} />

@@ -42,12 +42,6 @@ const ChatHeader = ({ userChatting }) => {
           </Avatar>
         )}
 
-        {/* <Avatar
-          className="avt"
-          alt="Remy Sharp"
-          src={userChatting?.avatar}
-          onClick={() => handleShowInfo()}
-        /> */}
         <div className="info_text">
           <span className="info_name">
             {userChatting?.last_name + " " + userChatting?.first_name}

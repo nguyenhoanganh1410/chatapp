@@ -37,6 +37,17 @@ const messageApi = {
       idMessage: id,
     });
   },
+
+  //reaction the meessage
+  addReaction: (messId, urlIcon, userId, nameUser) => {
+    const url = `/messages/addReact`;
+    return axiosClient.post(url, {
+      messId:messId,
+      icon:urlIcon,
+      userId:userId,
+      nameUser:nameUser
+    });
+  },
 };
 
 export default messageApi;
