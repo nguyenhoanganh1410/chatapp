@@ -50,19 +50,22 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
 
   React.useEffect(() => {
     if (socket.current) {
-      socket.current.on("get-last-message", (data) => {
-        // setConversations(data);
-        const { listSender, listReceiver } = data;
-        if (listSender[0].inFo.userIdFriend !== user.uid) {
-          setConversations(listSender);
-          console.log("S" + { listSender });
-        } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
-          setConversations(listReceiver);
-          console.log("R" + listReceiver);
-        }
-      });
+      // socket.current.on("get-last-message", (data) => {
+      //   // setConversations(data);
+      //   const { listSender, listReceiver } = data;
+      //   if (listSender[0].inFo.userIdFriend !== user.uid) {
+      //     setConversations(listSender);
+      //     console.log("S" + { listSender });
+      //   } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
+      //     setConversations(listReceiver);
+      //     console.log("R" + listReceiver);
+      //   }
+      // });
     }
   }, [user]);
+
+
+  
 
   //click 1 conversation -> show chat feed
   const handleShowChat = () => {

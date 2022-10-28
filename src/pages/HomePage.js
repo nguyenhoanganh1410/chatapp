@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef } from "react";
+import React, { useEffect, useContext, useRef, useState } from "react";
 import ChatFeed from "../components/chatfeed/ChatFeed";
 import ChatList from "../components/chatlist/ChatList";
 import TabBarComponent from "../components/TabBarComponent";
@@ -16,7 +16,8 @@ import ChatFeedGroup from "../components/chatfeed/ChatFeedGroup";
 
 const HomePage = () => {
   const socket = useRef();
-  //console.log(socket);
+  const [a, setA] = useState("a")
+  console.log(socket);
   // let socket = init();
 
   //width, height of current screen
@@ -31,15 +32,20 @@ const HomePage = () => {
   const { userChatting, groupChatting ,showAlert, user, showTabInfo, indexTab } = state;
 
   useEffect(() => {
+    setA('b')
     if (user) {
+
       socket.current = io("https://13.228.206.211");
       // socket.current = io("http://localhost:5005");
       // console.log(socket);
       socket.current.emit("start", user);
 
-      socket.current.on("join-room", (idConversation) => {
-        console.log("join");
-      });
+     
+     // console.log(socket);
+      socket.current.emit("start", user);
+
+
+
     }
   }, [user]);
 
@@ -60,7 +66,7 @@ const HomePage = () => {
   // }, [dimensions]);
   return (
     <React.Fragment>
-      <TabBarComponent />
+      <TabBarComponent a={a}  socket={socket}/>
       {dimensions.width < 800 ? null : <ChatList socket={socket} />}
       {indexTab === 0 ? (
         <React.Fragment>

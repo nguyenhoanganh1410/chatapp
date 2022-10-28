@@ -65,10 +65,10 @@ const NewMessageForm = ({
             );
             depatch(SetIdConversation(response));
             console.log("id conversation moi tao ---> " + response);
-            socket.current.emit("join-room", {
-              idCon: response,
-              isNew: true,
-            });
+            // socket.current.emit("join-room", {
+            //   idCon: response,
+            //   isNew: true,
+            // });
 
             const formData = new FormData();
             formData.append("userId", user.uid);

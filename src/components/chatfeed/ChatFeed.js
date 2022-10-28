@@ -43,7 +43,7 @@ const ChatFeed = ({ socket }) => {
     idMessageDeletedWithMe,
   } = state;
   // console.log(" message ---->");
-  console.log(idMessageDeletedWithMe);
+  
   const messagesEnd = useRef();
 
   const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
@@ -79,10 +79,13 @@ const ChatFeed = ({ socket }) => {
   }, [messageSent]);
 
   useEffect(() => {
-    // socket.current.emit("join-room", {
-    //   idCon:idConversation,
-    //   isNew:false
-    // });
+
+    socket.current?.emit("join-room", {
+      idCon:idConversation,
+      // isNew:false
+    });
+
+    
 
     socket.current?.on("get-message", ({ senderId, message }) => {
       //console.log("get");
@@ -109,6 +112,9 @@ const ChatFeed = ({ socket }) => {
   //       });
   //     }
   //   }, []);
+
+
+  
 
   //cap nhat mess da thu hoi len giao dien
   useEffect(() => {
@@ -138,6 +144,12 @@ const ChatFeed = ({ socket }) => {
   }, [idMessageDeletedWithMe]);
 
   useEffect(() => {
+
+    // socket.current.emit("seen-message", {
+    //   conversationId: idConversation,
+    //   userId: user.uid,
+    // });
+
     //xoa di message cuoi cung cua array (message mẫu)
     if (messageSent != "") {
       const messagesCurrent = messages.filter((val, idx) => {
@@ -264,7 +276,7 @@ const ChatFeed = ({ socket }) => {
   };
   return (
     <div className="chat_feed">
-      <ChatHeader userChatting={userChatting} />
+      <ChatHeader userChatting={userChatting} socket={socket} />
       <div
         // data-simplebar
         className="message_content"

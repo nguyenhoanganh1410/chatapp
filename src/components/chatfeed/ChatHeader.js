@@ -7,12 +7,17 @@ import Context from "../../store/Context";
 import { SetShowTabInfo } from "../../store/Actions";
 import ModelDetailUser from "../model/ModelDetailUser";
 import love from "../../images/love.jpg";
-const ChatHeader = ({ userChatting }) => {
+import { format } from 'timeago.js';
+const ChatHeader = ({ userChatting,socket }) => {
   const { state, depatch } = React.useContext(Context);
   const [openModelUser, setOpenModelUser] = React.useState(false);
+  const [isOnline, setIsOnline] = React.useState(false);
+  const [lastLogin, setLastLogin] = React.useState("");
 
   //detructering...
-  const { showTabInfo } = state;
+  const { showTabInfo,idConversation,user } = state;
+
+  
 
   const handleShowTabInfo = () => {
     depatch(SetShowTabInfo(!showTabInfo));
@@ -21,6 +26,21 @@ const ChatHeader = ({ userChatting }) => {
   const handleShowInfo = (params) => {
     setOpenModelUser(true);
   };
+
+  React.useEffect(() => {
+    if(idConversation){
+        socket.current.emit("get-user-online",userChatting.uid,({isOnline,lastLogin})=>{
+          setIsOnline(isOnline);
+          setLastLogin(lastLogin);
+            console.log(userChatting.uid,isOnline,lastLogin);
+        } );
+    }
+  }, [idConversation]);
+
+
+const paseDate = format(lastLogin, 'vi_VN');
+console.log(paseDate);
+
   return (
     <div className="chat_header">
       <div className="chat_header-info">
@@ -46,7 +66,8 @@ const ChatHeader = ({ userChatting }) => {
           <span className="info_name">
             {userChatting?.last_name + " " + userChatting?.first_name}
           </span>
-          <span className="info_hour">truy cập 1 giờ trước</span>
+          <span className="info_online">{isOnline?'0':'1'}</span>
+          <span className="info_hour">{isOnline?"Vừa truy cập":""+paseDate}</span>
         </div>
       </div>
       <ModelDetailUser

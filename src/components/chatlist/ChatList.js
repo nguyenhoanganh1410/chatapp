@@ -71,24 +71,25 @@ const ChatList = ({ socket }) => {
     setValue(newValue);
   };
 
+  
+
   React.useEffect(() => {
     if (socket.current) {
       // console.log(conversations);
-      // const ids = conversations.map((ele) => ele.conversations._id);
-      // console.log("chayy");
-      // socket.current.emit("join-conversations", ids);
-      // socket.current.on("get-last-message", (data) => {
-      //   console.log(data+"data");
-      //   // // setConversations(data);
-      //   const { listSender, listReceiver } = data;
-      //   if (listSender[0].inFo.userIdFriend !== user.uid) {
-      //     setConversations(listSender);
-      //     console.log(listSender);
-      //   } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
-      //     setConversations(listReceiver);
-      //     console.log(listReceiver);
-      //   }
-      // });
+      const ids = conversations.map((ele) => ele.conversations._id);
+      socket.current.emit("join-conversations", ids);
+      socket.current.on("get-last-message", (data) => {
+        // console.log(data);
+        // setConversations(data);
+        const { listSender, listReceiver } = data;
+        if (listSender[0].inFo.userIdFriend !== user.uid) {
+          setConversations(listSender);
+          console.log(listSender);
+        } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
+          setConversations(listReceiver);
+          console.log(listReceiver);
+        }
+      });
     }
   }, [user, conversations]);
 
