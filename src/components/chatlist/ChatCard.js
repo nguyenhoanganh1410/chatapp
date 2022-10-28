@@ -64,9 +64,6 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
     }
   }, [user]);
 
-
-  
-
   //click 1 conversation -> show chat feed
   const handleShowChat = () => {
     // console.log("chat"+conversations._id);
@@ -117,15 +114,14 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       <div className="card_group">
         {inFo?.avatar ? (
           <Avatar className="avt" src={inFo?.avatar} alt={inFo?.firstName} />
-        ) : (
-          <Avatar
-            className="avt"
-            style={{ textTransform: "capitalize" }}
-            src={inFo?.avatar}
-          >
-            {inFo?.lastName[0]}
-          </Avatar>
-        )}
+        ) : // <Avatar
+        //   className="avt"
+        //   style={{ textTransform: "capitalize" }}
+        //   src={inFo?.avatar}
+        // >
+        //   {inFo?.lastName[0]}
+        // </Avatar>
+        null}
         <div className="card_name">
           <h6 className="">{inFo?.firstName + " " + inFo?.lastName}</h6>
           <p>

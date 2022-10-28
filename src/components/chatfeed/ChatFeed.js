@@ -43,7 +43,7 @@ const ChatFeed = ({ socket }) => {
     idMessageDeletedWithMe,
   } = state;
   // console.log(" message ---->");
-  
+
   const messagesEnd = useRef();
 
   const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
@@ -79,13 +79,10 @@ const ChatFeed = ({ socket }) => {
   }, [messageSent]);
 
   useEffect(() => {
-
     socket.current?.emit("join-room", {
-      idCon:idConversation,
+      idCon: idConversation,
       // isNew:false
     });
-
-    
 
     socket.current?.on("get-message", ({ senderId, message }) => {
       //console.log("get");
@@ -112,9 +109,6 @@ const ChatFeed = ({ socket }) => {
   //       });
   //     }
   //   }, []);
-
-
-  
 
   //cap nhat mess da thu hoi len giao dien
   useEffect(() => {
@@ -144,7 +138,6 @@ const ChatFeed = ({ socket }) => {
   }, [idMessageDeletedWithMe]);
 
   useEffect(() => {
-
     // socket.current.emit("seen-message", {
     //   conversationId: idConversation,
     //   userId: user.uid,
@@ -269,9 +262,9 @@ const ChatFeed = ({ socket }) => {
             console.log("Failed to fetch conversation list: ", error);
           }
         };
-
         featchMessages();
       }
+      setStatusLoadOldMessage(false);
     }
   };
   return (

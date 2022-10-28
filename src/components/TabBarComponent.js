@@ -42,7 +42,7 @@ const TabBarComponent = ({socket, a}) => {
   const { user, indexTab } = state;
   //console.log("index tab " + indexTab);
   //show model
-  console.log(socket)
+  //console.log(socket)
   const [openAlert, setOpenAlert] = React.useState(false);
 
   const navigate = useNavigate();

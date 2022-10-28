@@ -42,7 +42,7 @@ const HomePage = () => {
 
      
      // console.log(socket);
-      socket.current.emit("start", user);
+      //socket.current.emit("start", user);
 
 
 
