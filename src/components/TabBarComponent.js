@@ -32,9 +32,8 @@ import firebase from "../firebase";
 import "firebase/compat/auth";
 import AlertNotification from "./model/AlertNotification";
 
-const TabBarComponent = () => {
+const TabBarComponent = ({socket, a}) => {
   const [openModelUser, setOpenModelUser] = React.useState(false);
-
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -43,6 +42,7 @@ const TabBarComponent = () => {
   const { user, indexTab } = state;
   //console.log("index tab " + indexTab);
   //show model
+  console.log(socket)
   const [openAlert, setOpenAlert] = React.useState(false);
 
   const navigate = useNavigate();
@@ -91,13 +91,20 @@ const TabBarComponent = () => {
     setOpenAlert(true);
     depatch(SetIdConversation(null));
     depatch(SetUserChatting(null));
+    
+
   };
 
   const handleLogoutMain = () => {
     //log out
     firebase.auth().signOut();
+    
+    
     //delete user current
     depatch(SetUser(null));
+    if( socket.current){
+      socket.current.emit("out");
+    }
   };
   const closeOpenAlert = () => {
     setOpenAlert(false);
