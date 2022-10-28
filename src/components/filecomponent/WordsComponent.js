@@ -1,9 +1,13 @@
 import * as React from "react";
 import words from "../../images/word.png";
+import pdf from "../../images/pdf.png";
+import file from "../../images/folder-icon.png";
 import { BsDownload } from "react-icons/bs";
 import "./WordsComponentStyle.scss";
+
 const WordsComponent = ({ mess }) => {
   const [content, setContent] = React.useState("");
+ 
   React.useEffect(() => {
     //ckeck do dai
     const newContent = mess.content.slice(
@@ -46,7 +50,14 @@ const WordsComponent = ({ mess }) => {
     <div className="wordsComponent">
       <div className="wordsComponent_top">
         <div className="top_left">
-          <img src={words} />
+          {mess.content.includes(".docx") ? (
+            <img src={words} />
+          ) : mess.content.includes(".pdf") ? (
+            <img src={pdf} />
+          ) : (
+            <img src={file} />
+          )}
+
           <div className="top_content">
             <p>{content}</p>
             <p className="mb">400 mb</p>

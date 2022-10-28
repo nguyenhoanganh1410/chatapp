@@ -31,7 +31,7 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
 
   const [me, setMe] = React.useState(false);
 
-  const { checkUrlIsDocx } = useCheckFile();
+  const { checkUrlIsDocx, checkUrlIsVideo } = useCheckFile();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -179,99 +179,133 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
                     <img src={mess.content} alt="image" />
                   </div>
                 ) : (
-                  <div
-                    className={
-                      mess.content.includes("https://img.stipop.io")
-                        ? "message_text bg-trans"
-                        : `${
-                            mess.type === "APPLICATION"
-                              ? "message_text cssFileDocx"
-                              : "message_text"
-                          }`
-                      // <>
-                      //   {mess.type === "APPLICATION"
-                      //     ? "message_text cssFileDocx"
-                      //     : "message_text"}
-                      // </>
-                    }
-                    style={me ? { backgroundColor: "#e5efff" } : {}}
-                  >
-                    {mess.content.includes("https://img.stipop.io") ? (
-                      <div className="messSticker">
-                        <img src={mess.content} alt="image" />
-                        <p className="timeMessSticker">
-                          {new Date(mess.createdAt)
-                            .toLocaleString("en-US", {
-                              timeZone: "Asia/Ho_Chi_Minh",
-                            })
-                            .slice(11, 23)}
-                        </p>
-                      </div>
+                  <>
+                    {mess.type === "VIDEO" ? (
+                      <video
+                        src={mess.content}
+                        width="300"
+                        height="200"
+                        controls="controls"
+                        autoplay="true"
+                      />
                     ) : (
-                      <>
-                        {/* <p className="textMess">{mess.content}</p> */}
-
-                        {mess.type === "APPLICATION" ? (
-                          <WordsComponent mess={mess} />
-                        ) : (
-                          <p className="textMess">{mess.content}</p>
-                        )}
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <p className="timeMess">
-                            {new Date(mess.createdAt)
-                              .toLocaleString("en-US", {
-                                timeZone: "Asia/Ho_Chi_Minh",
-                              })
-                              .slice(11, 23)}
-                          </p>
-                          {isLastMessage && mess?.userId === user?.uid ? (
-                            <p
-                              style={{
-                                fontSize: "12px",
-                                textTransform: "capitalize",
-                                marginLeft: "8px",
-                              }}
-                              className="timeMess"
-                            >
-                              {statusMessage}
+                      <div
+                        className={
+                          mess.content.includes("https://img.stipop.io")
+                            ? "message_text bg-trans"
+                            : `${
+                                mess.type === "APPLICATION"
+                                  ? "message_text cssFileDocx"
+                                  : `${
+                                      mess.content.length > 50
+                                        ? "message_text message_text__overFlow"
+                                        : "message_text"
+                                    }`
+                              }`
+                          // <>
+                          //   {mess.type === "APPLICATION"
+                          //     ? "message_text cssFileDocx"
+                          //     : "message_text"}
+                          // </>
+                        }
+                        style={me ? { backgroundColor: "#e5efff" } : {}}
+                      >
+                        {mess.content.includes("https://img.stipop.io") ? (
+                          <div className="messSticker">
+                            <img src={mess.content} alt="image" />
+                            <p className="timeMessSticker">
+                              {new Date(mess.createdAt)
+                                .toLocaleString("en-US", {
+                                  timeZone: "Asia/Ho_Chi_Minh",
+                                })
+                                .slice(11, 23)}
                             </p>
-                          ) : null}
-                        </div>
-                        <div className="icon_list">
-                          {showIcons ? (
-                            <div
-                              className="icons_react"
-                              style={me ? { right: "50%" } : { left: "50%" }}
-                            >
-                              {iconsTouch.map((icon) => {
-                                return (
-                                  <img
-                                    key={icon.id}
-                                    src={icon.url}
-                                    alt="icon.name"
-                                    className="icon_face"
-                                  />
-                                );
-                              })}
-                            </div>
-                          ) : null}
+                          </div>
+                        ) : (
+                          <>
+                            {/* <p className="textMess">{mess.content}</p> */}
 
-                          <span
-                            className="icon_react"
-                            style={!me ? { right: "20px" } : {}}
-                            onClick={() => handleToggle()}
-                          >
-                            <AiOutlineLike />
-                          </span>
-                        </div>
-                      </>
+                            {mess.type === "APPLICATION" ? (
+                              <WordsComponent mess={mess} />
+                            ) : (
+                              <p className="textMess">{mess.content}</p>
+                            )}
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <p className="timeMess">
+                                {new Date(mess.createdAt)
+                                  .toLocaleString("en-US", {
+                                    timeZone: "Asia/Ho_Chi_Minh",
+                                  })
+                                  .slice(11, 23)}
+                              </p>
+                              {isLastMessage && mess?.userId === user?.uid ? (
+                                <p
+                                  style={{
+                                    fontSize: "12px",
+                                    textTransform: "capitalize",
+                                    marginLeft: "8px",
+                                  }}
+                                  className="timeMess"
+                                >
+                                  {statusMessage}
+                                </p>
+                              ) : null}
+                            </div>
+                            {/* <div className="reactionIcons">
+                            <div className="arr_icons">
+                              <div className="icon_face">
+                                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-react-17ab5.appspot.com/o/images%2Ficons%2Fheart.png?alt=media&token=215d6174-ff8a-4eec-8f32-11a22aff9297" />
+                              </div>
+                              <div className="icon_face">
+                                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-react-17ab5.appspot.com/o/images%2Ficons%2Flaughing.png?alt=media&token=69f6f404-63a9-4675-ae23-888bd8f16c02" />
+                              </div>
+                              <span>39</span>
+                            </div>
+                            <div className="nowIcon">
+                              <div className="icon_face" style={{ margin: 0 }}>
+                                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-react-17ab5.appspot.com/o/images%2Ficons%2Flaughing.png?alt=media&token=69f6f404-63a9-4675-ae23-888bd8f16c02" />
+                              </div>
+                            </div>
+                          </div> */}
+                            <div className="icon_list">
+                              {showIcons ? (
+                                <div
+                                  className="icons_react"
+                                  style={
+                                    me ? { right: "50%" } : { left: "50%" }
+                                  }
+                                >
+                                  {iconsTouch.map((icon) => {
+                                    return (
+                                      <img
+                                        key={icon.id}
+                                        src={icon.url}
+                                        alt="icon.name"
+                                        className="icon_face"
+                                      />
+                                    );
+                                  })}
+                                </div>
+                              ) : null}
+
+                              <span
+                                className="icon_react"
+                                style={!me ? { right: "20px" } : {}}
+                                onClick={() => handleToggle()}
+                              >
+                                <AiOutlineLike />
+                              </span>
+                            </div>
+                          </>
+                        )}
+                      </div>
                     )}
-                  </div>
+                  </>
                 )}
               </>
             )}

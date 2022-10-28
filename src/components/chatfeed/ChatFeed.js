@@ -319,6 +319,13 @@ const ChatFeed = ({ socket }) => {
           }
           return <Message key={mess._id} mess={mess} socket={socket} />;
         })}
+        {/* <video
+          src="https://chatapp-bucket.s3.ap-southeast-1.amazonaws.com/zale_1666892497792_test.mp4"
+          width="300"
+          height="200"
+          controls="controls"
+          autoplay="true"
+        /> */}
         {/* <WordsComponent /> */}
         {/* <TimeLine />
         <Message />

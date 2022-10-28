@@ -18,7 +18,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
   const { state, depatch } = React.useContext(Contex);
   //custom hook
   const { handleDate } = useDateLogic();
-  const { checkUrlIsImage, checkUrlIsDocx } = useCheckFile();
+  const { checkUrlIsImage, checkUrlIsDocx, checkUrlIsVideo } = useCheckFile();
   //detructering...
   const { user, userSearched, idConversation, userChatting } = state;
 
@@ -142,18 +142,27 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
                     "hình ảnh"
                   ) : (
                     <>
-                      {checkUrlIsDocx(
+                      {checkUrlIsVideo(
                         conversations?.lastMessage[0]?.content
                       ) ? (
-                        "file docx"
+                        "Video"
                       ) : (
                         <>
-                          {conversations?.lastMessage[0]?.content.length > 20
-                            ? conversations?.lastMessage[0]?.content.slice(
-                                0,
-                                20
-                              ) + "..."
-                            : conversations?.lastMessage[0]?.content}
+                          {checkUrlIsDocx(
+                            conversations?.lastMessage[0]?.content
+                          ) ? (
+                            "File"
+                          ) : (
+                            <>
+                              {conversations?.lastMessage[0]?.content.length >
+                              20
+                                ? conversations?.lastMessage[0]?.content.slice(
+                                    0,
+                                    20
+                                  ) + "..."
+                                : conversations?.lastMessage[0]?.content}
+                            </>
+                          )}
                         </>
                       )}
                     </>
