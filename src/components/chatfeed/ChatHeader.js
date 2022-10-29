@@ -53,6 +53,7 @@ const ChatHeader = ({ userChatting, socket }) => {
                 src={userChatting?.avatar}
                 alt={userChatting?.first_name}
                 onClick={() => handleShowInfo()}
+                style={{ backgroundColor: "#e7f0ce" }}
               />
               {isOnline ? <div className="statusOnline"></div> : null}
             </div>

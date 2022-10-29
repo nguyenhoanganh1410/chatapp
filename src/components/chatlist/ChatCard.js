@@ -114,14 +114,15 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       <div className="card_group">
         {inFo?.avatar ? (
           <Avatar className="avt" src={inFo?.avatar} alt={inFo?.firstName} />
-        ) : // <Avatar
-        //   className="avt"
-        //   style={{ textTransform: "capitalize" }}
-        //   src={inFo?.avatar}
-        // >
-        //   {inFo?.lastName[0]}
-        // </Avatar>
-        null}
+        ) : (
+          <Avatar
+            className="avt"
+            style={{ textTransform: "capitalize", backgroundColor:"#e7f0ce" }}
+            src={inFo?.avatar}
+          >
+            {inFo?.lastName[0]}
+          </Avatar>
+        )}
         <div className="card_name">
           <h6 className="">{inFo?.firstName + " " + inFo?.lastName}</h6>
           <p>

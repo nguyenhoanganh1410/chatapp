@@ -21,7 +21,7 @@ import WordsComponent from "../filecomponent/WordsComponent";
 import useCheckFile from "../../hooks/useCheckFile";
 
 //status : 0 binh thuong, 1 thu hoi, 2 bi xoa
-const Message = ({ isLastMessage, status, mess, socket }) => {
+const Message = ({ isLastMessage, status, mess, socket, preMessage }) => {
   const { state, depatch } = React.useContext(Contex);
   //detructering...
   const { userChatting, idConversation, user, statusMessage } = state;
@@ -32,6 +32,9 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
   const [me, setMe] = React.useState(false);
 
   const { checkUrlIsDocx, checkUrlIsVideo } = useCheckFile();
+
+  // console.log("pre messs ----->");
+  // console.log(preMessage);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -174,41 +177,59 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
             style={me ? { flexDirection: "row-reverse" } : null}
           >
             {me ? (
-              <React.Fragment>
-                {user?.avatar ? (
-                  <Avatar
-                    className="avatar"
-                    src={user?.avatar}
-                    alt={user?.first_name}
-                  />
+              <>
+                {preMessage && preMessage[0].userId === mess.userId ? (
+                  <Avatar className="avatar" style={{ opacity: 0 }} />
                 ) : (
-                  <Avatar
-                    className="avatar"
-                    style={{ textTransform: "capitalize" }}
-                    src={user?.avatar}
-                  >
-                    {user?.last_name[0]}
-                  </Avatar>
+                  <React.Fragment>
+                    {user?.avatar ? (
+                      <Avatar
+                        className="avatar"
+                        src={user?.avatar}
+                        alt={user?.first_name}
+                      />
+                    ) : (
+                      <Avatar
+                        className="avatar"
+                        style={{
+                          textTransform: "capitalize",
+                          backgroundColor: "#e7f0ce",
+                        }}
+                        src={user?.avatar}
+                      >
+                        {user?.last_name[0]}
+                      </Avatar>
+                    )}
+                  </React.Fragment>
                 )}
-              </React.Fragment>
+              </>
             ) : (
-              <React.Fragment>
-                {userChatting?.avatar ? (
-                  <Avatar
-                    className="avatar"
-                    src={userChatting?.avatar}
-                    alt={userChatting?.first_name}
-                  />
+              <>
+                {preMessage && preMessage[0]?.userId === mess?.userId ? (
+                  <Avatar className="avatar" style={{ opacity: 0 }} />
                 ) : (
-                  <Avatar
-                    className="avatar"
-                    style={{ textTransform: "capitalize" }}
-                    src={userChatting?.avatar}
-                  >
-                    {userChatting?.last_name[0]}
-                  </Avatar>
+                  <React.Fragment>
+                    {userChatting?.avatar ? (
+                      <Avatar
+                        className="avatar"
+                        src={userChatting?.avatar}
+                        alt={userChatting?.first_name}
+                      />
+                    ) : (
+                      <Avatar
+                        className="avatar"
+                        style={{
+                          textTransform: "capitalize",
+                          backgroundColor: "#e7f0ce",
+                        }}
+                        src={userChatting?.avatar}
+                      >
+                        {userChatting?.last_name[0]}
+                      </Avatar>
+                    )}
+                  </React.Fragment>
                 )}
-              </React.Fragment>
+              </>
             )}
             {mess.isDeleted ? (
               <div
