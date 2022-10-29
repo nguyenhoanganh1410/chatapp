@@ -16,6 +16,7 @@ import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import CircularProgress from "@mui/material/CircularProgress";
 import {
+  SetIdConversation,
   SetIdMessageDeletedWithMe,
   SetMessageSent,
   SetStatusMessage,
@@ -67,6 +68,8 @@ const ChatFeed = ({ socket }) => {
   //   }
   // }, []);
 
+
+
   //khi tin nhan duoc gui thi them tin nhan do vao messages -> render
   useEffect(() => {
     // console.log("useEffect --->");
@@ -85,15 +88,84 @@ const ChatFeed = ({ socket }) => {
     });
 
   
-    socket.current?.on("get-message", ({ senderId, message,notifi }) => {
+    socket.current?.on("get-message", ({ senderId, message }) => {
       //console.log("get");
       console.log("mess nhan dc ---> ");
       console.log(message);
       setArrivalMess(message);
-      notifi();
+      // notifi();
 
       //set statusMessage = da nhan
       // depatch(SetStatusMessage("đã nhận"));
+    });
+
+    socket.current.on("get-notifi", (notifi) => {
+      notifi();
+    });
+
+    
+
+    socket.current?.on("reaction", (idC) => {
+      console.log("reaction"+idC);
+      const featchMessages = async (idC) => {
+        try {
+          //cal api get total page
+          const response = await messageApi.getMess(
+            idC,
+            user.uid,
+            panigation.page,
+            panigation.size
+          );
+          const { totalPages } = response;
+          console.log(totalPages);
+  
+          //th1: so luong tin nhan < 30, page = 1
+          if (totalPages <= 1) {
+            setMessages(response.data[0].messages);
+            //update page current
+            setPage(totalPages);
+          } else {
+            const newPage = totalPages - 1;
+            //get 30 tin moi nhat
+            const currnetResponse = await messageApi.getMess(
+              idC,
+              user.uid,
+              newPage,
+              panigation.size
+            );
+  
+            const { data, info, friendStatus, size } = currnetResponse;
+            //neu khong tra ve du 30 tin nhan -> lui 1 page
+            if (data[0].messages.length < 20) {
+              const cPage = newPage - 1;
+              //get 30 tin moi nhat
+              const newResponse = await messageApi.getMess(
+                idC,
+                user.uid,
+                cPage,
+                panigation.size + data[0].messages.length
+              );
+              if (newResponse) {
+                setMessages(newResponse.data[0].messages);
+                setPage(cPage);
+              }
+            } else {
+              setMessages(data[0].messages);
+              setPage(newPage);
+            }
+          }
+  
+          // //update page current
+          // setPage(newPage);
+          setStatusLoadMessage(false);
+        } catch (error) {
+          setMessages([]);
+          setStatusLoadMessage(false);
+          console.log("Failed to fetch conversation list: ", error);
+        }
+      };
+
+      featchMessages(idC);
     });
 
 
@@ -173,6 +245,7 @@ const ChatFeed = ({ socket }) => {
 
   useEffect(() => {
     setStatusLoadMessage(true);
+    console.log("useEffect load message");
     //call api get all message
     //set state
     const featchMessages = async () => {

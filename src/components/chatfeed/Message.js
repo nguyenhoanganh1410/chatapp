@@ -145,6 +145,11 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
       nameUser: user.lastName,
     };
 
+    socket.current.emit("reaction",{
+      isReaction: true,
+      idConversation:idConversation,
+    });
+
     //gui qua socket in here
 
     //call api reaction here
@@ -160,6 +165,7 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
       } catch (error) {
         console.log("Failed to reaction message: ", error);
       }
+      
     };
 
     addReactionMessage();
