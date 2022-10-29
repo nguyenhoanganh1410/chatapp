@@ -44,7 +44,7 @@ const ChatFeed = ({ socket }) => {
     idMessageDeletedWithMe,
   } = state;
   // console.log(" message ---->");
-
+  console.log(idConversation)
   const messagesEnd = useRef();
 
   const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
@@ -396,10 +396,19 @@ const ChatFeed = ({ socket }) => {
                 mess={mess}
                 socket={socket}
                 isLastMessage
+                preMessage={[messages[idx-1]]}
               />
             );
           }
-          return <Message key={mess._id} mess={mess} socket={socket} />;
+
+          //truyen vao prevent meassage bat dau tu idx = 1 : messages[idx - 1]
+          //neu idx = 0 thi khong truyen prevent message
+          if(idx === 0){
+
+            return <Message key={mess._id} mess={mess} socket={socket} />;
+          }else{
+            return <Message key={mess._id} mess={mess} socket={socket} preMessage={[messages[idx-1]]}/>;
+          }
         })}
         {/* <video
           src="https://chatapp-bucket.s3.ap-southeast-1.amazonaws.com/zale_1666892497792_test.mp4"

@@ -84,6 +84,7 @@ const TabInfomation = () => {
               sx={{ width: "auto", height: 450 }}
               cols={3}
               rowHeight={150}
+              className="imageList"
             >
               {itemData.map((item) => (
                 <ImageListItem key={item.img}>

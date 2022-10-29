@@ -32,7 +32,7 @@ import firebase from "../firebase";
 import "firebase/compat/auth";
 import AlertNotification from "./model/AlertNotification";
 
-const TabBarComponent = ({socket, a}) => {
+const TabBarComponent = ({ socket, a }) => {
   const [openModelUser, setOpenModelUser] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -91,18 +91,15 @@ const TabBarComponent = ({socket, a}) => {
     setOpenAlert(true);
     depatch(SetIdConversation(null));
     depatch(SetUserChatting(null));
-    
-
   };
 
   const handleLogoutMain = () => {
     //log out
     firebase.auth().signOut();
-    
-    
+
     //delete user current
     depatch(SetUser(null));
-    if( socket.current){
+    if (socket.current) {
       socket.current.emit("out");
     }
   };
@@ -136,6 +133,7 @@ const TabBarComponent = ({socket, a}) => {
             aria-controls={open ? "composition-menu" : undefined}
             aria-expanded={open ? "true" : undefined}
             aria-haspopup="true"
+            style={{ backgroundColor: "#e7f0ce" }}
           >
             {user?.last_name[0]}
           </Avatar>
