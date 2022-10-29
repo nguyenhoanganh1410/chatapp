@@ -21,7 +21,7 @@ const TabInfomation = () => {
   const { state, depatch } = useContext(Contex);
 
   //detructering...
-  const { userChatting } = state;
+  const { userChatting, groupChatting } = state;
 
   return (
     <div data-simplebar className="tab_infomation">
@@ -31,7 +31,6 @@ const TabInfomation = () => {
         </div>
         <div className="tab_info-content">
           <div className="content_top">
-            {/* //<Avatar className="avatarCustom" alt="Remy Sharp" src={love} /> */}
             {userChatting?.avatar ? (
               <Avatar
                 className="avatarCustom"
@@ -47,7 +46,16 @@ const TabInfomation = () => {
                 {userChatting?.last_name[0]}
               </Avatar>
             )}
-            <p style={{textTransform:"capitalize"}}>{userChatting?.last_name + " " + userChatting?.first_name}</p>
+
+            {groupChatting ? (
+              <p style={{ textTransform: "capitalize" }}>
+                {groupChatting.name}
+              </p>
+            ) : (
+              <p style={{ textTransform: "capitalize" }}>
+                {userChatting?.last_name + " " + userChatting?.first_name}
+              </p>
+            )}
           </div>
           <div className="content_icons">
             <div className="block_icon">
@@ -62,12 +70,21 @@ const TabInfomation = () => {
               </span>
               <p>Ghim hội thoại</p>
             </div>
-            <div className="block_icon">
-              <span>
-                <MdGroupAdd />
-              </span>
-              <p>Tạo nhóm trò chuyện</p>
-            </div>
+            {groupChatting ? (
+              <div className="block_icon">
+                <span>
+                  <MdGroupAdd />
+                </span>
+                <p>Thêm thành viên</p>
+              </div>
+            ) : (
+              <div className="block_icon">
+                <span>
+                  <MdGroupAdd />
+                </span>
+                <p>Tạo nhóm trò chuyện</p>
+              </div>
+            )}
           </div>
         </div>
         <div className="divide"></div>

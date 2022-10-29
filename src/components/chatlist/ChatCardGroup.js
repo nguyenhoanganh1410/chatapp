@@ -8,13 +8,24 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { RiArrowRightSLine } from "react-icons/ri";
 import AvatarGroup from "@mui/material/AvatarGroup";
-import { SetGroupChatting, SetUserChatting } from "../../store/Actions";
+import {
+  SetGroupChatting,
+  SetIdConversation,
+  SetUserChatting,
+} from "../../store/Actions";
 import Contex from "../../store/Context";
-const ChatCardGroup = ({ status }) => {
+import useDateLogic from "../../hooks/useDateLogic";
+const ChatCardGroup = ({ status, conversation, socket }) => {
   const { state, depatch } = React.useContext(Contex);
   const { groupChatting, userChatting, user } = state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  //custom hook
+  const { handleDate } = useDateLogic();
+
+  const { inFo, conversations } = conversation;
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -28,7 +39,8 @@ const ChatCardGroup = ({ status }) => {
   const handleGroupChat = () => {
     //delete user chatting
     depatch(SetUserChatting(null));
-    depatch(SetGroupChatting("group"));
+    depatch(SetGroupChatting(inFo));
+    depatch(SetIdConversation(inFo.idCon));
   };
   return (
     <div className="card_chat" onClick={() => handleGroupChat()}>
@@ -42,28 +54,73 @@ const ChatCardGroup = ({ status }) => {
 
         <AvatarGroup max={4} className="group_avatar">
           <div>
-            <Avatar className="avt avatar_item" alt="Remy Sharp" src={avt} />
-            <Avatar className="avt avatar_item" alt="Remy Sharp" src={avt} />
+            <Avatar
+              className="avt avatar_item"
+              alt="Remy Sharp"
+              src={inFo.avatar[0].avaUser}
+            />
+            <Avatar
+              className="avt avatar_item"
+              alt="Remy Sharp"
+              src={inFo.avatar[0].avaUser}
+            />
           </div>
           <AvatarGroup max={2}>
-            <Avatar className="avt avatar_item" alt="Remy Sharp" src={avt} />
-            <Avatar className="avt avatar_item" alt="Remy Sharp" src={avt} />
-            <Avatar className="avt avatar_item" alt="Remy Sharp" src={avt} />
+            <Avatar
+              className="avt avatar_item"
+              alt="Remy Sharp"
+              src={inFo.avatar[0].avaUser}
+            />
+            <Avatar
+              className="avt avatar_item"
+              alt="Remy Sharp"
+              src={inFo.avatar[0].avaUser}
+            />
+            <Avatar
+              className="avt avatar_item"
+              alt="Remy Sharp"
+              src={inFo.avatar[0].avaUser}
+            />
           </AvatarGroup>
         </AvatarGroup>
 
         <div className="card_name">
-          <h6 className="">Cong nghe moi</h6>
+          <h6 className="">{inFo.name}</h6>
           <p>
-            <span>Bạn: </span>
-            <span className={status ? "active" : ""}>8 hahha</span>
+            <span>
+              {conversations.lastMessage[0].userId === user.uid
+                ? "Bạn: "
+                : `${inFo.userInfo.map((user) => {
+                    if (user.userId === user.uid) {
+                      return user?.firstName + " " + user?.lastName;
+                    }
+                  })}`}{" "}
+            </span>
+            <span className={status ? "active" : ""}>
+              {conversations.lastMessage[0].content}
+            </span>
           </p>
         </div>
       </div>
 
       <div className="group_right">
-        <div className="card_time">31 phút</div>
-        {status ? <span className="numberNotification">2</span> : null}
+        <div className="card_time">
+          {" "}
+          {handleDate(
+            new Date(),
+            new Date(
+              `${conversations.lastMessage[0].updatedAt}`.toLocaleString(
+                "en-US",
+                { timeZone: "Asia/Ho_Chi_Minh" }
+              )
+            )
+          )}
+        </div>
+        {conversations?.mb?.numberUnread > 0 ? (
+          <span className="numberNotification">
+            {conversations?.mb?.numberUnread}
+          </span>
+        ) : null}
         <span
           className="threeDot"
           aria-controls={open ? "basic-menu" : undefined}

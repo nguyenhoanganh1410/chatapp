@@ -39,8 +39,8 @@
         background-color: transparent !important;
     }
     .messSticker{
-        width: 70px;
-        height: 70px;
+        width: 85px;
+        height: 85px;
         margin-bottom: 0.5rem;
        .timeMessSticker{
         font-size: 12px;
@@ -235,4 +235,10 @@
         }
     }
    }
+}
+
+.nameChatting{
+    color: rgba(0,0,0,0.6);
+    margin-bottom: 6px;
+    font-size: 14px;
 }

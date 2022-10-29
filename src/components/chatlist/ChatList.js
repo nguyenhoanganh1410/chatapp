@@ -71,8 +71,6 @@ const ChatList = ({ socket }) => {
     setValue(newValue);
   };
 
-  
-
   React.useEffect(() => {
     if (socket.current) {
       // console.log(conversations);
@@ -165,14 +163,25 @@ const ChatList = ({ socket }) => {
                     <>
                       {conversations.length > 0 ? (
                         conversations?.map((conversation) => {
-                          return (
-                            <ChatCard
-                              conversation={conversation}
-                              key={Math.random()}
-                              socket={socket}
-                              setConversations={setConversations}
-                            />
-                          );
+                          console.log(conversation);
+                          if (conversation?.conversations?.type) {
+                            return (
+                              <ChatCardGroup
+                                conversation={conversation}
+                                key={Math.random()}
+                                socket={socket}
+                              />
+                            );
+                          } else {
+                            return (
+                              <ChatCard
+                                conversation={conversation}
+                                key={Math.random()}
+                                socket={socket}
+                                setConversations={setConversations}
+                              />
+                            );
+                          }
                         })
                       ) : (
                         <div className="box_empty">
@@ -186,7 +195,7 @@ const ChatList = ({ socket }) => {
                       )}
                     </>
                   )}
-                  <ChatCardGroup />
+                  {/* <ChatCardGroup /> */}
                   {/* <ChatCardGroup />
                   <ChatCard />
                   <ChatCard status />
