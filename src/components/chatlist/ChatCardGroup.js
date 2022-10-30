@@ -15,10 +15,12 @@ import {
 } from "../../store/Actions";
 import Contex from "../../store/Context";
 import useDateLogic from "../../hooks/useDateLogic";
+import useCheckFile from "../../hooks/useCheckFile";
 const ChatCardGroup = ({ status, conversation, socket }) => {
   const { state, depatch } = React.useContext(Contex);
   const { groupChatting, userChatting, user } = state;
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { checkUrlIsImage, checkUrlIsDocx, checkUrlIsVideo } = useCheckFile();
   const open = Boolean(anchorEl);
 
   //custom hook
@@ -96,8 +98,44 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
                     }
                   })}`}{" "}
             </span>
-            <span className={status ? "active" : ""}>
-              {conversations.lastMessage[0].content}
+            <span className={conversations?.mb.numberUnread ? "active" : ""}>
+            {conversations?.lastMessage[0]?.content.includes(
+                "https://img.stipop.io"
+              ) ? (
+                "Sticker"
+              ) : (
+                <>
+                  {checkUrlIsImage(conversations?.lastMessage[0]?.content) ? (
+                    "hình ảnh"
+                  ) : (
+                    <>
+                      {checkUrlIsVideo(
+                        conversations?.lastMessage[0]?.content
+                      ) ? (
+                        "Video"
+                      ) : (
+                        <>
+                          {checkUrlIsDocx(
+                            conversations?.lastMessage[0]?.content
+                          ) ? (
+                            "File"
+                          ) : (
+                            <>
+                              {conversations?.lastMessage[0]?.content.length >
+                              20
+                                ? conversations?.lastMessage[0]?.content.slice(
+                                    0,
+                                    10
+                                  ) + "..."
+                                : conversations?.lastMessage[0]?.content}
+                            </>
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
             </span>
           </p>
         </div>
