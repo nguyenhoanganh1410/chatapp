@@ -63,7 +63,18 @@ const NewMessageGroupForm = ({ messages, setMessages, socket }) => {
         console.log("TYPE");
 
         //socket in here
-
+        if(socket.current){
+          socket.current.emit("send-message", {
+            senderId: user.uid,
+            idCon: idConversation,
+            message: messSave,
+            isGroup: true,
+            name: user.first_name+""+user.last_name,
+            avatar: user.avatar,
+            nameGroup: groupChatting.name,
+          });
+          console.log("send");
+        }
         // setMessages([...messages,messSave]);
         setNewMessage("");
       } catch (error) {
@@ -100,6 +111,18 @@ const NewMessageGroupForm = ({ messages, setMessages, socket }) => {
       console.log(messSave);
 
       //socket in here
+      if(socket.current){
+        socket.current.emit("send-message", {
+          senderId: user.uid,
+          idCon: idConversation,
+          message: messSave,
+          isGroup: true,
+          name: user.first_name+""+user.last_name,
+          avatar: user.avatar,
+          nameGroup: groupChatting.name,
+        });
+        console.log("send");
+      }
     } catch (error) {
       console.log("Failed to fetch conversation list: ", error);
     }

@@ -65,7 +65,7 @@ const ChatFeedGroup = ({ socket }) => {
   });
 
   useEffect(() => {
-    console.log("useEffect");
+    
     socket.current.on("get-message", ({ senderId, message,isGroup }) => {
       console.log("get");
       if(isGroup){
@@ -73,9 +73,106 @@ const ChatFeedGroup = ({ socket }) => {
         console.log(message);
         setArrivalMess(message);
       }
-      
     });
+
+    //socket on tha reaction
+    socket.current?.on("reaction", (idC) => {
+      console.log("reaction"+idC);
+      const featchMessages = async (idC) => {
+        try {
+          //cal api get total page
+          const response = await messageApi.getMess(
+            idC,
+            user.uid,
+            panigation.page,
+            panigation.size
+          );
+          const { totalPages } = response;
+          console.log(totalPages);
+  
+          //th1: so luong tin nhan < 30, page = 1
+          if (totalPages <= 1) {
+            setMessages(response.data[0].messages);
+            //update page current
+            setPage(totalPages);
+          } else {
+            const newPage = totalPages - 1;
+            //get 30 tin moi nhat
+            const currnetResponse = await messageApi.getMess(
+              idC,
+              user.uid,
+              newPage,
+              panigation.size
+            );
+  
+            const { data, info, friendStatus, size } = currnetResponse;
+            //neu khong tra ve du 30 tin nhan -> lui 1 page
+            if (data[0].messages.length < 20) {
+              const cPage = newPage - 1;
+              //get 30 tin moi nhat
+              const newResponse = await messageApi.getMess(
+                idC,
+                user.uid,
+                cPage,
+                panigation.size + data[0].messages.length
+              );
+              if (newResponse) {
+                setMessages(newResponse.data[0].messages);
+                setPage(cPage);
+              }
+            } else {
+              setMessages(data[0].messages);
+              setPage(newPage);
+            }
+          }
+  
+          // //update page current
+          // setPage(newPage);
+          setStatusLoadMessage(false);
+        } catch (error) {
+          setMessages([]);
+          setStatusLoadMessage(false);
+          console.log("Failed to fetch conversation list: ", error);
+        }
+      };
+
+      featchMessages(idC);
+    });
+
+    //socket on thu hoi tin nhan
+    socket.current?.on("reMessage", (data) => {
+      console.log("add");
+      setIdReMessage(data);
+    });
+
   }, []);
+
+  //cap nhat mess da thu hoi len giao dien
+  useEffect(() => {
+    if (idReMessage) {
+      const newMess = messages.map((mess) => {
+        if (mess._id === idReMessage) {
+          return { ...mess, isDeleted: true };
+        }
+        return mess;
+      });
+      //console.log(newMess);
+      setMessages(newMess);
+    }
+  }, [idReMessage]);
+
+  //cap nhat mess da xoa phia toi len giao dien
+  useEffect(() => {
+    if (idMessageDeletedWithMe) {
+      console.log("useEffcet delete message start");
+      const newMess = messages.filter((mess) => {
+        return mess._id != idMessageDeletedWithMe;
+      });
+      console.log(newMess);
+      setMessages(newMess);
+      depatch(SetIdMessageDeletedWithMe(""));
+    }
+  }, [idMessageDeletedWithMe]);
 
   useEffect(() => {
     // socket.current.emit("seen-message", {
