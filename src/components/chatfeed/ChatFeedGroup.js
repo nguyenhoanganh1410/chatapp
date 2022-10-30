@@ -64,6 +64,17 @@ const ChatFeedGroup = ({ socket }) => {
     scrollToBottom();
   });
 
+  //khi tin nhan duoc gui thi them tin nhan do vao messages -> render
+  useEffect(() => {
+    // console.log("useEffect --->");
+    // console.log(messageSent);
+    if (messageSent != "" && idConversation === messageSent.conversationId) {
+      setMessages((prev) => [...prev, messageSent]);
+    }
+    // messageSent &&
+    //   idConversation === messageSent.conversationId &&
+  }, [messageSent]);
+
   useEffect(() => {
     setStatusLoadMessage(true);
     console.log("useEffect load message");
