@@ -20,6 +20,7 @@
     // width: 60%;
     // overflow-wrap: break-word;
     
+    
 
     .messImg{
         width: 14rem;
@@ -38,8 +39,8 @@
         background-color: transparent !important;
     }
     .messSticker{
-        width: 70px;
-        height: 70px;
+        width: 85px;
+        height: 85px;
         margin-bottom: 0.5rem;
        .timeMessSticker{
         font-size: 12px;
@@ -196,7 +197,7 @@
         background-color: #fff;
         display: inline-block;
         z-index: 1;
-       
+        box-shadow: 0 0 10px rgba(0,0,0,0.01);
        
     }
     .message_text__overFlow{
@@ -234,4 +235,10 @@
         }
     }
    }
+}
+
+.nameChatting{
+    color: rgba(0,0,0,0.6);
+    margin-bottom: 6px;
+    font-size: 14px;
 }

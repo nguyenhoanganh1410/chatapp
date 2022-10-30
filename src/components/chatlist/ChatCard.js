@@ -7,7 +7,11 @@ import Divider from "@mui/material/Divider";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { RiArrowRightSLine } from "react-icons/ri";
-import { SetIdConversation, SetUserChatting } from "../../store/Actions";
+import {
+  SetGroupChatting,
+  SetIdConversation,
+  SetUserChatting,
+} from "../../store/Actions";
 import Contex from "../../store/Context";
 import UserService from "../../services/UserService";
 import { differenceInHours } from "date-fns";
@@ -85,7 +89,8 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       .catch((err) => {
         console.log(err.message);
       });
-
+    //delete groupChitting
+    depatch(SetGroupChatting(null));
     if (socket.current) {
       socket.current.emit("seen-message", {
         conversationId: idConversation,
@@ -114,14 +119,15 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       <div className="card_group">
         {inFo?.avatar ? (
           <Avatar className="avt" src={inFo?.avatar} alt={inFo?.firstName} />
-        ) : // <Avatar
-        //   className="avt"
-        //   style={{ textTransform: "capitalize" }}
-        //   src={inFo?.avatar}
-        // >
-        //   {inFo?.lastName[0]}
-        // </Avatar>
-        null}
+        ) : (
+          <Avatar
+            className="avt"
+            style={{ textTransform: "capitalize", backgroundColor: "#e7f0ce" }}
+            src={inFo?.avatar}
+          >
+            {inFo?.lastName[0]}
+          </Avatar>
+        )}
         <div className="card_name">
           <h6 className="">{inFo?.firstName + " " + inFo?.lastName}</h6>
           <p>
@@ -157,7 +163,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
                               20
                                 ? conversations?.lastMessage[0]?.content.slice(
                                     0,
-                                    20
+                                    10
                                   ) + "..."
                                 : conversations?.lastMessage[0]?.content}
                             </>

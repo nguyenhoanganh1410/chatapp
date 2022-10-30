@@ -19,19 +19,33 @@ import { useState } from "react";
 import { SetIdMessageDeletedWithMe } from "../../store/Actions";
 import WordsComponent from "../filecomponent/WordsComponent";
 import useCheckFile from "../../hooks/useCheckFile";
+import UserService from "../../services/UserService";
 
 //status : 0 binh thuong, 1 thu hoi, 2 bi xoa
-const Message = ({ isLastMessage, status, mess, socket }) => {
+const Message = ({
+  isLastMessage,
+  status,
+  mess,
+  socket,
+  preMessage,
+  userId,
+}) => {
   const { state, depatch } = React.useContext(Contex);
   //detructering...
-  const { userChatting, idConversation, user, statusMessage } = state;
+  const { userChatting, idConversation, user, statusMessage, groupChatting } =
+    state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const [showIcons, setShowIcons] = React.useState(false);
 
   const [me, setMe] = React.useState(false);
 
+  const [userCurrentMess, setUserCurrentMess] = React.useState(null);
+
   const { checkUrlIsDocx, checkUrlIsVideo } = useCheckFile();
+
+  // console.log("pre messs ----->");
+  // console.log(preMessage);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -145,9 +159,9 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
       nameUser: user.lastName,
     };
 
-    socket.current.emit("reaction",{
+    socket.current.emit("reaction", {
       isReaction: true,
-      idConversation:idConversation,
+      idConversation: idConversation,
     });
 
     //gui qua socket in here
@@ -165,11 +179,21 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
       } catch (error) {
         console.log("Failed to reaction message: ", error);
       }
-      
     };
 
     addReactionMessage();
   };
+
+  React.useEffect(() => {
+    //load user with id
+    //featch user from firebase
+    UserService.getById(userId).then(function (snapshot) {
+      ////const userTemp = { uid: u.uid, ...snapshot.data() };
+      console.log(snapshot.data());
+      setUserCurrentMess(snapshot.data());
+      //  depatch(SetUser(userTemp));
+    });
+  }, []);
 
   return (
     <>
@@ -180,41 +204,59 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
             style={me ? { flexDirection: "row-reverse" } : null}
           >
             {me ? (
-              <React.Fragment>
-                {user?.avatar ? (
-                  <Avatar
-                    className="avatar"
-                    src={user?.avatar}
-                    alt={user?.first_name}
-                  />
+              <>
+                {preMessage && preMessage[0].userId === mess.userId ? (
+                  <Avatar className="avatar" style={{ opacity: 0 }} />
                 ) : (
-                  <Avatar
-                    className="avatar"
-                    style={{ textTransform: "capitalize" }}
-                    src={user?.avatar}
-                  >
-                    {user?.last_name[0]}
-                  </Avatar>
+                  <React.Fragment>
+                    {user?.avatar ? (
+                      <Avatar
+                        className="avatar"
+                        src={user?.avatar}
+                        alt={user?.first_name}
+                      />
+                    ) : (
+                      <Avatar
+                        className="avatar"
+                        style={{
+                          textTransform: "capitalize",
+                          backgroundColor: "#e7f0ce",
+                        }}
+                        src={user?.avatar}
+                      >
+                        {user?.last_name[0]}
+                      </Avatar>
+                    )}
+                  </React.Fragment>
                 )}
-              </React.Fragment>
+              </>
             ) : (
-              <React.Fragment>
-                {userChatting?.avatar ? (
-                  <Avatar
-                    className="avatar"
-                    src={userChatting?.avatar}
-                    alt={userChatting?.first_name}
-                  />
+              <>
+                {preMessage && preMessage[0]?.userId === mess?.userId ? (
+                  <Avatar className="avatar" style={{ opacity: 0 }} />
                 ) : (
-                  <Avatar
-                    className="avatar"
-                    style={{ textTransform: "capitalize" }}
-                    src={userChatting?.avatar}
-                  >
-                    {userChatting?.last_name[0]}
-                  </Avatar>
+                  <React.Fragment>
+                    {userChatting?.avatar ? (
+                      <Avatar
+                        className="avatar"
+                        src={userChatting?.avatar}
+                        alt={userChatting?.first_name}
+                      />
+                    ) : (
+                      <Avatar
+                        className="avatar"
+                        style={{
+                          textTransform: "capitalize",
+                          backgroundColor: "#e7f0ce",
+                        }}
+                        src={userChatting?.avatar}
+                      >
+                        {userChatting?.last_name[0]}
+                      </Avatar>
+                    )}
+                  </React.Fragment>
                 )}
-              </React.Fragment>
+              </>
             )}
             {mess.isDeleted ? (
               <div
@@ -263,25 +305,62 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
                                         : "message_text"
                                     }`
                               }`
-                          // <>
-                          //   {mess.type === "APPLICATION"
-                          //     ? "message_text cssFileDocx"
-                          //     : "message_text"}
-                          // </>
                         }
                         style={me ? { backgroundColor: "#e5efff" } : {}}
                       >
                         {mess.content.includes("https://img.stipop.io") ? (
-                          <div className="messSticker">
-                            <img src={mess.content} alt="image" />
-                            <p className="timeMessSticker">
-                              {new Date(mess.createdAt)
-                                .toLocaleString("en-US", {
-                                  timeZone: "Asia/Ho_Chi_Minh",
-                                })
-                                .slice(11, 23)}
-                            </p>
-                          </div>
+                          <>
+                            <div className="messSticker">
+                              <img src={mess.content} alt="image" />
+                              <p className="timeMessSticker">
+                                {new Date(mess.createdAt)
+                                  .toLocaleString("en-US", {
+                                    timeZone: "Asia/Ho_Chi_Minh",
+                                  })
+                                  .slice(11, 23)}
+                              </p>
+                            </div>
+                            <div className="messSticker">
+                              <img src={mess.content} alt="image" />
+                              <p className="timeMessSticker">
+                                {new Date(mess.createdAt)
+                                  .toLocaleString("en-US", {
+                                    timeZone: "Asia/Ho_Chi_Minh",
+                                  })
+                                  .slice(11, 23)}
+                              </p>
+                            </div>
+                            <div className="messSticker">
+                              <img src={mess.content} alt="image" />
+                              <p className="timeMessSticker">
+                                {new Date(mess.createdAt)
+                                  .toLocaleString("en-US", {
+                                    timeZone: "Asia/Ho_Chi_Minh",
+                                  })
+                                  .slice(11, 23)}
+                              </p>
+                            </div>
+                            <div className="messSticker">
+                              <img src={mess.content} alt="image" />
+                              <p className="timeMessSticker">
+                                {new Date(mess.createdAt)
+                                  .toLocaleString("en-US", {
+                                    timeZone: "Asia/Ho_Chi_Minh",
+                                  })
+                                  .slice(11, 23)}
+                              </p>
+                            </div>
+                            <div className="messSticker">
+                              <img src={mess.content} alt="image" />
+                              <p className="timeMessSticker">
+                                {new Date(mess.createdAt)
+                                  .toLocaleString("en-US", {
+                                    timeZone: "Asia/Ho_Chi_Minh",
+                                  })
+                                  .slice(11, 23)}
+                              </p>
+                            </div>
+                          </>
                         ) : (
                           <>
                             {/* <p className="textMess">{mess.content}</p> */}
@@ -289,7 +368,16 @@ const Message = ({ isLastMessage, status, mess, socket }) => {
                             {mess?.type === "APPLICATION" ? (
                               <WordsComponent mess={mess} />
                             ) : (
-                              <p className="textMess">{mess?.content}</p>
+                              <>
+                                {groupChatting ? (
+                                  <p className="nameChatting">
+                                    {userCurrentMess?.last_name +
+                                      " " +
+                                      userCurrentMess?.first_name}
+                                  </p>
+                                ) : null}
+                                <p className="textMess">{mess?.content}</p>
+                              </>
                             )}
                             <div
                               style={{

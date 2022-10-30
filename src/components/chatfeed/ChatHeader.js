@@ -15,7 +15,7 @@ const ChatHeader = ({ userChatting, socket }) => {
   const [lastLogin, setLastLogin] = React.useState("");
 
   //detructering...
-  const { showTabInfo, idConversation, user } = state;
+  const { showTabInfo, idConversation, user, groupChatting } = state;
 
   const handleShowTabInfo = () => {
     depatch(SetShowTabInfo(!showTabInfo));
@@ -40,7 +40,7 @@ const ChatHeader = ({ userChatting, socket }) => {
   }, [idConversation]);
 
   const paseDate = format(lastLogin, "vi_VN");
-  console.log(paseDate);
+  //console.log(paseDate);
 
   return (
     <div className="chat_header">
@@ -53,6 +53,7 @@ const ChatHeader = ({ userChatting, socket }) => {
                 src={userChatting?.avatar}
                 alt={userChatting?.first_name}
                 onClick={() => handleShowInfo()}
+                style={{ backgroundColor: "#e7f0ce" }}
               />
               {isOnline ? <div className="statusOnline"></div> : null}
             </div>
