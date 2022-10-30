@@ -90,6 +90,34 @@ const ChatList = ({ socket }) => {
         }
       });
 
+      socket.current.on("get-message", ({ senderId, message,isGroup }) => {
+        if(isGroup){
+          console.log("last");
+          const fetchConversations = async () => {
+            try {
+              const response = await conversationApi.getConversations(
+                user.uid,
+                panigation.page,
+                panigation.size
+              );
+      
+              const { data, page, size, totalPages } = response;
+              console.log(data);
+              if (response) {
+                setConversations(data);
+                setLoading(false);
+              }
+            } catch (error) {
+              console.log("Failed to fetch conversation list: ", error);
+            }
+          };
+      
+          fetchConversations();
+          
+        }
+        
+      });
+
       
 
 
@@ -104,6 +132,19 @@ const ChatList = ({ socket }) => {
           addNotification({
             title: name,
             message: message.content,
+            duration:4000,
+            icon: avatar,
+            theme: "darkblue",
+            native: true, // when using native, your OS will handle theming.
+        })
+        });
+
+        socket.current.on("get-notifiGr", ({message,name,avatar,nameGroup}) => {
+          console.log(name);
+          addNotification({
+            title: "Group: "+nameGroup,
+            // subtitle: 'Please fill it',
+            message: name+" : "+message.content,
             duration:4000,
             icon: avatar,
             theme: "darkblue",

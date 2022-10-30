@@ -64,8 +64,48 @@ const ChatFeedGroup = ({ socket }) => {
     scrollToBottom();
   });
 
+  useEffect(() => {
+    console.log("useEffect");
+    socket.current.on("get-message", ({ senderId, message,isGroup }) => {
+      console.log("get");
+      if(isGroup){
+        console.log("mess nhan dc ---> ");
+        console.log(message);
+        setArrivalMess(message);
+      }
+      
+    });
+  }, []);
+
+  useEffect(() => {
+    // socket.current.emit("seen-message", {
+    //   conversationId: idConversation,
+    //   userId: user.uid,
+    // });
+
+    //xoa di message cuoi cung cua array (message mẫu)
+    if (messageSent != "") {
+      const messagesCurrent = messages.filter((val, idx) => {
+        return idx !== messages.length - 1;
+      });
+      depatch(SetMessageSent(""));
+      // console.log(messagesCurrent);
+      arrivalMess &&
+        idConversation === arrivalMess.conversationId &&
+        setMessages((prev) => [...messagesCurrent, arrivalMess]);
+    } else {
+      arrivalMess &&
+        idConversation === arrivalMess.conversationId &&
+        setMessages((prev) => [...prev, arrivalMess]);
+    }
+  }, [arrivalMess, idConversation]);
+
+
+
   //khi tin nhan duoc gui thi them tin nhan do vao messages -> render
   useEffect(() => {
+
+    
     // console.log("useEffect --->");
     // console.log(messageSent);
     if (messageSent != "" && idConversation === messageSent.conversationId) {
@@ -222,7 +262,7 @@ const ChatFeedGroup = ({ socket }) => {
         </div>
       ) : null}
 
-      <NewMessageGroupForm />
+      <NewMessageGroupForm socket={socket}/>
     </div>
   );
 };

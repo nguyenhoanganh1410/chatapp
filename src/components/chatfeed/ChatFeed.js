@@ -94,27 +94,7 @@ const ChatFeed = ({ socket }) => {
       console.log("mess nhan dc ---> ");
       console.log(message);
       setArrivalMess(message);
-      
-
-
-      // notifi();
-
-      //set statusMessage = da nhan
-      // depatch(SetStatusMessage("đã nhận"));
     });
-
-    // socket.current.on("get-notifi", ({message,name,avatar}) => {
-    //   addNotification({
-    //     title: name,
-    //     message: message.content,
-    //     duration:8000,
-    //     icon: avatar,
-    //     theme: "darkblue",
-    //     native: true, // when using native, your OS will handle theming.
-    // })
-    // });
-
-    
 
     socket.current?.on("reaction", (idC) => {
       console.log("reaction"+idC);
@@ -178,7 +158,6 @@ const ChatFeed = ({ socket }) => {
 
       featchMessages(idC);
     });
-
 
 
     socket.current?.on("reMessage", (data) => {

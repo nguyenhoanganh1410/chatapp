@@ -18,7 +18,7 @@ import useDateLogic from "../../hooks/useDateLogic";
 import useCheckFile from "../../hooks/useCheckFile";
 const ChatCardGroup = ({ status, conversation, socket }) => {
   const { state, depatch } = React.useContext(Contex);
-  const { groupChatting, userChatting, user } = state;
+  const { groupChatting, userChatting, user,idConversation } = state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { checkUrlIsImage, checkUrlIsDocx, checkUrlIsVideo } = useCheckFile();
   const open = Boolean(anchorEl);
@@ -43,6 +43,10 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
     depatch(SetUserChatting(null));
     depatch(SetGroupChatting(inFo));
     depatch(SetIdConversation(inFo.idCon));
+    socket.current?.emit("join-room", {
+      idCon: inFo.idCon,
+      // isNew:false
+    })
   };
   return (
     <div className="card_chat" onClick={() => handleGroupChat()}>

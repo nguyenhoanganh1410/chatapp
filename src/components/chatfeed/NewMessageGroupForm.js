@@ -25,7 +25,7 @@ const NewMessageGroupForm = ({ messages, setMessages, socket }) => {
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [newMessageSticker, setNewMessageSticker] = useState("");
 
-  const { user, messageSent, idConversation } = state;
+  const { user, messageSent, idConversation,groupChatting } = state;
   const inputChooseIMG = useRef();
   //detructering...
   // console.log({ user });
@@ -107,6 +107,7 @@ const NewMessageGroupForm = ({ messages, setMessages, socket }) => {
     setNewMessageSticker("");
     setShowStickers(false);
   };
+
   //gui 1 tin nhan dang text
   const onFormSubmit = async (e) => {
     e.preventDefault();
@@ -137,15 +138,21 @@ const NewMessageGroupForm = ({ messages, setMessages, socket }) => {
 
       //call api add a message into db
       const messSave = await messageApi.addTextMess(newMess);
+      console.log(groupChatting);
 
-      // const notifi = addNotification({
-      //   title: user.first_name + "" + user.last_name,
-      //   message: messSave.content,
-      //   duration: 8000,
-      //   icon: user.avatar,
-      //   theme: "darkblue",
-      //   native: true, // when using native, your OS will handle theming.
-      // });
+      //socket
+      if(socket.current){
+        socket.current.emit("send-message", {
+          senderId: user.uid,
+          idCon: idConversation,
+          message: messSave,
+          isGroup: true,
+          name: user.first_name+""+user.last_name,
+          avatar: user.avatar,
+          nameGroup: groupChatting.name,
+        });
+        console.log("send");
+      }
 
       setNewMessage("");
     } catch (error) {

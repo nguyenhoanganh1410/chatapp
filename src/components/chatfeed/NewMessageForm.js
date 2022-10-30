@@ -357,6 +357,7 @@ const NewMessageForm = ({
           });
           console.log("send");
         }
+        socket.current.emit("stop-typing",idConversation) 
 
         // sendNotification({
         //   userName: user.first_name,
@@ -412,7 +413,7 @@ const NewMessageForm = ({
 
   return (
     <div className="new_message" ref={divMessage}>
-      {/* {isTyping? <div>{user.first_name+""+user.last_name+" đang soạn tin nhắn....."}</div>:null} */}
+      {isTyping? <div>{user.first_name+""+user.last_name+" đang soạn tin nhắn....."}</div>:null}
       <form onSubmit={onFormSubmit}>
         <input
           onFocus={() => handleFocus()}

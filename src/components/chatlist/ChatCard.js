@@ -91,12 +91,12 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       });
     //delete groupChitting
     depatch(SetGroupChatting(null));
-    if (socket.current) {
-      socket.current.emit("seen-message", {
-        conversationId: idConversation,
-        userId: user.uid,
-      });
-    }
+    // if (socket.current) {
+    //   socket.current.emit("seen-message", {
+    //     conversationId: idConversation,
+    //     userId: user.uid,
+    //   });
+    // }
   };
   // How many hours are between 2 July 2014 06:50:00 and 2 July 2014 19:00:00?
   // const result = differenceInHours(
