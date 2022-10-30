@@ -9,6 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import "./MessageStyle.scss";
 import TimeLine from "./TimeLine";
 import { IoIosArrowDown } from "react-icons/io";
+import addNotification from "react-push-notification";
 
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 import "simplebar/dist/simplebar.css";
@@ -88,20 +89,30 @@ const ChatFeed = ({ socket }) => {
     });
 
   
-    socket.current?.on("get-message", ({ senderId, message }) => {
+    socket.current?.on("get-message", ({ senderId, message,name,avatar }) => {
       //console.log("get");
       console.log("mess nhan dc ---> ");
       console.log(message);
       setArrivalMess(message);
+      
+
+
       // notifi();
 
       //set statusMessage = da nhan
       // depatch(SetStatusMessage("đã nhận"));
     });
 
-    socket.current.on("get-notifi", (notifi) => {
-      notifi();
-    });
+    // socket.current.on("get-notifi", ({message,name,avatar}) => {
+    //   addNotification({
+    //     title: name,
+    //     message: message.content,
+    //     duration:8000,
+    //     icon: avatar,
+    //     theme: "darkblue",
+    //     native: true, // when using native, your OS will handle theming.
+    // })
+    // });
 
     
 

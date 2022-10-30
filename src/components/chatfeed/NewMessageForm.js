@@ -30,13 +30,26 @@ const NewMessageForm = ({
   const [selectedFile, setSelectedFile] = useState();
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [newMessageSticker, setNewMessageSticker] = useState("");
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   const { user, messageSent } = state;
   const inputChooseIMG = useRef();
+
+  useEffect(() => {
+    if(socket.current){
+      socket.current.on("typing", () => setIsTyping(true));
+      socket.current.on("stop-typing", () => setIsTyping(false));
+    }
+  }, []);
   //detructering...
-  console.log({user});
+  // console.log({user});
 
   const divMessage = useRef();
+
+
+  
+
   const handleFocus = (params) => {
     divMessage.current.classList.add("booderTop");
   };
@@ -48,11 +61,13 @@ const NewMessageForm = ({
     setShowStickers(!showStickers);
   };
 
-  // const sendNotification = ({userName,content}) => {
+  // const sendNotification = (data) => {
   //   console.log("userName");
   //   addNotification({
-  //     title: userName,
-  //     message: content,
+  //     title: data.name,
+  //     message: data.conten,
+  //     duration:8000,
+  //     icon: data.avatar,
   //     theme: "darkblue",
   //     native: true, // when using native, your OS will handle theming.
   //   });
@@ -316,14 +331,20 @@ const NewMessageForm = ({
         //call api add a message into db
         const messSave = await messageApi.addTextMess(newMess);
 
-        const notifi= addNotification({
-          title: user.first_name+""+user.last_name,
-          message: messSave.content,
-          duration:8000,
-          icon: user.avatar,
-          theme: "darkblue",
-          native: true, // when using native, your OS will handle theming.
-        });
+        // const notifi= addNotification({
+        //   title: user.first_name+""+user.last_name,
+        //   message: messSave.content,
+        //   duration:8000,
+        //   icon: user.avatar,
+        //   theme: "darkblue",
+        //   native: true, // when using native, your OS will handle theming.
+        // });
+
+        // sendNotification({
+        //   name: user.first_name + " " + user.last_name,
+        //   conten: messSave.content,
+        //   avatar: user.avatar,
+        // })
 
         if (socket.current) {
           socket.current.emit("send-message", {
@@ -331,7 +352,8 @@ const NewMessageForm = ({
             receiverId: userChatting.uid,
             message: messSave,
             idCon: idConversation,
-            notifi: notifi,
+            name: user.first_name+""+user.last_name,
+            avatar: user.avatar,
           });
           console.log("send");
         }
@@ -342,15 +364,39 @@ const NewMessageForm = ({
         // });
         // setMessages([...messages,messSave]);
         setNewMessage("");
-
-        
-  
+        // notifi();
 
       } catch (error) {
         console.log("Failed to fetch conversation list: ", error);
       }
     }
   };
+
+  const typingHandle = (e) => {
+    setNewMessage(e.target.value)
+    if (socket.current) {
+      if(!typing){
+        console.log(idConversation);
+        setTyping(true);
+        socket.current.emit("typing",idConversation) 
+      }
+
+      let lastTypingTime = (new Date()).getTime();
+      let timerLength = 3000;
+      setTimeout(() => {
+        let typingTimer = (new Date()).getTime();
+        let timeDiff = typingTimer - lastTypingTime;
+        if (timeDiff >= timerLength && typing) {
+          setTyping(false);
+          socket.current.emit("stop-typing",idConversation) 
+          console.log(idConversation);
+        }
+      }, timerLength);
+    }
+    
+  };
+  isTyping?console.log(user.first_name+""+user.last_name+" đang soạn tin nhắn....."):console.log("not typing");
+
 
   // useEffect(() => {
   //   socket.current?.on("get-message", ({ senderId, message }) => {
@@ -366,11 +412,12 @@ const NewMessageForm = ({
 
   return (
     <div className="new_message" ref={divMessage}>
+      {/* {isTyping? <div>{user.first_name+""+user.last_name+" đang soạn tin nhắn....."}</div>:null} */}
       <form onSubmit={onFormSubmit}>
         <input
           onFocus={() => handleFocus()}
           onBlur={(e) => handleBlur(e)}
-          onChange={(e) => setNewMessage(e.target.value)}
+          onChange={typingHandle}
           value={newMessage}
           type="text"
           placeholder={

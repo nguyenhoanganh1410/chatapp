@@ -18,6 +18,7 @@ import conversationApi from "../../api/conversationApi";
 // import {socket} from '../../store/socketClient';
 import Skeleton from "@mui/material/Skeleton";
 import { BsInbox } from "react-icons/bs";
+import addNotification from "react-push-notification";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -90,16 +91,29 @@ const ChatList = ({ socket }) => {
           console.log(listReceiver);
         }
       });
+
+      
+
+
+
     }
   }, [user, conversations]);
 
-  //   React.useEffect(() => {
-  //     if(socket.current){
-  //       const ids = conversations.map((ele) => ele.conversations._id);
-  //       console.log(ids);
-  //       socket.current.emit("join-conversations", ids);
-  //     }
-  // }, []);
+    React.useEffect(() => {
+      if(socket.current){
+        socket.current.on("get-notifi", ({message,name,avatar}) => {
+          console.log("messageOn");
+          addNotification({
+            title: name,
+            message: message.content,
+            duration:4000,
+            icon: avatar,
+            theme: "darkblue",
+            native: true, // when using native, your OS will handle theming.
+        })
+        });
+      }
+  }, [conversations]);
 
   React.useEffect(() => {
     //get api set list conversation
