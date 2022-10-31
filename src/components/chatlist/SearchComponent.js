@@ -10,6 +10,7 @@ import {
   SetSearchingStatus,
   SetShowTabHistorySearch,
   SetUserSearched,
+  SetIdConversation
 } from "../../store/Actions";
 import UserService from "../../services/UserService";
 import Backdrop from "@mui/material/Backdrop";
@@ -33,7 +34,7 @@ const style = {
   p: 2,
 };
 
-const SearchComponent = () => {
+const SearchComponent = ({socket}) => {
   const inputFileAvatar = React.useRef();
   const groupSearchRef = useRef();
   const creatGroupInput = useRef();
@@ -85,6 +86,8 @@ const SearchComponent = () => {
   //   setActive(false);
   //   depatch(SetShowTabHistorySearch(false));
   // };
+
+  console.log(socket.current)
 
   const handleClose = () => {
     groupSearchRef.current.classList.remove("active");
@@ -273,6 +276,11 @@ const SearchComponent = () => {
                   const response = await conversationApi.createConversation(
                     temp
                   );
+                  if(socket.current){
+                    console.log("vooo");
+                    socket.current.emit("create-conversation",{idConversation:response,idList})
+                  }
+                  depatch(SetIdConversation(response));
                   setAvt(null);
                   console.log("tao nhom thanh cong" + response);
                 } catch (error) {
@@ -280,6 +288,7 @@ const SearchComponent = () => {
                 }
               };
               createGroup();
+              
             });
         });
     } else {
@@ -296,6 +305,10 @@ const SearchComponent = () => {
           console.log(temp);
           const response = await conversationApi.createConversation(temp);
           setAvt(null);
+          if(socket.current){
+            console.log("vooo");
+            socket.current.emit("create-conversation",{idConversation:response,idList})
+          }
           console.log("tao nhom thanh cong" + response);
         } catch (error) {
           console.log("Failed to fetch conversation list: ", error);

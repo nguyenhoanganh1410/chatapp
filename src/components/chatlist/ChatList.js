@@ -92,7 +92,6 @@ const ChatList = ({ socket }) => {
 
       socket.current.on("get-message", ({ senderId, message,isGroup }) => {
         if(isGroup){
-          console.log("last");
           const fetchConversations = async () => {
             try {
               const response = await conversationApi.getConversations(
@@ -118,8 +117,35 @@ const ChatList = ({ socket }) => {
         
       });
 
-      
 
+      socket.current.on("get-conversation-group", (idCon) => {
+        if(idCon){
+          const fetchConversations = async () => {
+            try {
+              const response = await conversationApi.getConversations(
+                user.uid,
+                panigation.page,
+                panigation.size
+              );
+      
+              const { data, page, size, totalPages } = response;
+              console.log(data);
+              if (response) {
+                setConversations(data);
+                setLoading(false);
+              }
+            } catch (error) {
+              console.log("Failed to fetch conversation list: ", error);
+            }
+          };
+    
+          fetchConversations();
+          
+        }
+        
+      });
+
+      
 
 
     }
@@ -127,6 +153,10 @@ const ChatList = ({ socket }) => {
 
     React.useEffect(() => {
       if(socket.current){
+
+        
+
+
         socket.current.on("get-notifi", ({message,name,avatar}) => {
           console.log("messageOn");
           addNotification({
@@ -153,6 +183,8 @@ const ChatList = ({ socket }) => {
         });
       }
   }, [conversations]);
+
+
 
   React.useEffect(() => {
     //get api set list conversation
@@ -181,7 +213,7 @@ const ChatList = ({ socket }) => {
 
   return (
     <div className="chatlist">
-      <SearchComponent />
+      <SearchComponent socket={socket} />
       {showTabHistorySearch ? (
         <SearchList />
       ) : (
