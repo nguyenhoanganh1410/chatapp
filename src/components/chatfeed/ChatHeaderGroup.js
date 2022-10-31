@@ -43,7 +43,7 @@ const ChatHeaderGroup = ({ socket }) => {
             <span style={{ marginRight: "4px" }}>
               <FaRegUser />
             </span>
-            5 thành viên
+            {groupChatting.userInfo.length} thành viên
           </span>
         </div>
       </div>

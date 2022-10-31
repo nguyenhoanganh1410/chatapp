@@ -10,7 +10,7 @@ $gutter: 20px;
 
    @for $i from 1 through $cols {
      .col-#{$i}{
-       width: (100% / 12) * $i;
+       width: (100% / 12) * $i !important;
        padding: $gutter/2;
      }
 

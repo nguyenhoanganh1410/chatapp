@@ -75,7 +75,7 @@ const ChatList = ({ socket }) => {
   React.useEffect(() => {
     if (socket.current) {
       // console.log(conversations);
-      const ids = conversations.map((ele) => ele.conversations._id);
+      const ids = conversations?.map((ele) => ele.conversations._id);
       socket.current.emit("join-conversations", ids);
       socket.current.on("get-last-message", (data) => {
         // console.log(data);
@@ -216,7 +216,7 @@ const ChatList = ({ socket }) => {
                     </>
                   ) : (
                     <>
-                      {conversations.length > 0 ? (
+                      {conversations?.length > 0 ? (
                         conversations?.map((conversation) => {
                           console.log(conversation);
                           if (conversation?.conversations?.type) {

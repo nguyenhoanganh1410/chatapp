@@ -309,58 +309,48 @@ const Message = ({
                         style={me ? { backgroundColor: "#e5efff" } : {}}
                       >
                         {mess.content.includes("https://img.stipop.io") ? (
-                          <>
-                            <div className="messSticker">
-                              <img src={mess.content} alt="image" />
-                              <p className="timeMessSticker">
-                                {new Date(mess.createdAt)
-                                  .toLocaleString("en-US", {
-                                    timeZone: "Asia/Ho_Chi_Minh",
-                                  })
-                                  .slice(11, 23)}
-                              </p>
-                            </div>
-                            <div className="messSticker">
-                              <img src={mess.content} alt="image" />
-                              <p className="timeMessSticker">
-                                {new Date(mess.createdAt)
-                                  .toLocaleString("en-US", {
-                                    timeZone: "Asia/Ho_Chi_Minh",
-                                  })
-                                  .slice(11, 23)}
-                              </p>
-                            </div>
-                            <div className="messSticker">
-                              <img src={mess.content} alt="image" />
-                              <p className="timeMessSticker">
-                                {new Date(mess.createdAt)
-                                  .toLocaleString("en-US", {
-                                    timeZone: "Asia/Ho_Chi_Minh",
-                                  })
-                                  .slice(11, 23)}
-                              </p>
-                            </div>
-                            <div className="messSticker">
-                              <img src={mess.content} alt="image" />
-                              <p className="timeMessSticker">
-                                {new Date(mess.createdAt)
-                                  .toLocaleString("en-US", {
-                                    timeZone: "Asia/Ho_Chi_Minh",
-                                  })
-                                  .slice(11, 23)}
-                              </p>
-                            </div>
-                            <div className="messSticker">
-                              <img src={mess.content} alt="image" />
-                              <p className="timeMessSticker">
-                                {new Date(mess.createdAt)
-                                  .toLocaleString("en-US", {
-                                    timeZone: "Asia/Ho_Chi_Minh",
-                                  })
-                                  .slice(11, 23)}
-                              </p>
-                            </div>
-                          </>
+                          <React.Fragment>
+                            {preMessage[0].content.includes(
+                              "https://img.stipop.io"
+                            ) === false ? (
+                              <div className="row">
+                                <div className="col-4">
+                                  <div className="messSticker">
+                                    <img src={mess.content} alt="image" />
+                                    <p className="timeMessSticker">
+                                      {new Date(mess.createdAt)
+                                        .toLocaleString("en-US", {
+                                          timeZone: "Asia/Ho_Chi_Minh",
+                                        })
+                                        .slice(11, 23)}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <>
+                                <div className="row">
+                                  <div className="col-4">
+                                    <div className="messSticker">
+                                      <img
+                                        src={mess.content}
+                                        alt="image"
+                                      />
+                                      <p className="timeMessSticker">
+                                        {new Date(mess.createdAt)
+                                          .toLocaleString("en-US", {
+                                            timeZone: "Asia/Ho_Chi_Minh",
+                                          })
+                                          .slice(11, 23)}
+                                      </p>
+                                    </div>
+                                  </div>
+                                 
+                                </div>
+                               
+                              </>
+                            )}
+                          </React.Fragment>
                         ) : (
                           <>
                             {/* <p className="textMess">{mess.content}</p> */}

@@ -27,6 +27,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
   const { handleDate } = useDateLogic();
 
   const { inFo, conversations } = conversation;
+  console.log(inFo);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -58,52 +59,60 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
           <Avatar className="avt" alt="4" />
         </div> */}
 
-        <AvatarGroup max={4} className="group_avatar">
-          <div>
-            <Avatar
-              className="avt avatar_item"
-              alt="Remy Sharp"
-              src={inFo.avatar[0].avaUser}
-            />
-            <Avatar
-              className="avt avatar_item"
-              alt="Remy Sharp"
-              src={inFo.avatar[0].avaUser}
-            />
-          </div>
-          <AvatarGroup max={2}>
-            <Avatar
-              className="avt avatar_item"
-              alt="Remy Sharp"
-              src={inFo.avatar[0].avaUser}
-            />
-            <Avatar
-              className="avt avatar_item"
-              alt="Remy Sharp"
-              src={inFo.avatar[0].avaUser}
-            />
-            <Avatar
-              className="avt avatar_item"
-              alt="Remy Sharp"
-              src={inFo.avatar[0].avaUser}
-            />
+        {inFo.avatar.length === 1 ? (
+          <Avatar
+            className="avt group_avatar"
+            alt="Remy Sharp"
+            src={inFo?.avatar[0]}
+          />
+        ) : (
+          <AvatarGroup max={4} className="group_avatar">
+            <div>
+              <Avatar
+                className="avt avatar_item"
+                alt="Remy Sharp"
+                src={inFo?.avatar[0]?.avaUser}
+              />
+              <Avatar
+                className="avt avatar_item"
+                alt="Remy Sharp"
+                src={inFo?.avatar[0]?.avaUser}
+              />
+            </div>
+            <AvatarGroup max={2}>
+              <Avatar
+                className="avt avatar_item"
+                alt="Remy Sharp"
+                src={inFo?.avatar[0]?.avaUser}
+              />
+              <Avatar
+                className="avt avatar_item"
+                alt="Remy Sharp"
+                src={inFo?.avatar[0]?.avaUser}
+              />
+              <Avatar
+                className="avt avatar_item"
+                alt="Remy Sharp"
+                src={inFo?.avatar[0]?.avaUser}
+              />
+            </AvatarGroup>
           </AvatarGroup>
-        </AvatarGroup>
+        )}
 
         <div className="card_name">
-          <h6 className="">{inFo.name}</h6>
+          <h6 className="">{inFo?.name}</h6>
           <p>
             <span>
-              {conversations.lastMessage[0].userId === user.uid
+              {conversations?.lastMessage[0]?.userId === user.uid
                 ? "Bạn: "
-                : `${inFo.userInfo.map((user) => {
+                : `${inFo?.userInfo?.map((user) => {
                     if (user.userId === user.uid) {
                       return user?.firstName + " " + user?.lastName;
                     }
                   })}`}{" "}
             </span>
             <span className={conversations?.mb.numberUnread ? "active" : ""}>
-            {conversations?.lastMessage[0]?.content.includes(
+              {conversations?.lastMessage[0]?.content.includes(
                 "https://img.stipop.io"
               ) ? (
                 "Sticker"

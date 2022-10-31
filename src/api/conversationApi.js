@@ -29,6 +29,11 @@ const conversationApi = {
       userFriendId: userFriendId,
     });
   },
+
+  // [POST] /coversation/groups
+  createConversation: (temp) => {
+    return axiosClient.post("conversation/groups", temp);
+  },
 };
 
 export default conversationApi;
