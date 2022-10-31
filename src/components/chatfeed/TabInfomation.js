@@ -17,11 +17,36 @@ import ImageListItem from "@mui/material/ImageListItem";
 import love from "../../images/love.jpg";
 import Contex from "../../store/Context";
 import { useContext } from "react";
+import conversationApi from "../../api/conversationApi";
+import messageApi from "../../api/messageApi";
+import { useState } from "react";
+import WordsComponent from "../filecomponent/WordsComponent";
 const TabInfomation = () => {
   const { state, depatch } = useContext(Contex);
-
+  const [listImage, setListImage] = useState([]);
+  const [files, setFiles] = useState([]);
+  console.log(files);
   //detructering...
-  const { userChatting, groupChatting } = state;
+  const { userChatting, groupChatting, idConversation } = state;
+
+  React.useEffect(() => {
+    //get list image in the conversation
+    const featchFile = async (idConversation, type) => {
+      try {
+        const response = await messageApi.getMessWithType(idConversation, type);
+        if (type === "IMAGE") {
+          setListImage(response);
+        } else if (type === "APPLICATION") {
+          setFiles(response);
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+
+    featchFile(idConversation, "IMAGE");
+    featchFile(idConversation, "APPLICATION");
+  }, [idConversation]);
 
   return (
     <div data-simplebar className="tab_infomation">
@@ -97,19 +122,29 @@ const TabInfomation = () => {
             <Typography>Ảnh/ Video</Typography>
           </AccordionSummary>
           <AccordionDetails>
+            <p
+              style={{
+                fontWeight: "500",
+                fontSize: "14px",
+                marginBottom: "10px",
+              }}
+            >
+              ngay 30 thang 10
+            </p>
             <ImageList
               sx={{ width: "auto", height: 450 }}
               cols={3}
               rowHeight={150}
               className="imageList"
             >
-              {itemData.map((item) => (
-                <ImageListItem key={item.img}>
+              {listImage.map((item) => (
+                <ImageListItem key={item.content}>
                   <img
-                    src={`${item.img}?w=150&h=150&fit=crop&auto=format`}
-                    srcSet={`${item.img}?w=150&h=150&fit=crop&auto=format&dpr=2 2x`}
-                    alt={item.title}
+                    src={`${item.content}?w=150&h=150&fit=crop&auto=format`}
+                    srcSet={`${item.content}?w=150&h=150&fit=crop&auto=format&dpr=2 2x`}
+                    alt="erro"
                     loading="lazy"
+                    style={{ cursor: "pointer", borderRadius: "6px" }}
                   />
                 </ImageListItem>
               ))}
@@ -126,11 +161,27 @@ const TabInfomation = () => {
             <Typography>File</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-              eget.
-            </Typography>
+            <p
+              style={{
+                fontWeight: "500",
+                fontSize: "14px",
+                marginBottom: "10px",
+              }}
+            >
+              ngay 30 thang 10
+            </p>
+            <ImageList
+              sx={{ width: "auto", height: 700 }}
+              cols={1}
+              rowHeight={150}
+             
+            >
+              {files.map((item) => (
+                <ImageListItem key={item.content}>
+                  <WordsComponent mess={item} />
+                </ImageListItem>
+              ))}
+            </ImageList>
           </AccordionDetails>
         </Accordion>
         <div className="divide"></div>

@@ -18,7 +18,7 @@ import useDateLogic from "../../hooks/useDateLogic";
 import useCheckFile from "../../hooks/useCheckFile";
 const ChatCardGroup = ({ status, conversation, socket }) => {
   const { state, depatch } = React.useContext(Contex);
-  const { groupChatting, userChatting, user,idConversation } = state;
+  const { groupChatting, userChatting, user, idConversation } = state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { checkUrlIsImage, checkUrlIsDocx, checkUrlIsVideo } = useCheckFile();
   const open = Boolean(anchorEl);
@@ -47,7 +47,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
     socket.current?.emit("join-room", {
       idCon: inFo.idCon,
       // isNew:false
-    })
+    });
   };
   return (
     <div className="card_chat" onClick={() => handleGroupChat()}>
@@ -105,11 +105,12 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
             <span>
               {conversations?.lastMessage[0]?.userId === user.uid
                 ? "Bạn: "
-                : `${inFo?.userInfo?.map((user) => {
-                    if (user.userId === user.uid) {
-                      return user?.firstName + " " + user?.lastName;
+                : inFo?.userInfo?.map((u) => {
+                    if (conversations.lastMessage[0].userId === u.userId) {
+                      console.log(u);
+                      return u?.userFistName + " " + u?.userLastName + ": ";
                     }
-                  })}`}{" "}
+                  })}
             </span>
             <span className={conversations?.mb.numberUnread ? "active" : ""}>
               {conversations?.lastMessage[0]?.content.includes(

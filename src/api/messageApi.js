@@ -42,11 +42,18 @@ const messageApi = {
   addReaction: (messId, urlIcon, userId, nameUser) => {
     const url = `/messages/addReact`;
     return axiosClient.post(url, {
-      messId:messId,
-      icon:urlIcon,
-      userId:userId,
-      nameUser:nameUser
+      messId: messId,
+      icon: urlIcon,
+      userId: userId,
+      nameUser: nameUser,
     });
+  },
+
+  //[GET] messages/getMessageByType/:idConversation/:type
+  getMessWithType: (id, type) => {
+    //console.log(id);
+    const url = `/messages/getMessageByType/${id}/${type}`;
+    return axiosClient.get(url);
   },
 };
 
