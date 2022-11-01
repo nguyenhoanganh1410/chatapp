@@ -21,15 +21,21 @@ import conversationApi from "../../api/conversationApi";
 import messageApi from "../../api/messageApi";
 import { useState } from "react";
 import WordsComponent from "../filecomponent/WordsComponent";
+import {
+  SetGroupChatting,
+  SetIdConversation,
+} from "../../store/Actions";
 
 import MemberCard from "../card/MemberCard";
 
-const TabInfomation = () => {
+const TabInfomation = ({socket}) => {
   const { state, depatch } = useContext(Contex);
   const [listImage, setListImage] = useState([]);
   const [files, setFiles] = useState([]);
+  const [members, setMembers] = useState([]);
 
-  //console.log(files);
+
+  console.log(members);
   //detructering...
   const { userChatting, groupChatting, user, idConversation, idLeaderGroup } =
     state;
@@ -51,7 +57,44 @@ const TabInfomation = () => {
 
     featchFile(idConversation, "IMAGE");
     featchFile(idConversation, "APPLICATION");
+
   }, [idConversation]);
+
+  React.useEffect(() => {
+    const featchListMember = async (idConversation) => {
+      try {
+        const response = await conversationApi.getListMember(idConversation);
+        setMembers(response.members);
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+    featchListMember(idConversation);
+  }, [idConversation]);
+
+  React.useEffect(() => {
+    if(socket.current){
+      socket.current.on("notifi-kickUser",(data)=>{
+        if(data){
+          console.log("kick");
+          const featchListMember = async (idConversation) => {
+            try {
+              const response = await conversationApi.getListMember(idConversation);
+              setMembers(response.members);
+            } catch (error) {
+              console.log("Failed to fetch conversation list: ", error);
+            }
+          };
+          featchListMember(idConversation);
+        }
+      });
+    }
+    
+  }, [idConversation]);
+
+  
+
+
 
   return (
     <div data-simplebar className="tab_infomation">
@@ -131,8 +174,8 @@ const TabInfomation = () => {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
-                {groupChatting.userInfo.map((u, idx) => {
-                  return <MemberCard u={u} />;
+                {members.map((u, idx) => {
+                  return <MemberCard u={u} socket={socket} />;
                 })}
               </AccordionDetails>
             </Accordion>

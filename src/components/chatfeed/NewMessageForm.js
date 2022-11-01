@@ -8,7 +8,7 @@ import Context from "../../store/Context";
 import { useContext, useEffect } from "react";
 import messageApi from "../../api/messageApi";
 // import {socket} from '../../store/socketClient';
-import addNotification from "react-push-notification";
+
 import io from "socket.io-client";
 import conversationApi from "../../api/conversationApi";
 // import {init} from '../../store/socketClient';
@@ -58,17 +58,7 @@ const NewMessageForm = ({
     setShowStickers(!showStickers);
   };
 
-  // const sendNotification = (data) => {
-  //   console.log("userName");
-  //   addNotification({
-  //     title: data.name,
-  //     message: data.conten,
-  //     duration:8000,
-  //     icon: data.avatar,
-  //     theme: "darkblue",
-  //     native: true, // when using native, your OS will handle theming.
-  //   });
-  // }
+  
 
   // SEND FILE
   const changeHandler = async (event) => {
@@ -328,20 +318,6 @@ const NewMessageForm = ({
         //call api add a message into db
         const messSave = await messageApi.addTextMess(newMess);
 
-        // const notifi= addNotification({
-        //   title: user.first_name+""+user.last_name,
-        //   message: messSave.content,
-        //   duration:8000,
-        //   icon: user.avatar,
-        //   theme: "darkblue",
-        //   native: true, // when using native, your OS will handle theming.
-        // });
-
-        // sendNotification({
-        //   name: user.first_name + " " + user.last_name,
-        //   conten: messSave.content,
-        //   avatar: user.avatar,
-        // })
 
         if (socket.current) {
           socket.current.emit("send-message", {

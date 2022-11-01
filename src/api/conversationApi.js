@@ -47,6 +47,11 @@ const conversationApi = {
       }
     );
   },
+
+  getListMember: (idConversation) => {
+    return axiosClient.get(`conversation/members/${idConversation}`);
+  },
+
 };
 
 export default conversationApi;
