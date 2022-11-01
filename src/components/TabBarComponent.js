@@ -21,6 +21,7 @@ import ModelDetailUser from "./model/ModelDetailUser";
 import Contex from "../store/Context";
 import {
   SetIdConversation,
+  SetIdLeaderGroup,
   SetIndexTab,
   SetUser,
   SetUserChatting,
@@ -89,19 +90,19 @@ const TabBarComponent = ({ socket, a }) => {
   const handleLogout = (e) => {
     //show model
     setOpenAlert(true);
-    depatch(SetIdConversation(null));
-    depatch(SetUserChatting(null));
   };
 
   const handleLogoutMain = () => {
-    //log out
-    firebase.auth().signOut();
-
     //delete user current
+    depatch(SetIdConversation(null));
+    depatch(SetUserChatting(null));
     depatch(SetUser(null));
+    depatch(SetIdLeaderGroup(null));
     if (socket.current) {
       socket.current.emit("out");
     }
+    //log out
+    firebase.auth().signOut();
   };
   const closeOpenAlert = () => {
     setOpenAlert(false);

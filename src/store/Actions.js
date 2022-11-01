@@ -18,6 +18,7 @@ export const SET_MESSAGESENT = "set_MessageSent";
 export const SET_STATUSMESSAGE = "set_StatusMessage";
 export const SET_IDMESSAGEDELETEDWITHME = "set_IdMessageDeletedWithMe";
 export const SET_GROUPCHATTING = "set_GroupChatting";
+export const SET_IDLEADERGROUP = "set_idLeaderGroup";
 
 export const SetGroupChatting = (payload) => {
   return {
@@ -25,6 +26,16 @@ export const SetGroupChatting = (payload) => {
     payload,
   };
 };
+
+export const SetIdLeaderGroup = (payload) => {
+  return {
+    type: SET_IDLEADERGROUP,
+    payload,
+  };
+};
+
+
+
 
 
 export const SetMessageSent = (payload) => {

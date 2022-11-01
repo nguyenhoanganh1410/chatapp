@@ -34,6 +34,19 @@ const conversationApi = {
   createConversation: (temp) => {
     return axiosClient.post("conversation/groups", temp);
   },
+
+  // [DELETE] /coversation/groups
+  kickUserOutGroup: (idConversation, idLeader, idUserKicked) => {
+    console.log("idCOnversiot:", idConversation);
+    console.log("idLeader:", idLeader);
+    console.log("idUserKicked:", idUserKicked);
+    return axiosClient.delete(
+      `conversation/members/${idConversation}/${idUserKicked}`,
+      {
+        data: { userId: idLeader },
+      }
+    );
+  },
 };
 
 export default conversationApi;

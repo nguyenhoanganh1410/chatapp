@@ -21,13 +21,18 @@ import conversationApi from "../../api/conversationApi";
 import messageApi from "../../api/messageApi";
 import { useState } from "react";
 import WordsComponent from "../filecomponent/WordsComponent";
+
+import MemberCard from "../card/MemberCard";
+
 const TabInfomation = () => {
   const { state, depatch } = useContext(Contex);
   const [listImage, setListImage] = useState([]);
   const [files, setFiles] = useState([]);
-  console.log(files);
+
+  //console.log(files);
   //detructering...
-  const { userChatting, groupChatting, idConversation } = state;
+  const { userChatting, groupChatting, user, idConversation, idLeaderGroup } =
+    state;
 
   React.useEffect(() => {
     //get list image in the conversation
@@ -113,6 +118,27 @@ const TabInfomation = () => {
           </div>
         </div>
         <div className="divide"></div>
+        {groupChatting ? (
+          <React.Fragment>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>
+                  Thành viên nhóm ({groupChatting.userInfo.length})
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {groupChatting.userInfo.map((u, idx) => {
+                  return <MemberCard u={u} />;
+                })}
+              </AccordionDetails>
+            </Accordion>
+            <div className="divide"></div>
+          </React.Fragment>
+        ) : null}
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -174,7 +200,6 @@ const TabInfomation = () => {
               sx={{ width: "auto", height: 700 }}
               cols={1}
               rowHeight={150}
-             
             >
               {files.map((item) => (
                 <ImageListItem key={item.content}>
@@ -196,54 +221,4 @@ const TabInfomation = () => {
   );
 };
 
-const itemData = [
-  {
-    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-    title: "Camera",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
-    title: "Hats",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
-    title: "Basketball",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
-    title: "Fern",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-    title: "Mushrooms",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
-    title: "Sea star",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
-    title: "Bike",
-  },
-];
 export default TabInfomation;

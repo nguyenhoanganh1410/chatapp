@@ -17,6 +17,7 @@ import {
   SET_STATUSMESSAGE,
   SET_IDMESSAGEDELETEDWITHME,
   SET_GROUPCHATTING,
+  SET_IDLEADERGROUP,
 } from "./Actions";
 
 //innite state
@@ -46,7 +47,7 @@ const initState = {
   userChatting: null,
 
   //group chat
-  groupChatting : null,
+  groupChatting: null,
   //id cua cuoc hoi thoai dang chat
   idConversation: null,
 
@@ -64,11 +65,19 @@ const initState = {
   statusMessage: "đã gửi",
 
   idMessageDeletedWithMe: "",
+
+  //leader hien tai cua group
+  idLeaderGroup: null,
 };
 
 //depatch
 const Reducer = (state, action) => {
   switch (action.type) {
+    case SET_IDLEADERGROUP:
+      return {
+        ...state,
+        idLeaderGroup: action.payload,
+      };
     case SET_ISSIGNEDIN:
       return {
         ...state,
@@ -155,11 +164,11 @@ const Reducer = (state, action) => {
         ...state,
         idMessageDeletedWithMe: action.payload,
       };
-      case SET_GROUPCHATTING:
-        return {
-          ...state,
-          groupChatting: action.payload,
-        };
+    case SET_GROUPCHATTING:
+      return {
+        ...state,
+        groupChatting: action.payload,
+      };
   }
 };
 

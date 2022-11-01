@@ -34,8 +34,6 @@ const Message = ({
   //detructering...
   const { userChatting, idConversation, user, statusMessage, groupChatting } =
     state;
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
   const [showIcons, setShowIcons] = React.useState(false);
 
   const [me, setMe] = React.useState(false);
@@ -47,6 +45,8 @@ const Message = ({
   // console.log("pre messs ----->");
   // console.log(preMessage);
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -332,10 +332,7 @@ const Message = ({
                                 <div className="row">
                                   <div className="col-4">
                                     <div className="messSticker">
-                                      <img
-                                        src={mess.content}
-                                        alt="image"
-                                      />
+                                      <img src={mess.content} alt="image" />
                                       <p className="timeMessSticker">
                                         {new Date(mess.createdAt)
                                           .toLocaleString("en-US", {
@@ -345,9 +342,7 @@ const Message = ({
                                       </p>
                                     </div>
                                   </div>
-                                 
                                 </div>
-                               
                               </>
                             )}
                           </React.Fragment>
