@@ -42,6 +42,15 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
     alert("updating...");
   };
 
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on("notifi-kickUser", (data) => {
+        console.log("kick user", data);
+        depatch(SetIdConversation(data));
+      });
+    }
+  }, [groupChatting]);
+
   const handleGroupChat = () => {
     //delete user chatting
     depatch(SetUserChatting(null));

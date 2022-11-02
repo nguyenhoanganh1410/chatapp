@@ -8,7 +8,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { BsThreeDots } from "react-icons/bs";
 import conversationApi from "../../api/conversationApi";
-const MemberCard = ({ u }) => {
+const MemberCard = ({ u,socket }) => {
+  console.log(u);
   //material ui
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -47,8 +48,18 @@ const MemberCard = ({ u }) => {
     //neu user hien tai dang nhap la leader (moi co giao dien thuc hien chuc nang kick user)
     //=> idLeader = user.uid
     kickUser();
+
+    //emit socket kick user
+    if(socket.current){
+      socket.current.emit("kickUser",{
+        idConversation:idConversation,
+        idLeader:user.uid,
+        idUserKick:u.userId
+      });
+    }
+
   };
-  return (
+  return (  
     <div
       className="users_member"
       style={{

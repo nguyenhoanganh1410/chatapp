@@ -89,7 +89,7 @@ const ChatFeed = ({ socket }) => {
     });
 
   
-    socket.current?.on("get-message", ({ senderId, message,name,avatar }) => {
+    socket.current?.on("get-message", ({ message }) => {
       //console.log("get");
       console.log("mess nhan dc ---> ");
       console.log(message);
@@ -163,6 +163,9 @@ const ChatFeed = ({ socket }) => {
     socket.current?.on("reMessage", (data) => {
       setIdReMessage(data);
     });
+
+  
+
   }, []);
 
   // }, [userChatting]);

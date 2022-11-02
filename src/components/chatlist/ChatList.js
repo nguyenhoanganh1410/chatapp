@@ -19,7 +19,6 @@ import conversationApi from "../../api/conversationApi";
 import Skeleton from "@mui/material/Skeleton";
 import { BsInbox } from "react-icons/bs";
 
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   const [listConversation, setListConversation] = React.useState([]);
@@ -90,8 +89,8 @@ const ChatList = ({ socket }) => {
         }
       });
 
-      socket.current.on("get-message", ({ senderId, message,isGroup }) => {
-        if(isGroup){
+      socket.current.on("get-message", ({ senderId, message, isGroup }) => {
+        if (isGroup) {
           const fetchConversations = async () => {
             try {
               const response = await conversationApi.getConversations(
@@ -99,7 +98,7 @@ const ChatList = ({ socket }) => {
                 panigation.page,
                 panigation.size
               );
-      
+
               const { data, page, size, totalPages } = response;
               console.log(data);
               if (response) {
@@ -110,16 +109,13 @@ const ChatList = ({ socket }) => {
               console.log("Failed to fetch conversation list: ", error);
             }
           };
-      
-          fetchConversations();
-          
-        }
-        
-      });
 
+          fetchConversations();
+        }
+      });
 
       socket.current.on("get-conversation-group", (idCon) => {
-        if(idCon){
+        if (idCon) {
           const fetchConversations = async () => {
             try {
               const response = await conversationApi.getConversations(
@@ -127,7 +123,7 @@ const ChatList = ({ socket }) => {
                 panigation.page,
                 panigation.size
               );
-      
+
               const { data, page, size, totalPages } = response;
               console.log(data);
               if (response) {
@@ -138,53 +134,57 @@ const ChatList = ({ socket }) => {
               console.log("Failed to fetch conversation list: ", error);
             }
           };
-    
+
           fetchConversations();
-          
         }
-        
       });
 
-      
+      socket.current.on("kickUser-group", (idCon) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              user.uid,
+              panigation.page,
+              panigation.size
+            );
 
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+        fetchConversations();
+      });
 
+      socket.current.on("messNotifi", (idCon) => {
+        console.log("idCon");
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              user.uid,
+              panigation.page,
+              panigation.size
+            );
+
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+        fetchConversations();
+      });
     }
   }, [user, conversations]);
-
-    React.useEffect(() => {
-      if(socket.current){
-
-        
-
-
-        // socket.current.on("get-notifi", ({message,name,avatar}) => {
-        //   console.log("messageOn");
-        //   addNotification({
-        //     title: name,
-        //     message: message.content,
-        //     duration:4000,
-        //     icon: avatar,
-        //     theme: "darkblue",
-        //     native: true, // when using native, your OS will handle theming.
-        // })
-        // });
-
-        // socket.current.on("get-notifiGr", ({message,name,avatar,nameGroup}) => {
-        //   console.log(name);
-        //   addNotification({
-        //     title: "Group: "+nameGroup,
-        //     // subtitle: 'Please fill it',
-        //     message: name+" : "+message.content,
-        //     duration:4000,
-        //     icon: avatar,
-        //     theme: "darkblue",
-        //     native: true, // when using native, your OS will handle theming.
-        // })
-        // });
-      }
-  }, [conversations]);
-
-
 
   React.useEffect(() => {
     //get api set list conversation

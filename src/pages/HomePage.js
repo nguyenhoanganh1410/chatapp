@@ -88,7 +88,7 @@ const HomePage = () => {
               className="chat_main"
             >
               <ChatFeed socket={socket} />
-              {showTabInfo ? <TabInfomation /> : null}
+              {showTabInfo ? <TabInfomation  socket={socket}/> : null}
             </div>
           ) : (
             // <HomeComponent />
@@ -111,7 +111,7 @@ const HomePage = () => {
                   className="chat_main"
                 >
                   <ChatFeedGroup socket={socket} />
-                  {showTabInfo ? <TabInfomation /> : null}
+                  {showTabInfo ? <TabInfomation socket={socket} /> : null}
                 </div>
               ) : (
                 <HomeComponent />
