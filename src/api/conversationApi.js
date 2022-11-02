@@ -1,5 +1,6 @@
 import axiosClient from "./axiosClient";
 
+
 const conversationApi = {
   // GET: /conversation?senderID=Ix7UVDUIrmRYOB6uGFc715drn24&receiverID=ztpYIbpqoiYVDVsf0h9Clzg7QgW2
   //res: false or conversationID
@@ -50,6 +51,23 @@ const conversationApi = {
 
   getListMember: (idConversation) => {
     return axiosClient.get(`conversation/members/${idConversation}`);
+  },
+
+  leaveGroup: (idConversation,idUser) => {
+    console.log("idCOnversiot:", idUser);
+    return axiosClient.delete(`conversation/leave/${idConversation}`,
+    {
+      data: { userId: idUser },
+    }
+    )
+  },
+
+  deleteAllMess: (idConversation,idUser) => {
+    return axiosClient.delete(`conversation/${idConversation}/messages`,
+    {
+      data: { userId: idUser },
+    }
+    );
   },
 
 };

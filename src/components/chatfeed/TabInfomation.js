@@ -4,6 +4,9 @@ import Avatar from "@mui/material/Avatar";
 import { AiOutlineBell } from "react-icons/ai";
 import { MdGroupAdd } from "react-icons/md";
 import { RiDeleteBin3Line } from "react-icons/ri";
+import { IoExitOutline } from "react-icons/io5";
+import { AiOutlineDeleteColumn } from "react-icons/ai";
+
 import { TiAttachmentOutline } from "react-icons/ti";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -33,9 +36,8 @@ const TabInfomation = ({socket}) => {
   const [listImage, setListImage] = useState([]);
   const [files, setFiles] = useState([]);
   const [members, setMembers] = useState([]);
-
-
-  console.log(members);
+  const [leaderId, setLeaderId] = useState("");
+  
   //detructering...
   const { userChatting, groupChatting, user, idConversation, idLeaderGroup } =
     state;
@@ -65,6 +67,7 @@ const TabInfomation = ({socket}) => {
       try {
         const response = await conversationApi.getListMember(idConversation);
         setMembers(response.members);
+        setLeaderId(response.leaderId);
       } catch (error) {
         console.log("Failed to fetch conversation list: ", error);
       }
@@ -92,9 +95,46 @@ const TabInfomation = ({socket}) => {
     
   }, [idConversation]);
 
-  
+  const handleLeaveGroup = async () => {
+    try {
+      const response = await conversationApi.leaveGroup(idConversation, user.uid);
+      if (response) {
+        console.log("leave");
+        depatch(SetGroupChatting(null));
+        depatch(SetIdConversation(null));
 
+        if(socket.current){
+          socket.current.emit("kickUser",{
+            idConversation:idConversation,
+            // idLeader:user.uid,
+            idUserKick:user.uid
+          });
+        }
 
+      }
+    } catch (error) {
+      console.log("Failed to fetch conversation list: ", error);
+    }
+  };
+
+  const handleDeleteAllMess = async () => {
+    try {
+      const response = await conversationApi.deleteAllMess(idConversation,user.uid);
+      if (response) {
+        console.log("delete");
+        //render list mess
+
+      }
+    } catch (error) {
+      console.log("Failed to fetch conversation list: ", error);
+    }
+  }
+
+  const handleDeleteGroup = async () => {
+
+  }
+
+console.log(user.uid===leaderId);
 
   return (
     <div data-simplebar className="tab_infomation">
@@ -170,7 +210,7 @@ const TabInfomation = ({socket}) => {
                 id="panel1a-header"
               >
                 <Typography>
-                  Thành viên nhóm ({groupChatting.userInfo.length})
+                  Thành viên nhóm ({members.length})
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
@@ -254,11 +294,24 @@ const TabInfomation = ({socket}) => {
         </Accordion>
         <div className="divide"></div>
       </div>
-      <div className="deleteChat">
+      <div className="deleteChat" onClick={handleDeleteAllMess}>
         <span>
           <RiDeleteBin3Line />
         </span>
         <p>Xóa lịch xử trò chuyện</p>
+      </div>
+      <div className="leaveChat" onClick={handleLeaveGroup}>
+        <span>
+          <IoExitOutline />
+        </span>
+        <p>Rời Nhóm</p>
+      </div>
+
+      <div className="deleteGroup" onClick={handleDeleteGroup}>
+        <span>
+          <AiOutlineDeleteColumn />
+        </span>
+        <p>Giả tán Nhóm</p>
       </div>
     </div>
   );

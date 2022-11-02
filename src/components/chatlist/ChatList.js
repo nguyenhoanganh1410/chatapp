@@ -169,7 +169,6 @@ const ChatList = ({ socket }) => {
       });
 
       socket.current.on("messNotifi", (idCon) => {
-        console.log("idCon");
         const fetchConversations = async () => {
           try {
             const response = await conversationApi.getConversations(
@@ -190,6 +189,31 @@ const ChatList = ({ socket }) => {
         };
         fetchConversations();
     });
+
+  //   socket.current.on("leave-group", (rs) => {
+  //     console.log("l");
+  //     if(rs){
+  //       const fetchConversations = async () => {
+  //         try {
+  //           const response = await conversationApi.getConversations(
+  //             user.uid,
+  //             panigation.page,
+  //             panigation.size
+  //           );
+    
+  //           const { data, page, size, totalPages } = response;
+  //           console.log(data);
+  //           if (response) {
+  //             setConversations(data);
+  //             setLoading(false);
+  //           }
+  //         } catch (error) {
+  //           console.log("Failed to fetch conversation list: ", error);
+  //         }
+  //       };
+  //       fetchConversations();
+  //     }
+  // });
 
 
       
