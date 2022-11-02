@@ -8,7 +8,7 @@ import Context from "../../store/Context";
 import { useContext, useEffect } from "react";
 import messageApi from "../../api/messageApi";
 // import {socket} from '../../store/socketClient';
-import addNotification from "react-push-notification";
+
 import io from "socket.io-client";
 import conversationApi from "../../api/conversationApi";
 // import {init} from '../../store/socketClient';

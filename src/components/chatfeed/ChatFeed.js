@@ -9,7 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import "./MessageStyle.scss";
 import TimeLine from "./TimeLine";
 import { IoIosArrowDown } from "react-icons/io";
-import addNotification from "react-push-notification";
+
 
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 import "simplebar/dist/simplebar.css";
