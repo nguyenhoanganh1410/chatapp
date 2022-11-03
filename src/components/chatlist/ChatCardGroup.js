@@ -30,7 +30,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
   const { handleDate } = useDateLogic();
 
   const { inFo, conversations } = conversation;
-  // console.log(inFo);
+   console.log(inFo);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -71,7 +71,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
       <div className="card_group">
       
 
-        {inFo.avatar.length === 1 ? (
+        {inFo.avatar.length === 1 && inFo?.avatar[0]?.avaUser === undefined  ? (
           <Avatar
             className="avt group_avatar"
             alt="Remy Sharp"

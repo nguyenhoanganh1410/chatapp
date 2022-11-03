@@ -59,10 +59,8 @@ const TabInfomation = ({ socket }) => {
   const [listImage, setListImage] = useState([]);
   const [files, setFiles] = useState([]);
   const [members, setMembers] = useState([]);
-
+  console.log(members);
   const [leaderId, setLeaderId] = useState("");
-  
-
 
   //material ui
   const [open, setOpen] = React.useState(false);
@@ -77,7 +75,6 @@ const TabInfomation = ({ socket }) => {
     setTextSeachMember("");
     setUserAddMember([]);
   };
-
 
   //detructering...
   const {
@@ -126,10 +123,11 @@ const TabInfomation = ({ socket }) => {
   }, [idConversation]);
 
   React.useEffect(() => {
+    //socket call api get list member when kick, add member into the group
     if (socket.current) {
       socket.current.on("notifi-kickUser", (data) => {
         if (data) {
-          console.log("kick");
+          //console.log("kick");
           const featchListMember = async (idConversation) => {
             try {
               const response = await conversationApi.getListMember(
@@ -146,23 +144,24 @@ const TabInfomation = ({ socket }) => {
     }
   }, [idConversation]);
 
-
   const handleLeaveGroup = async () => {
     try {
-      const response = await conversationApi.leaveGroup(idConversation, user.uid);
+      const response = await conversationApi.leaveGroup(
+        idConversation,
+        user.uid
+      );
       if (response) {
         console.log("leave");
         depatch(SetGroupChatting(null));
         depatch(SetIdConversation(null));
 
-        if(socket.current){
-          socket.current.emit("kickUser",{
-            idConversation:idConversation,
+        if (socket.current) {
+          socket.current.emit("kickUser", {
+            idConversation: idConversation,
             // idLeader:user.uid,
-            idUserKick:user.uid
+            idUserKick: user.uid,
           });
         }
-
       }
     } catch (error) {
       console.log("Failed to fetch conversation list: ", error);
@@ -171,16 +170,18 @@ const TabInfomation = ({ socket }) => {
 
   const handleDeleteAllMess = async () => {
     try {
-      const response = await conversationApi.deleteAllMess(idConversation,user.uid);
+      const response = await conversationApi.deleteAllMess(
+        idConversation,
+        user.uid
+      );
       if (response) {
         console.log("delete");
         //render list mess
-
       }
     } catch (error) {
       console.log("Failed to fetch conversation list: ", error);
     }
-  }
+  };
 
   const handleDeleteGroup = async () => {
     try {
@@ -190,9 +191,9 @@ const TabInfomation = ({ socket }) => {
         depatch(SetGroupChatting(null));
         depatch(SetIdConversation(null));
 
-        if(socket.current){
-          socket.current.emit("kickUser",{
-            idConversation:idConversation,
+        if (socket.current) {
+          socket.current.emit("kickUser", {
+            idConversation: idConversation,
             // idLeader:user.uid,
             // idUserKick:user.uid
           });
@@ -201,7 +202,7 @@ const TabInfomation = ({ socket }) => {
     } catch (error) {
       console.log("Failed to fetch conversation list: ", error);
     }
-  }
+  };
 
   const handleOpenModelAddMember = () => {
     handleOpen();
@@ -223,7 +224,7 @@ const TabInfomation = ({ socket }) => {
       console.log(val);
       if (u.uid === val.userId) {
         console.log("user da co trong group --> k add dc nha");
-        notify()
+        notify();
         status = 1;
       }
     });
@@ -263,7 +264,6 @@ const TabInfomation = ({ socket }) => {
     // let res = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     // if (res.test(text)) {
     //   //search by email
-
 
     //   UserService.getUserByEmail(text)
     //     .then((querySnapshot) => {
@@ -406,9 +406,7 @@ const TabInfomation = ({ socket }) => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography>
-                  Thành viên nhóm ({members.length})
-                </Typography>
+                <Typography>Thành viên nhóm ({members.length})</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 {members.map((u, idx) => {
@@ -492,37 +490,35 @@ const TabInfomation = ({ socket }) => {
         <div className="divide"></div>
       </div>
       <div className="tab_info-footer">
-      
-      <div className="deleteChat" onClick={handleDeleteAllMess}>
-        <span>
-          <RiDeleteBin3Line />
-        </span>
-        <p>Xóa lịch xử trò chuyện</p>
-      </div>
+        <div className="deleteChat" onClick={handleDeleteAllMess}>
+          <span>
+            <RiDeleteBin3Line />
+          </span>
+          <p>Xóa lịch xử trò chuyện</p>
+        </div>
 
-      <div className="leaveChat" onClick={handleLeaveGroup}>
-        <span>
-          <IoExitOutline />
-        </span>
-        <p>Rời Nhóm</p>
-      </div>
-                
-      {/* <div className="deleteGroup" onClick={handleDeleteGroup}>
+        <div className="leaveChat" onClick={handleLeaveGroup}>
+          <span>
+            <IoExitOutline />
+          </span>
+          <p>Rời Nhóm</p>
+        </div>
+
+        {/* <div className="deleteGroup" onClick={handleDeleteGroup}>
         <span>
           <AiOutlineDeleteColumn />
         </span>
         <p>Giả tán Nhóm</p>
       </div> */}
-      {user.uid === leaderId ? (
-        <div className="deleteGroup" onClick={handleDeleteGroup}>
-        <span>
-          <AiOutlineDeleteColumn />
-        </span>
-        <p>Giả tán Nhóm</p>
+        {user.uid === leaderId ? (
+          <div className="deleteGroup" onClick={handleDeleteGroup}>
+            <span>
+              <AiOutlineDeleteColumn />
+            </span>
+            <p>Giả tán Nhóm</p>
+          </div>
+        ) : null}
       </div>
-      ) : null}
-      </div>
-
 
       <Modal
         aria-labelledby="transition-modal-title"
@@ -656,7 +652,6 @@ const TabInfomation = ({ socket }) => {
           </Box>
         </Fade>
       </Modal>
-
     </div>
   );
 };
