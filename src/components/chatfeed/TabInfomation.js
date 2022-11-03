@@ -131,10 +131,26 @@ const TabInfomation = ({socket}) => {
   }
 
   const handleDeleteGroup = async () => {
+    try {
+      const response = await conversationApi.deleteGroup(idConversation);
+      if (response) {
+        console.log("delete");
+        depatch(SetGroupChatting(null));
+        depatch(SetIdConversation(null));
 
+        if(socket.current){
+          socket.current.emit("kickUser",{
+            idConversation:idConversation,
+            // idLeader:user.uid,
+            // idUserKick:user.uid
+          });
+        }
+      }
+    } catch (error) {
+      console.log("Failed to fetch conversation list: ", error);
+    }
   }
 
-console.log(user.uid===leaderId);
 
   return (
     <div data-simplebar className="tab_infomation">
@@ -294,6 +310,8 @@ console.log(user.uid===leaderId);
         </Accordion>
         <div className="divide"></div>
       </div>
+      <div className="tab_info-footer">
+      
       <div className="deleteChat" onClick={handleDeleteAllMess}>
         <span>
           <RiDeleteBin3Line />
@@ -306,13 +324,23 @@ console.log(user.uid===leaderId);
         </span>
         <p>Rời Nhóm</p>
       </div>
-
-      <div className="deleteGroup" onClick={handleDeleteGroup}>
+                
+      {/* <div className="deleteGroup" onClick={handleDeleteGroup}>
+        <span>
+          <AiOutlineDeleteColumn />
+        </span>
+        <p>Giả tán Nhóm</p>
+      </div> */}
+      {user.uid === leaderId ? (
+        <div className="deleteGroup" onClick={handleDeleteGroup}>
         <span>
           <AiOutlineDeleteColumn />
         </span>
         <p>Giả tán Nhóm</p>
       </div>
+      ) : null}
+      </div>
+
     </div>
   );
 };

@@ -18,6 +18,8 @@ import conversationApi from "../../api/conversationApi";
 // import {socket} from '../../store/socketClient';
 import Skeleton from "@mui/material/Skeleton";
 import { BsInbox } from "react-icons/bs";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function TabPanel(props) {
@@ -71,6 +73,8 @@ const ChatList = ({ socket }) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  
 
   React.useEffect(() => {
     if (socket.current) {
@@ -166,6 +170,13 @@ const ChatList = ({ socket }) => {
             }
           };
           fetchConversations();
+          // const showAlert =()=>{
+          //   toast.success('Success Notification !', {
+          //     position: toast.POSITION.TOP_RIGHT
+          //   });
+          // }
+
+          // showAlert();
       });
 
       socket.current.on("messNotifi", (idCon) => {
@@ -269,7 +280,7 @@ const ChatList = ({ socket }) => {
                   aria-label="basic tabs example"
                 >
                   <Tab label="Tất cả" {...a11yProps(0)} />
-                  <Tab label="Chưa đọc" {...a11yProps(1)} />
+                  <Tab label="Chưa đọc" {...a11yProps(1)} onClick={showAlert}/>
                 </Tabs>
               </Box>
 

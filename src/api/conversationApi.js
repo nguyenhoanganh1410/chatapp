@@ -70,6 +70,10 @@ const conversationApi = {
     );
   },
 
+  deleteGroup: (idConversation) => {
+    return axiosClient.delete(`conversation/groups/${idConversation}`);
+  },
+
 };
 
 export default conversationApi;

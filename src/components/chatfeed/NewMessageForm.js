@@ -411,6 +411,8 @@ const NewMessageForm = ({
             type="file"
             ref={inputChooseIMG}
             hidden
+            multiple
+            accept='application/pdf, image/png'
             onChange={changeHandler}
           ></input>
           <GrImage onClick={onHandlChoiseFile} />
