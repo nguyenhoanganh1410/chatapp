@@ -228,7 +228,7 @@ const ChatList = ({ socket }) => {
                   aria-label="basic tabs example"
                 >
                   <Tab label="Tất cả" {...a11yProps(0)} />
-                  <Tab label="Chưa đọc" {...a11yProps(1)} onClick={showAlert} />
+                  <Tab label="Chưa đọc" {...a11yProps(1)}  />
                 </Tabs>
               </Box>
 
