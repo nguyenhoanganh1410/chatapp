@@ -69,12 +69,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
   return (
     <div className="card_chat" onClick={() => handleGroupChat()}>
       <div className="card_group">
-        {/* <div className="group_avatar">
-          <Avatar className="avt group_avatar" alt="Remy Sharp" src={avt} />
-          <Avatar className="avt group_avatar" alt="Remy Sharp" src={avt} />
-          <Avatar className="avt group_avatar" alt="Remy Sharp" src={avt} />
-          <Avatar className="avt" alt="4" />
-        </div> */}
+      
 
         {inFo.avatar.length === 1 ? (
           <Avatar

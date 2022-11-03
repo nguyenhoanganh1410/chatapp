@@ -12,11 +12,12 @@ import HomeComponent from "../components/Home/HomeComponent";
 import ModelShowListImage from "../components/model/ModelShowListImage";
 import io from "socket.io-client";
 import ChatFeedGroup from "../components/chatfeed/ChatFeedGroup";
+import { ToastContainer, toast } from "react-toastify";
 // import {init} from '../store/socketClient';
 
 const HomePage = () => {
   const socket = useRef();
-  const [a, setA] = useState("a")
+  const [a, setA] = useState("a");
   console.log(socket);
   // let socket = init();
 
@@ -29,23 +30,25 @@ const HomePage = () => {
   const { state, depatch } = React.useContext(Contex);
 
   //detructering...
-  const { userChatting, groupChatting ,showAlert, user, showTabInfo, indexTab } = state;
+  const {
+    userChatting,
+    groupChatting,
+    showAlert,
+    user,
+    showTabInfo,
+    indexTab,
+  } = state;
 
   useEffect(() => {
-    setA('b')
+    setA("b");
     if (user) {
-
       socket.current = io("https://13.228.206.211");
       // socket.current = io("http://localhost:5005");
       // console.log(socket);
       socket.current.emit("start", user);
 
-     
-     // console.log(socket);
+      // console.log(socket);
       //socket.current.emit("start", user);
-
-
-
     }
   }, [user]);
 
@@ -66,7 +69,7 @@ const HomePage = () => {
   // }, [dimensions]);
   return (
     <React.Fragment>
-      <TabBarComponent a={a}  socket={socket}/>
+      <TabBarComponent a={a} socket={socket} />
       {dimensions.width < 800 ? null : <ChatList socket={socket} />}
       {indexTab === 0 ? (
         <React.Fragment>
@@ -88,7 +91,7 @@ const HomePage = () => {
               className="chat_main"
             >
               <ChatFeed socket={socket} />
-              {showTabInfo ? <TabInfomation  socket={socket}/> : null}
+              {showTabInfo ? <TabInfomation socket={socket} /> : null}
             </div>
           ) : (
             // <HomeComponent />
@@ -140,6 +143,7 @@ const HomePage = () => {
         </Alert>
       )}
       {/* <ModelShowListImage /> */}
+      <ToastContainer />
     </React.Fragment>
   );
 };

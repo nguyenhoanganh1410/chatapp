@@ -8,8 +8,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { BsThreeDots } from "react-icons/bs";
 import conversationApi from "../../api/conversationApi";
-const MemberCard = ({ u,socket }) => {
-  console.log(u);
+const MemberCard = ({ u, socket, modelAdd }) => {
+  //console.log(u);
   //material ui
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -50,16 +50,15 @@ const MemberCard = ({ u,socket }) => {
     kickUser();
 
     //emit socket kick user
-    if(socket.current){
-      socket.current.emit("kickUser",{
-        idConversation:idConversation,
-        idLeader:user.uid,
-        idUserKick:u.userId
+    if (socket.current) {
+      socket.current.emit("kickUser", {
+        idConversation: idConversation,
+        idLeader: user.uid,
+        idUserKick: u.userId,
       });
     }
-
   };
-  return (  
+  return (
     <div
       className="users_member"
       style={{
@@ -106,7 +105,7 @@ const MemberCard = ({ u,socket }) => {
           >
             {u?.userFistName + " " + u?.userLastName}
           </p>
-          {idLeaderGroup === u.userId ? (
+          {idLeaderGroup === u.userId && !modelAdd ? (
             <p
               style={{
                 textTransform: "capitalize",
@@ -116,20 +115,35 @@ const MemberCard = ({ u,socket }) => {
               Trưởng nhóm
             </p>
           ) : null}
+          {modelAdd ? (
+            <p
+              style={{
+                textTransform: "capitalize",
+                fontSize: "10px",
+              }}
+            >
+              joined
+            </p>
+          ) : null}
         </div>
       </div>
-      {idLeaderGroup === user.uid && user.uid !== u.userId ? (
-        <span
-          className="threeDots"
-          id="basic-button"
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-          onClick={handleClick}
-        >
-          <BsThreeDots />
-        </span>
-      ) : null}
+      {/* modelAdd duoc truyen xuong tu model tadd member */}
+      {modelAdd ? null : (
+        <React.Fragment>
+          {idLeaderGroup === user.uid && user.uid !== u.userId ? (
+            <span
+              className="threeDots"
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+            >
+              <BsThreeDots />
+            </span>
+          ) : null}
+        </React.Fragment>
+      )}
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
