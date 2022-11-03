@@ -53,6 +53,7 @@ const conversationApi = {
     return axiosClient.get(`conversation/members/${idConversation}`);
   },
 
+
   leaveGroup: (idConversation,idUser) => {
     console.log("idCOnversiot:", idUser);
     return axiosClient.delete(`conversation/leave/${idConversation}`,
@@ -72,6 +73,15 @@ const conversationApi = {
 
   deleteGroup: (idConversation) => {
     return axiosClient.delete(`conversation/groups/${idConversation}`);
+  },
+
+
+  //[POST] add member into group
+  addMember: (idConversation, idUserAdd, listMember) => {
+    return axiosClient.post(`conversation/members/${idConversation}`, {
+      userId: idUserAdd,
+      members: listMember,
+    });
   },
 
 };

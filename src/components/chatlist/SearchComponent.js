@@ -10,7 +10,7 @@ import {
   SetSearchingStatus,
   SetShowTabHistorySearch,
   SetUserSearched,
-  SetIdConversation
+  SetIdConversation,
 } from "../../store/Actions";
 import UserService from "../../services/UserService";
 import Backdrop from "@mui/material/Backdrop";
@@ -34,7 +34,7 @@ const style = {
   p: 2,
 };
 
-const SearchComponent = ({socket}) => {
+const SearchComponent = ({ socket }) => {
   const inputFileAvatar = React.useRef();
   const groupSearchRef = useRef();
   const creatGroupInput = useRef();
@@ -67,7 +67,6 @@ const SearchComponent = ({socket}) => {
   const handleCloseModel = () => setOpen(false);
   const [image, setImage] = React.useState(null);
   const [avt, setAvt] = React.useState(null);
-  console.log(avt);
 
   const handleOnClick = (e) => {
     //add clss active
@@ -80,14 +79,6 @@ const SearchComponent = ({socket}) => {
     //add clss active
     creatGroupInput.current.classList.add("active");
   };
-
-  // const handleBlur = () => {
-  //   groupSearchRef.current.classList.remove("active");
-  //   setActive(false);
-  //   depatch(SetShowTabHistorySearch(false));
-  // };
-
-  console.log(socket.current)
 
   const handleClose = () => {
     groupSearchRef.current.classList.remove("active");
@@ -276,9 +267,12 @@ const SearchComponent = ({socket}) => {
                   const response = await conversationApi.createConversation(
                     temp
                   );
-                  if(socket.current){
+                  if (socket.current) {
                     console.log("vooo");
-                    socket.current.emit("create-conversation",{idConversation:response,idList})
+                    socket.current.emit("create-conversation", {
+                      idConversation: response,
+                      idList,
+                    });
                   }
                   depatch(SetIdConversation(response));
                   setAvt(null);
@@ -288,7 +282,6 @@ const SearchComponent = ({socket}) => {
                 }
               };
               createGroup();
-              
             });
         });
     } else {
@@ -305,9 +298,12 @@ const SearchComponent = ({socket}) => {
           console.log(temp);
           const response = await conversationApi.createConversation(temp);
           setAvt(null);
-          if(socket.current){
+          if (socket.current) {
             console.log("vooo");
-            socket.current.emit("create-conversation",{idConversation:response,idList})
+            socket.current.emit("create-conversation", {
+              idConversation: response,
+              idList,
+            });
           }
           console.log("tao nhom thanh cong" + response);
         } catch (error) {
