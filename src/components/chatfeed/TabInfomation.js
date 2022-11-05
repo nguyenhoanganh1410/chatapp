@@ -59,7 +59,6 @@ const TabInfomation = ({ socket }) => {
   const [listImage, setListImage] = useState([]);
   const [files, setFiles] = useState([]);
   const [members, setMembers] = useState([]);
-  console.log(members);
   const [leaderId, setLeaderId] = useState("");
 
   //material ui
@@ -326,6 +325,13 @@ const TabInfomation = ({ socket }) => {
 
     //call custom hook
     addMemberIntoGroup(idConversation, user.uid, idList);
+    if (socket.current) {
+      socket.current.emit("kickUser", {
+        idConversation: idConversation,
+        // idLeader:user.uid,
+        idUserKick: user.uid,
+      });
+    }
   };
 
   return (

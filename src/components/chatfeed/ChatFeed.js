@@ -34,8 +34,9 @@ const ChatFeed = ({ socket }) => {
   const [statusLoadOldMessage, setStatusLoadOldMessage] = useState(false);
   // const [arrivalMess, setArrivalMess] = useState(null);
   const [arrivalMess, setArrivalMess] = useState("");
+  const [isFriend, setIsFriend] = useState(false);
 
-  //console.log("chetfeed message ---->" + messages);
+  console.log(isFriend);
   //detructering...
   const {
     userChatting,
@@ -45,7 +46,7 @@ const ChatFeed = ({ socket }) => {
     idMessageDeletedWithMe,
   } = state;
   // console.log(" message ---->");
-  console.log(idConversation)
+  
   const messagesEnd = useRef();
 
   const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
@@ -170,14 +171,16 @@ const ChatFeed = ({ socket }) => {
 
   // }, [userChatting]);
 
-  // useEffect(() => {
-  //     if (socket.current) {
-  //       socket.current.emit("seen-message", {
-  //         conversationId: idConversation,
-  //         userId: user.uid,
-  //       });
-  //     }
-  //   }, []);
+  useEffect(() => {
+    socket?.current.on("updateListInvite", idFriend => {
+      if (idFriend) {
+        setIsFriend(true);
+        socket.current.emit("kickUser", {
+          idConversation: idConversation,
+        });
+      }
+    })
+    }, [idConversation]);
 
   //cap nhat mess da thu hoi len giao dien
   useEffect(() => {
@@ -252,6 +255,8 @@ const ChatFeed = ({ socket }) => {
         );
         const { totalPages } = response;
         console.log(totalPages);
+        const {friendStatus} = response;
+        setIsFriend(friendStatus);
 
         //th1: so luong tin nhan < 30, page = 1
         if (totalPages <= 1) {
@@ -269,6 +274,7 @@ const ChatFeed = ({ socket }) => {
           );
 
           const { data, info, friendStatus, size } = currnetResponse;
+          setIsFriend(friendStatus);
           //neu khong tra ve du 30 tin nhan -> lui 1 page
           if (data[0].messages.length < 20) {
             const cPage = newPage - 1;
@@ -339,7 +345,7 @@ const ChatFeed = ({ socket }) => {
   };
   return (
     <div className="chat_feed">
-      <ChatHeader userChatting={userChatting} socket={socket} />
+      <ChatHeader userChatting={userChatting} socket={socket} isFriend={isFriend}/>
       <div
         // data-simplebar
         className="message_content"

@@ -33,7 +33,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
   // console.log(conversation);
 
   const { inFo, conversations } = conversation;
-  console.log(conversation);
+  console.log(conversations);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

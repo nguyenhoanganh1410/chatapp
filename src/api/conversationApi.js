@@ -1,6 +1,5 @@
 import axiosClient from "./axiosClient";
 
-
 const conversationApi = {
   // GET: /conversation?senderID=Ix7UVDUIrmRYOB6uGFc715drn24&receiverID=ztpYIbpqoiYVDVsf0h9Clzg7QgW2
   //res: false or conversationID

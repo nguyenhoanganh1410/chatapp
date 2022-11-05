@@ -123,7 +123,7 @@ const HomePage = () => {
           )}
         </React.Fragment>
       ) : (
-        <ListRequestComponent />
+        <ListRequestComponent socket={socket} />
       )}
 
       <ModelUpdateUser />

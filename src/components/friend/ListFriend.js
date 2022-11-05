@@ -2,11 +2,61 @@ import "./index.scss";
 import friend from "../../images/friend.png";
 import Divider from "@mui/material/Divider";
 import * as React from "react";
+import Contex from "../../store/Context";
+import { useContext } from "react";
+import { BsThreeDots } from "react-icons/bs";
+
 
 import { IoPersonAddSharp } from "react-icons/io5";
 import avt from "../../images/av.jpg";
+import friendApi from "../../api/friendApi";
 
-const ListFriend = () => {
+
+const ListFriend = ({socket}) => {
+
+  const { state, depatch } = useContext(Contex);
+  const [listFriend, setListFriend] = React.useState([]);
+
+  const {
+  user,
+  idConversation,
+  } = state;
+
+  console.log(listFriend)
+  
+
+  React.useEffect(() => {
+    const featchListMember = async (userId) => {
+      try {
+        const response = await friendApi.getListFriend(userId);
+        setListFriend(response);
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+    featchListMember(user.uid);
+  }, [user]);
+
+  
+
+  React.useEffect(() => {
+    if(socket.current){
+      socket.current.on("updateListFrien",idFriend=>{
+        if(idFriend){
+          const featchListMember = async (userId) => {
+            try {
+              const response = await friendApi.getListFriend(userId);
+              setListFriend(response);
+            } catch (error) {
+              console.log("Failed to fetch conversation list: ", error);
+            }
+          };
+          featchListMember(user.uid);
+        }
+      });
+    }
+  }, [user]);
+
   return (
     <div className="list_friend">
       <div className="block" style={{ padding: "0.5rem 1.5rem" }}>
@@ -21,44 +71,14 @@ const ListFriend = () => {
       </div>
 
       <Divider />
-      <p style={{ padding: "0.5rem 1rem", fontWeight: "500" }}>Bạn bè (100)</p>
+      <p style={{ padding: "0.5rem 1rem", fontWeight: "500" }}>Bạn bè ({listFriend.length})</p>
       <div className="group_friend">
-        <div className="f_card">
-          <img src={avt} />
-          <p>anh nguyen</p>
+        {listFriend.map((item) => (
+          <div className="f_card">
+          <img src={item.avaUser} />
+          <p>{item.userFistName+item.userLastName}</p>
         </div>
-        <div className="f_card">
-          <img src={avt} />
-          <p>anh nguyen</p>
-        </div>
-        <div className="f_card">
-          <img src={avt} />
-          <p>anh nguyen</p>
-        </div>
-        <div className="f_card">
-          <img src={avt} />
-          <p>anh nguyen</p>
-        </div>
-        <div className="f_card">
-          <img src={avt} />
-          <p>anh nguyen</p>
-        </div>
-        <div className="f_card">
-          <img src={avt} />
-          <p>anh nguyen</p>
-        </div>
-        <div className="f_card">
-          <img src={avt} />
-          <p>anh nguyen</p>
-        </div>
-        <div className="f_card">
-          <img src={avt} />
-          <p>anh nguyen</p>
-        </div>
-        <div className="f_card">
-          <img src={avt} />
-          <p>anh nguyen</p>
-        </div>
+        ))}
       </div>
     </div>
   );

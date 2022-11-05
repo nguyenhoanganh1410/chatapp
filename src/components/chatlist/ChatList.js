@@ -324,7 +324,7 @@ const ChatList = ({ socket }) => {
               </TabPanel>
             </Box>
           ) : (
-            <ListFriend />
+            <ListFriend socket={socket} />
           )}
         </React.Fragment>
       )}
