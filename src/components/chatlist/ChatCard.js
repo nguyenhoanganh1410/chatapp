@@ -33,7 +33,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
   // console.log(conversation);
 
   const { inFo, conversations } = conversation;
-  console.log(conversations);
+  // console.log(conversations);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -47,33 +47,31 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
   React.useEffect(() => {
     socket.current.on("get-last", (data) => {
       // setConversations(data);
-      console.log(data);
+      // console.log(data);
       setConversations(data);
     });
   }, []);
 
-  React.useEffect(() => {
-    if (socket.current) {
-      // socket.current.on("get-last-message", (data) => {
-      //   // setConversations(data);
-      //   const { listSender, listReceiver } = data;
-      //   if (listSender[0].inFo.userIdFriend !== user.uid) {
-      //     setConversations(listSender);
-      //     console.log("S" + { listSender });
-      //   } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
-      //     setConversations(listReceiver);
-      //     console.log("R" + listReceiver);
-      //   }
-      // });
-    }
-  }, [user]);
+  // React.useEffect(() => {
+  //   if (socket.current) {
+  //     // socket.current.on("get-last-message", (data) => {
+  //     //   // setConversations(data);
+  //     //   const { listSender, listReceiver } = data;
+  //     //   if (listSender[0].inFo.userIdFriend !== user.uid) {
+  //     //     setConversations(listSender);
+  //     //     console.log("S" + { listSender });
+  //     //   } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
+  //     //     setConversations(listReceiver);
+  //     //     console.log("R" + listReceiver);
+  //     //   }
+  //     // });
+  //   }
+  // }, [user]);
 
   //click 1 conversation -> show chat feed
   const handleShowChat = () => {
-    // console.log("chat"+conversations._id);
-    // console.log("old"+idConversation);
-
-    // socket.current.emit("leave-room", idConversation);
+    //delete groupChitting
+    depatch(SetGroupChatting(null));
 
     //featch user by id
     UserService.getById(inFo.userIdFriend)
@@ -89,8 +87,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       .catch((err) => {
         console.log(err.message);
       });
-    //delete groupChitting
-    depatch(SetGroupChatting(null));
+
     // if (socket.current) {
     //   socket.current.emit("seen-message", {
     //     conversationId: idConversation,
@@ -98,14 +95,6 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
     //   });
     // }
   };
-  // How many hours are between 2 July 2014 06:50:00 and 2 July 2014 19:00:00?
-  // const result = differenceInHours(
-  //   new Date(),
-  //   new Date("2022-10-17T14:30:53.856Z".replace("Z", ""))
-  // );
-  // console.log(result);
-  // //=> 12
-  //card_chat card_chat_active
 
   return (
     <div
@@ -181,15 +170,15 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
 
       <div className="group_right">
         <div className="card_time">
-          {handleDate(
+          {/* {handleDate(
             new Date(),
             new Date(
-              `${conversations.lastMessage[0].updatedAt}`.toLocaleString(
+              `${conversations?.lastMessage[0]?.updatedAt}`.toLocaleString(
                 "en-US",
                 { timeZone: "Asia/Ho_Chi_Minh" }
               )
             )
-          )}
+          )} */}
         </div>
         {conversations.mb.numberUnread > 0 ? (
           <span className="numberNotification">

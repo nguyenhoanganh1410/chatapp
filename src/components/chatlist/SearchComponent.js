@@ -22,6 +22,7 @@ import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import conversationApi from "../../api/conversationApi";
 import { storageRef } from "../../firebase";
+import CardFriend from "../card/CardFriend";
 const style = {
   position: "absolute",
   top: "50%",
@@ -44,6 +45,11 @@ const SearchComponent = ({ socket }) => {
   const [searchText, setSerachText] = useState("");
   const [usersCreateGroup, setUsesrCreateGroup] = useState([]);
 
+  //state model is add friend or create group
+  //0: model add firend;
+  //1: model create group
+  const [statusModel, setStatusModel] = useState(null);
+
   //statue search in model create group
   const [textSearchInCreateGroup, setTextSearchInCreateGroup] = useState("");
 
@@ -64,7 +70,11 @@ const SearchComponent = ({ socket }) => {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleCloseModel = () => setOpen(false);
+  const handleCloseModel = () => {
+    setOpen(false);
+    setTextSearchInCreateGroup("");
+    depatch(SetUserSearched([]));
+  };
   const [image, setImage] = React.useState(null);
   const [avt, setAvt] = React.useState(null);
 
@@ -334,6 +344,16 @@ const SearchComponent = ({ socket }) => {
 
     setAvt(file);
   };
+
+  const handleOpenModelAddFriend = () => {
+    handleOpen();
+    setStatusModel(0);
+  };
+
+  const handleOpenModleCreateGroup = () => {
+    handleOpen();
+    setStatusModel(1);
+  };
   return (
     <React.Fragment>
       <form className="form_search">
@@ -366,10 +386,10 @@ const SearchComponent = ({ socket }) => {
           </span>
         ) : (
           <React.Fragment>
-            <span className="icon">
+            <span className="icon" onClick={() => handleOpenModelAddFriend()}>
               <MdPersonAddAlt />
             </span>
-            <span className="icon" onClick={handleOpen}>
+            <span className="icon" onClick={() => handleOpenModleCreateGroup()}>
               <BsPeople />
             </span>
           </React.Fragment>
@@ -390,35 +410,45 @@ const SearchComponent = ({ socket }) => {
         <Fade in={open}>
           <Box sx={style}>
             <div className="model_header">
-              <p>Tạo nhóm</p>
+              {statusModel === 1 ? <p>Tạo nhóm</p> : <p>Thêm bạn</p>}
               <span>x</span>
             </div>
-            <div className="model_create">
-              <div className="choiseAvtGroup" onClick={() => handlChoiseFile()}>
+
+            {statusModel === 1 ? (
+              <div className="model_create">
+                <div
+                  className="choiseAvtGroup"
+                  onClick={() => handlChoiseFile()}
+                >
+                  <input
+                    type="file"
+                    ref={inputFileAvatar}
+                    hidden
+                    onChange={handlePreviewAvatar}
+                  ></input>
+                  {avt ? (
+                    <Avatar className="avatar" src={avt?.preview} />
+                  ) : (
+                    <span>
+                      <BsCameraFill />
+                    </span>
+                  )}
+                </div>
                 <input
-                  type="file"
-                  ref={inputFileAvatar}
-                  hidden
-                  onChange={handlePreviewAvatar}
-                ></input>
-                {avt ? (
-                  <Avatar className="avatar" src={avt?.preview} />
-                ) : (
-                  <span>
-                    <BsCameraFill />
-                  </span>
-                )}
+                  placeholder="Nhập tên nhóm..."
+                  type="text"
+                  value={nameGroup}
+                  onChange={(e) => setNameGroup(e.target.value)}
+                />
               </div>
-              <input
-                placeholder="Nhập tên nhóm..."
-                type="text"
-                value={nameGroup}
-                onChange={(e) => setNameGroup(e.target.value)}
-              />
-            </div>
+            ) : null}
             <div className="model_search">
-              <p>Thêm bạn vào nhóm</p>
-              <div className="group_input" ref={creatGroupInput}>
+              {statusModel ? <p>Thêm bạn vào nhóm</p> : null}
+              <div
+                className="group_input"
+                style={{ marginTop: "12px" }}
+                ref={creatGroupInput}
+              >
                 <span>
                   <AiOutlineSearch />
                 </span>
@@ -435,51 +465,77 @@ const SearchComponent = ({ socket }) => {
               </div>
             </div>
 
-            <div className="list_user">
+            <div className="list_user" style={{ position: "relative" }}>
               <div className="list_user-willChoise">
-                {userSearched?.map((u) => {
-                  return (
-                    <div
-                      className="user_search_model_group"
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginTop: "8px",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => handleMove(u)}
-                    >
-                      {u?.avatar ? (
-                        <Avatar
-                          className="avatar"
-                          src={u?.avatar}
-                          alt={u?.first_name}
-                          style={{ width: "36px", height: "36px" }}
-                        />
-                      ) : (
-                        <Avatar
-                          className="avatar"
-                          style={{
-                            textTransform: "capitalize",
-                            width: "36px",
-                            height: "36px",
-                          }}
-                          src={u?.avatar}
-                        >
-                          {u?.last_name[0]}
-                        </Avatar>
-                      )}
-                      <p
-                        style={{
-                          textTransform: "capitalize",
-                          marginLeft: "8px",
-                        }}
-                      >
-                        {u?.last_name + " " + u?.first_name}
-                      </p>
-                    </div>
-                  );
-                })}
+                {userSearched?.length === 0 ? (
+                  <p
+                    className="textCenter"
+                    style={{
+                      textAlign: "center",
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                    }}
+                  >
+                    Không có gì!!
+                  </p>
+                ) : (
+                  <>
+                    {statusModel === 1 ? (
+                      <>
+                        {userSearched?.map((u) => {
+                          return (
+                            <div
+                              className="user_search_model_group"
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                marginTop: "8px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => handleMove(u)}
+                            >
+                              {u?.avatar ? (
+                                <Avatar
+                                  className="avatar"
+                                  src={u?.avatar}
+                                  alt={u?.first_name}
+                                  style={{ width: "36px", height: "36px" }}
+                                />
+                              ) : (
+                                <Avatar
+                                  className="avatar"
+                                  style={{
+                                    textTransform: "capitalize",
+                                    width: "36px",
+                                    height: "36px",
+                                  }}
+                                  src={u?.avatar}
+                                >
+                                  {u?.last_name[0]}
+                                </Avatar>
+                              )}
+                              <p
+                                style={{
+                                  textTransform: "capitalize",
+                                  marginLeft: "8px",
+                                }}
+                              >
+                                {u?.last_name + " " + u?.first_name}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      <>
+                        {userSearched?.map((u) => {
+                          return <CardFriend u={u} />;
+                        })}
+                      </>
+                    )}
+                  </>
+                )}
               </div>
               {usersCreateGroup.length > 0 ? (
                 <div className="user_choise">
@@ -509,19 +565,23 @@ const SearchComponent = ({ socket }) => {
               >
                 Hủy
               </Button>
-              {usersCreateGroup.length > 1 && textSearchInCreateGroup ? (
-                <Button onClick={handleCreateGroup} variant="contained">
-                  Tạo nhóm
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => handleCreateGroup()}
-                  variant="contained"
-                  disabled
-                >
-                  Tạo nhóm
-                </Button>
-              )}
+              {statusModel === 1 ? (
+                <>
+                  {usersCreateGroup.length > 1 && textSearchInCreateGroup ? (
+                    <Button onClick={handleCreateGroup} variant="contained">
+                      Tạo nhóm
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => handleCreateGroup()}
+                      variant="contained"
+                      disabled
+                    >
+                      Tạo nhóm
+                    </Button>
+                  )}
+                </>
+              ) : null}
             </div>
           </Box>
         </Fade>

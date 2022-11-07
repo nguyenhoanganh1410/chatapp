@@ -6,30 +6,27 @@ import Contex from "../../store/Context";
 import { useContext } from "react";
 import { BsThreeDots } from "react-icons/bs";
 
-
 import { IoPersonAddSharp } from "react-icons/io5";
 import avt from "../../images/av.jpg";
 import friendApi from "../../api/friendApi";
+import { SetListFriend } from "../../store/Actions";
 
-
-const ListFriend = ({socket}) => {
-
+const ListFriend = ({ socket }) => {
   const { state, depatch } = useContext(Contex);
   const [listFriend, setListFriend] = React.useState([]);
 
-  const {
-  user,
-  idConversation,
-  } = state;
+  const { user, idConversation } = state;
 
-  console.log(listFriend)
-  
+  console.log(listFriend);
 
   React.useEffect(() => {
     const featchListMember = async (userId) => {
       try {
         const response = await friendApi.getListFriend(userId);
         setListFriend(response);
+
+        //set value global
+        depatch(SetListFriend(response));
       } catch (error) {
         console.log("Failed to fetch conversation list: ", error);
       }
@@ -37,12 +34,10 @@ const ListFriend = ({socket}) => {
     featchListMember(user.uid);
   }, [user]);
 
-  
-
   React.useEffect(() => {
-    if(socket.current){
-      socket.current.on("updateListFrien",idFriend=>{
-        if(idFriend){
+    if (socket.current) {
+      socket.current.on("updateListFrien", (idFriend) => {
+        if (idFriend) {
           const featchListMember = async (userId) => {
             try {
               const response = await friendApi.getListFriend(userId);
@@ -71,13 +66,15 @@ const ListFriend = ({socket}) => {
       </div>
 
       <Divider />
-      <p style={{ padding: "0.5rem 1rem", fontWeight: "500" }}>Bạn bè ({listFriend.length})</p>
+      <p style={{ padding: "0.5rem 1rem", fontWeight: "500" }}>
+        Bạn bè ({listFriend.length})
+      </p>
       <div className="group_friend">
         {listFriend.map((item) => (
           <div className="f_card">
-          <img src={item.avaUser} />
-          <p>{item.userFistName+item.userLastName}</p>
-        </div>
+            <img src={item.avaUser} />
+            <p>{item.userFistName + item.userLastName}</p>
+          </div>
         ))}
       </div>
     </div>

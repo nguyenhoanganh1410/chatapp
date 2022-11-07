@@ -18,6 +18,7 @@ import {
   SET_IDMESSAGEDELETEDWITHME,
   SET_GROUPCHATTING,
   SET_IDLEADERGROUP,
+  SET_LISTFRIEND,
 } from "./Actions";
 
 //innite state
@@ -68,11 +69,18 @@ const initState = {
 
   //leader hien tai cua group
   idLeaderGroup: null,
+
+  listFriend: [],
 };
 
 //depatch
 const Reducer = (state, action) => {
   switch (action.type) {
+    case SET_LISTFRIEND:
+      return {
+        ...state,
+        listFriend: action.payload,
+      };
     case SET_IDLEADERGROUP:
       return {
         ...state,

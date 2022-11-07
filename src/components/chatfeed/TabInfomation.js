@@ -85,6 +85,8 @@ const TabInfomation = ({ socket }) => {
     idLeaderGroup,
   } = state;
 
+  console.log("tabInfo: ", userChatting);
+
   //import costom hook
   const { addMemberIntoGroup } = conversationHook();
   const { notify } = aleartHook();
@@ -503,12 +505,14 @@ const TabInfomation = ({ socket }) => {
           <p>Xóa lịch xử trò chuyện</p>
         </div>
 
-        <div className="leaveChat" onClick={handleLeaveGroup}>
-          <span>
-            <IoExitOutline />
-          </span>
-          <p>Rời Nhóm</p>
-        </div>
+        {userChatting ? null : (
+          <div className="leaveChat" onClick={handleLeaveGroup}>
+            <span>
+              <IoExitOutline />
+            </span>
+            <p>Rời Nhóm</p>
+          </div>
+        )}
 
         {/* <div className="deleteGroup" onClick={handleDeleteGroup}>
         <span>

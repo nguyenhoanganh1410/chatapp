@@ -10,7 +10,6 @@ import "./MessageStyle.scss";
 import TimeLine from "./TimeLine";
 import { IoIosArrowDown } from "react-icons/io";
 
-
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 import "simplebar/dist/simplebar.css";
 import Contex from "../../store/Context";
@@ -23,6 +22,7 @@ import {
   SetStatusMessage,
 } from "../../store/Actions";
 import WordsComponent from "../filecomponent/WordsComponent";
+import NotifyComponent from "./NotifyComponent";
 // import {socket} from '../../store/socketClient';
 
 const ChatFeed = ({ socket }) => {
@@ -46,7 +46,7 @@ const ChatFeed = ({ socket }) => {
     idMessageDeletedWithMe,
   } = state;
   // console.log(" message ---->");
-  
+
   const messagesEnd = useRef();
 
   const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
@@ -70,8 +70,6 @@ const ChatFeed = ({ socket }) => {
   //   }
   // }, []);
 
-
-
   //khi tin nhan duoc gui thi them tin nhan do vao messages -> render
   useEffect(() => {
     // console.log("useEffect --->");
@@ -89,7 +87,6 @@ const ChatFeed = ({ socket }) => {
       // isNew:false
     });
 
-  
     socket.current?.on("get-message", ({ message }) => {
       //console.log("get");
       console.log("mess nhan dc ---> ");
@@ -98,7 +95,7 @@ const ChatFeed = ({ socket }) => {
     });
 
     socket.current?.on("reaction", (idC) => {
-      console.log("reaction"+idC);
+      console.log("reaction" + idC);
       const featchMessages = async (idC) => {
         try {
           //cal api get total page
@@ -110,7 +107,7 @@ const ChatFeed = ({ socket }) => {
           );
           const { totalPages } = response;
           console.log(totalPages);
-  
+
           //th1: so luong tin nhan < 30, page = 1
           if (totalPages <= 1) {
             setMessages(response.data[0].messages);
@@ -125,7 +122,7 @@ const ChatFeed = ({ socket }) => {
               newPage,
               panigation.size
             );
-  
+
             const { data, info, friendStatus, size } = currnetResponse;
             //neu khong tra ve du 30 tin nhan -> lui 1 page
             if (data[0].messages.length < 20) {
@@ -146,7 +143,7 @@ const ChatFeed = ({ socket }) => {
               setPage(newPage);
             }
           }
-  
+
           // //update page current
           // setPage(newPage);
           setStatusLoadMessage(false);
@@ -160,27 +157,23 @@ const ChatFeed = ({ socket }) => {
       featchMessages(idC);
     });
 
-
     socket.current?.on("reMessage", (data) => {
       setIdReMessage(data);
     });
-
-  
-
   }, []);
 
   // }, [userChatting]);
 
   useEffect(() => {
-    socket?.current.on("updateListInvite", idFriend => {
+    socket?.current.on("updateListInvite", (idFriend) => {
       if (idFriend) {
         setIsFriend(true);
         socket.current.emit("kickUser", {
           idConversation: idConversation,
         });
       }
-    })
-    }, [idConversation]);
+    });
+  }, [idConversation]);
 
   //cap nhat mess da thu hoi len giao dien
   useEffect(() => {
@@ -255,7 +248,7 @@ const ChatFeed = ({ socket }) => {
         );
         const { totalPages } = response;
         console.log(totalPages);
-        const {friendStatus} = response;
+        const { friendStatus } = response;
         setIsFriend(friendStatus);
 
         //th1: so luong tin nhan < 30, page = 1
@@ -345,7 +338,11 @@ const ChatFeed = ({ socket }) => {
   };
   return (
     <div className="chat_feed">
-      <ChatHeader userChatting={userChatting} socket={socket} isFriend={isFriend}/>
+      <ChatHeader
+        userChatting={userChatting}
+        socket={socket}
+        isFriend={isFriend}
+      />
       <div
         // data-simplebar
         className="message_content"
@@ -386,6 +383,10 @@ const ChatFeed = ({ socket }) => {
         ) : null}
 
         {messages.map((mess, idx) => {
+          //neu message co "type": "NOTIFY"
+          if (mess.type === "NOTIFY") {
+            return <NotifyComponent text={mess.content} />;
+          }
           //neu la tin nhan cuoi cung
           //truyen 1 trang thai la isLastMessage
           if (idx === messages?.length - 1) {
@@ -395,18 +396,24 @@ const ChatFeed = ({ socket }) => {
                 mess={mess}
                 socket={socket}
                 isLastMessage
-                preMessage={[messages[idx-1]]}
+                preMessage={[messages[idx - 1]]}
               />
             );
           }
 
           //truyen vao prevent meassage bat dau tu idx = 1 : messages[idx - 1]
           //neu idx = 0 thi khong truyen prevent message
-          if(idx === 0){
-
+          if (idx === 0) {
             return <Message key={mess._id} mess={mess} socket={socket} />;
-          }else{
-            return <Message key={mess._id} mess={mess} socket={socket} preMessage={[messages[idx-1]]}/>;
+          } else {
+            return (
+              <Message
+                key={mess._id}
+                mess={mess}
+                socket={socket}
+                preMessage={[messages[idx - 1]]}
+              />
+            );
           }
         })}
         {/* <video

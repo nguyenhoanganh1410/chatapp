@@ -12,7 +12,7 @@ import { SetShowTabInfo } from "../../store/Actions";
 import ModelDetailUser from "../model/ModelDetailUser";
 import love from "../../images/love.jpg";
 import { format } from "timeago.js";
-const ChatHeader = ({ userChatting, socket,isFriend }) => {
+const ChatHeader = ({ userChatting, socket, isFriend }) => {
   const { state, depatch } = React.useContext(Context);
   const [openModelUser, setOpenModelUser] = React.useState(false);
   const [isOnline, setIsOnline] = React.useState(false);
@@ -25,7 +25,7 @@ const ChatHeader = ({ userChatting, socket,isFriend }) => {
   const handleShowTabInfo = () => {
     depatch(SetShowTabInfo(!showTabInfo));
   };
-
+  console.log(isFriend);
   const handleShowInfo = (params) => {
     setOpenModelUser(true);
   };
@@ -43,7 +43,6 @@ const ChatHeader = ({ userChatting, socket,isFriend }) => {
     };
 
     featchAddFriend(user.uid, userChatting.uid);
-    
   };
 
   const handleCancleFriend = (params) => {
@@ -62,7 +61,6 @@ const ChatHeader = ({ userChatting, socket,isFriend }) => {
           console.log(userChatting.uid, isOnline, lastLogin);
         }
       );
-      
     }
   }, [idConversation]);
 
@@ -95,7 +93,11 @@ const ChatHeader = ({ userChatting, socket,isFriend }) => {
             >
               {userChatting?.last_name[0]}
             </Avatar>
-            {isOnline ? <div className="statusOnline"></div> : null}
+            {isFriend ? (
+              <React.Fragment>
+                {isOnline ? <div className="statusOnline"></div> : null}
+              </React.Fragment>
+            ) : null}
           </div>
         )}
 
@@ -104,9 +106,29 @@ const ChatHeader = ({ userChatting, socket,isFriend }) => {
             {userChatting?.last_name + " " + userChatting?.first_name}
           </span>
           {/* // <span className="info_online">{isOnline ? "0" : "1"}</span> */}
-          <span className="info_hour">
-            {isOnline ? "Vừa truy cập" : "" + paseDate}
-          </span>
+
+          {isFriend ? (
+            <span className="info_hour">
+              {isOnline ? "Vừa truy cập" : "" + paseDate}
+            </span>
+          ) : (
+            <span
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "2px 6px",
+                marginTop: "4px",
+                borderRadius: "6px",
+                backgroundColor: "#abb4bc",
+                color: "#fff",
+                textTransform: "capitalize",
+                fontSize: "10px",
+              }}
+            >
+              Người lạ
+            </span>
+          )}
         </div>
       </div>
       <ModelDetailUser
@@ -116,9 +138,13 @@ const ChatHeader = ({ userChatting, socket,isFriend }) => {
       />
 
       <div className="block_icon">
-        {isFriend ? null:(
-          <span className="icon" title="Add Friend" >
-            {reqFriend ? <FiUserX onClick={() => handleCancleFriend()} /> : <FiUserPlus onClick={() => handleAddFriend()} />}
+        {isFriend ? null : (
+          <span className="icon" title="Add Friend">
+            {reqFriend ? (
+              <FiUserX onClick={() => handleCancleFriend()} />
+            ) : (
+              <FiUserPlus onClick={() => handleAddFriend()} />
+            )}
           </span>
         )}
         <span className="icon" title="Cuộc gọi video">

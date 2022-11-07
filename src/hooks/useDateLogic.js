@@ -19,7 +19,7 @@ const useDateLogic = () => {
     if (resultTime < 25) return resultTime + " giờ";
     const resultDate = differenceInCalendarDays(currentDate, passDate);
     if (resultDate < 8) return resultDate + " ngày";
-    return passDate.slice(0, 10);
+    return passDate?.slice(0, 10);
   };
   return {
     handleDate: handleDate,

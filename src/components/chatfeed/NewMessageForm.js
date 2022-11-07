@@ -1,6 +1,7 @@
 import "./NewMessageForm.scss";
 import { MdInsertEmoticon } from "react-icons/md";
 import { FcLike } from "react-icons/fc";
+import { FiSend } from "react-icons/fi";
 import { GrImage } from "react-icons/gr";
 import { useState, useRef } from "react";
 import { SearchComponent } from "stipop-react-sdk";
@@ -57,8 +58,6 @@ const NewMessageForm = ({
   const handleShowStickers = () => {
     setShowStickers(!showStickers);
   };
-
-  
 
   // SEND FILE
   const changeHandler = async (event) => {
@@ -318,7 +317,6 @@ const NewMessageForm = ({
         //call api add a message into db
         const messSave = await messageApi.addTextMess(newMess);
 
-
         if (socket.current) {
           socket.current.emit("send-message", {
             senderId: user.uid,
@@ -412,7 +410,7 @@ const NewMessageForm = ({
             ref={inputChooseIMG}
             hidden
             multiple
-            accept='application/pdf, image/png'
+            accept="application/pdf, image/png"
             onChange={changeHandler}
           ></input>
           <GrImage onClick={onHandlChoiseFile} />
@@ -429,7 +427,8 @@ const NewMessageForm = ({
           <MdInsertEmoticon />
         </span>
         <span title="Gửi nhanh cảm xúc">
-          <FcLike />
+          {/* <FcLike /> */}
+          <FiSend />
         </span>
       </form>
       {showStickers ? (
