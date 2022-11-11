@@ -71,6 +71,7 @@ const SearchComponent = ({ socket }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleCloseModel = () => {
+    console.log("call method close model");
     setOpen(false);
     setTextSearchInCreateGroup("");
     depatch(SetUserSearched([]));
@@ -530,7 +531,13 @@ const SearchComponent = ({ socket }) => {
                     ) : (
                       <>
                         {userSearched?.map((u) => {
-                          return <CardFriend u={u} />;
+                          return (
+                            <CardFriend
+                              u={u}
+                              handleCloseModel={handleCloseModel}
+                              socket={socket}
+                            />
+                          );
                         })}
                       </>
                     )}

@@ -10,13 +10,18 @@ import { BsThreeDots } from "react-icons/bs";
 import conversationApi from "../../api/conversationApi";
 import friendApi from "../../api/friendApi";
 import { SetListFriend } from "../../store/Actions";
-const CardFriend = ({ u }) => {
+import aleartHook from "../../hooks/aleartHook";
+import useFriendHook from "../../hooks/useFriendHook";
+const CardFriend = ({ u, handleCloseModel, socket }) => {
+  //custom hook
+  const { notifyAddFriend } = aleartHook();
+  const { featchAddFriend, featchStatusFriend } = useFriendHook();
   const { state, depatch } = React.useContext(Contex);
 
   const { listFriend, user } = state;
 
   //status is friend
-  const [isFriend, setIsFriend] = React.useState(false);
+  const [isFriend, setIsFriend] = React.useState("");
 
   React.useEffect(() => {
     const featchListMember = async (userId) => {
@@ -33,22 +38,76 @@ const CardFriend = ({ u }) => {
   }, [user]);
 
   React.useEffect(() => {
-    //check isFriend or not
-    console.log("userEffect ");
-    const newArr = listFriend.map((val) => {
-      return val.userId;
-    });
-    if (newArr.includes(u.uid)) {
-      setIsFriend(true);
-    } else {
-      setIsFriend(false);
-    }
+    //call api check statue friend
+    const featchStatusFriend = async (userId, freId) => {
+      try {
+        const response = await friendApi.checkStatus(userId, freId);
+        // const {senderId, receiverId} = response
+
+        //check trang thai gui
+        //la friend -> reponse === friend
+        if (response === "friend") {
+          console.log("la ban be");
+          setIsFriend("Bạn bè");
+        } else if (response === "none") {
+          console.log("chua la ban be");
+          setIsFriend("Kết bạn");
+        } else {
+          const { senderId, receiverId } = response;
+          if (senderId === user.uid) {
+            setIsFriend("Bạn đã gửi");
+          } else {
+            setIsFriend("Chấp nhận");
+          }
+        }
+        // console.log(response);
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+
+    featchStatusFriend(user.uid, u.uid);
   });
 
   //xu ly ket ban in here
-  const handleSendAddFriend = () => {
-    //call api add friend
-    //add socket
+  const handeOnClick = () => {
+    //neu da la ban -> return
+    if (isFriend === "friend" || isFriend === "Bạn đã gửi") {
+      return;
+    }
+
+    //chua la ban
+    if (isFriend === "none") {
+      //call api add friend
+      notifyAddFriend();
+      //call api save into db
+      featchAddFriend(user.uid, u.uid);
+
+      //close model
+      handleCloseModel();
+      //add socket
+    } else if (isFriend === "Chấp nhận") {
+      //ng khac gui yeu cau kb
+      //click de accept friend
+      const handleAccept = async (id) => {
+        try {
+          const response = await friendApi.acceptFriend(user.uid, id);
+          //  console.log(response);
+          if (socket.current) {
+            socket.current.emit("accept-friend", {
+              idUser: user.uid,
+              idFriend: id,
+            });
+          }
+        } catch (error) {
+          console.log("Failed to fetch conversation list: ", error);
+        }
+      };
+
+      handleAccept(u.uid);
+      //close model
+      handleCloseModel();
+    }
   };
   return (
     <div
@@ -107,17 +166,14 @@ const CardFriend = ({ u }) => {
             </p>
           </div>
         </div>
-        {isFriend ? (
-          <span>Bạn bè</span>
-        ) : (
-          <Button
-            variant="outlined"
-            style={{ fontSize: "12px" }}
-            onClick={() => handleSendAddFriend()}
-          >
-            Kết bạn
-          </Button>
-        )}
+
+        <Button
+          variant="outlined"
+          style={{ fontSize: "12px" }}
+          onClick={() => handeOnClick()}
+        >
+          {isFriend}
+        </Button>
       </div>
     </div>
   );

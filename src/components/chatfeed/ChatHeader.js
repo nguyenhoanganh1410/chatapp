@@ -12,7 +12,12 @@ import { SetShowTabInfo } from "../../store/Actions";
 import ModelDetailUser from "../model/ModelDetailUser";
 import love from "../../images/love.jpg";
 import { format } from "timeago.js";
+import useFriendHook from "../../hooks/useFriendHook";
 const ChatHeader = ({ userChatting, socket, isFriend }) => {
+
+  //custom hook
+  const { featchAddFriend } = useFriendHook();
+
   const { state, depatch } = React.useContext(Context);
   const [openModelUser, setOpenModelUser] = React.useState(false);
   const [isOnline, setIsOnline] = React.useState(false);
@@ -33,15 +38,6 @@ const ChatHeader = ({ userChatting, socket, isFriend }) => {
   const handleAddFriend = (params) => {
     console.log("add friend");
     setReqFriend(true);
-    const featchAddFriend = async (userId, freId) => {
-      try {
-        const response = await friendApi.sendInvite(userId, freId);
-        console.log(response);
-      } catch (error) {
-        console.log("Failed to fetch conversation list: ", error);
-      }
-    };
-
     featchAddFriend(user.uid, userChatting.uid);
   };
 

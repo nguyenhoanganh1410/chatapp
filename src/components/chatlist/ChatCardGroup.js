@@ -30,7 +30,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
   const { handleDate } = useDateLogic();
 
   const { inFo, conversations } = conversation;
-   console.log(inFo);
+  console.log(inFo);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -69,9 +69,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
   return (
     <div className="card_chat" onClick={() => handleGroupChat()}>
       <div className="card_group">
-      
-
-        {inFo.avatar.length === 1 && inFo?.avatar[0]?.avaUser === undefined  ? (
+        {inFo.avatar.length === 1 && inFo?.avatar[0]?.avaUser === undefined ? (
           <Avatar
             className="avt group_avatar"
             alt="Remy Sharp"
@@ -169,7 +167,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
 
       <div className="group_right">
         <div className="card_time">
-          {" "}
+          {/* {" "}
           {handleDate(
             new Date(),
             new Date(
@@ -178,7 +176,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
                 { timeZone: "Asia/Ho_Chi_Minh" }
               )
             )
-          )}
+          )} */}
         </div>
         {conversations?.mb?.numberUnread > 0 ? (
           <span className="numberNotification">
