@@ -13,8 +13,13 @@ import ModelDetailUser from "../model/ModelDetailUser";
 import love from "../../images/love.jpg";
 import { format } from "timeago.js";
 import useFriendHook from "../../hooks/useFriendHook";
-const ChatHeader = ({ userChatting, socket, isFriend }) => {
 
+import { styled } from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
+import Stack from "@mui/material/Stack";
+import AvatarUserOnline from "../avatar/AvatarUserOnline";
+
+const ChatHeader = ({ userChatting, socket, isFriend }) => {
   //custom hook
   const { featchAddFriend } = useFriendHook();
 
@@ -66,7 +71,7 @@ const ChatHeader = ({ userChatting, socket, isFriend }) => {
   return (
     <div className="chat_header">
       <div className="chat_header-info">
-        {userChatting?.avatar ? (
+        {/* {userChatting?.avatar ? (
           <React.Fragment>
             <div className="info_block">
               <Avatar
@@ -95,7 +100,13 @@ const ChatHeader = ({ userChatting, socket, isFriend }) => {
               </React.Fragment>
             ) : null}
           </div>
-        )}
+        )} */}
+
+        <AvatarUserOnline
+          userChatting={userChatting}
+          isOnline={isOnline}
+          isFriend={isFriend}
+        />
 
         <div className="info_text">
           <span className="info_name">

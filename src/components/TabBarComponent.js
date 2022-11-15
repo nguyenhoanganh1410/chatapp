@@ -9,16 +9,11 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
-
-import avt from "../images/av.jpg";
 import "./TabBarStyle.scss";
-
-import { BiMessageRoundedDetail } from "react-icons/bi";
-import { AiOutlineCheckSquare } from "react-icons/ai";
-import { RiContactsBook2Line } from "react-icons/ri";
 import { arrIconOption } from "../data/Data";
 import ModelDetailUser from "./model/ModelDetailUser";
 import Contex from "../store/Context";
+import { deepOrange } from "@mui/material/colors";
 import {
   SetIdConversation,
   SetIdLeaderGroup,
@@ -117,6 +112,7 @@ const TabBarComponent = ({ socket, a }) => {
         {user?.avatar ? (
           <Avatar
             className="avatar"
+           
             src={user?.avatar}
             ref={anchorRef}
             aria-controls={open ? "composition-menu" : undefined}
@@ -134,7 +130,7 @@ const TabBarComponent = ({ socket, a }) => {
             aria-controls={open ? "composition-menu" : undefined}
             aria-expanded={open ? "true" : undefined}
             aria-haspopup="true"
-            style={{ backgroundColor: "#e7f0ce" }}
+            style={{ backgroundColor: "#055E68" }}
           >
             {user?.last_name[0]}
           </Avatar>

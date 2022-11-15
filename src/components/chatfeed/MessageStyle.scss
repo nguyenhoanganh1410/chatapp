@@ -14,11 +14,12 @@
     position: relative;
     z-index: 0;
     display: flex;
-  
+    justify-content: flex-end;
     //flex-direction: row-reverse;
     align-items: flex-start;
    
     margin: 6px 0;
+    
     // width: 60%;
     // overflow-wrap: break-word;
     

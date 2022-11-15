@@ -11,7 +11,7 @@ const RegisterPage = ({ setToken }) => {
   }, []);
   return (
     <div className="login" style={{ height: "auto" }}>
-      <h1>Zalo</h1>
+      <h1>ZenChat</h1>
       <p className="text">{t("registerTitle")}</p>
       <RegisterForm />
     </div>

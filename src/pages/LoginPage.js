@@ -38,7 +38,7 @@ const LoginPage = () => {
 
   return (
     <div className="login">
-      <h1>Zalo</h1>
+      <h1>ZenChat</h1>
 
       <p className="text">
         {t("login_title01")}

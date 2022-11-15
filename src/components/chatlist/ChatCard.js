@@ -111,7 +111,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
         ) : (
           <Avatar
             className="avt"
-            style={{ textTransform: "capitalize", backgroundColor: "#e7f0ce" }}
+            style={{ textTransform: "capitalize", backgroundColor: "#055E68" }}
             src={inFo?.avatar}
           >
             {inFo?.lastName[0]}

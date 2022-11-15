@@ -23,11 +23,11 @@ export const arrIconOption = [
     name: "Danh bạ",
     icon: <RiContactsBook2Line className="icon" />,
   },
-  {
-    id: "iconOption3",
-    name: "To-do",
-    icon: <AiOutlineCheckSquare className="icon" />,
-  },
+  // {
+  //   id: "iconOption3",
+  //   name: "To-do",
+  //   icon: <AiOutlineCheckSquare className="icon" />,
+  // },
 ];
 
 export const silderData = [

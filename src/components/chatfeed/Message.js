@@ -201,61 +201,61 @@ const Message = ({
         <>
           <div
             className="message"
-            style={me ? { flexDirection: "row-reverse" } : null}
+            style={!me ? { flexDirection: "row-reverse" } : null}
           >
-            {me ? (
+            {status === 1 ? null : (
               <>
-                {preMessage && preMessage[0].userId === mess.userId ? (
-                  <Avatar className="avatar" style={{ opacity: 0 }} />
-                ) : (
-                  <React.Fragment>
-                    {user?.avatar ? (
-                      <Avatar
-                        className="avatar"
-                        src={user?.avatar}
-                        alt={user?.first_name}
-                      />
-                    ) : (
-                      <Avatar
-                        className="avatar"
-                        style={{
-                          textTransform: "capitalize",
-                          backgroundColor: "#e7f0ce",
-                        }}
-                        src={user?.avatar}
-                      >
-                        {user?.last_name[0]}
-                      </Avatar>
-                    )}
-                  </React.Fragment>
-                )}
-              </>
-            ) : (
-              <>
-                {preMessage && preMessage[0]?.userId === mess?.userId ? (
-                  <Avatar className="avatar" style={{ opacity: 0 }} />
-                ) : (
-                  <React.Fragment>
-                    {userChatting?.avatar ? (
-                      <Avatar
-                        className="avatar"
-                        src={userChatting?.avatar}
-                        alt={userChatting?.first_name}
-                      />
-                    ) : (
-                      <Avatar
-                        className="avatar"
-                        style={{
-                          textTransform: "capitalize",
-                          backgroundColor: "#e7f0ce",
-                        }}
-                        src={userChatting?.avatar}
-                      >
-                        {userChatting?.last_name[0]}
-                      </Avatar>
-                    )}
-                  </React.Fragment>
-                )}
+                <div className="option">
+                  <span
+                    aria-controls={open ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                    title="Thêm"
+                  >
+                    <BiDotsHorizontalRounded />
+                  </span>
+                  <span title="Trả lời">
+                    <MdFormatQuote />
+                  </span>
+                </div>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem onClick={copyToClipboard}>
+                    <span style={{ fontSize: "16px", marginRight: "6px" }}>
+                      <FaRegCopy />
+                    </span>
+                    Copy tin nhắn
+                  </MenuItem>
+                  <Divider />
+                  {me ? (
+                    <MenuItem
+                      style={{ color: "#E64848" }}
+                      onClick={() => handleReMessage()}
+                    >
+                      <span style={{ fontSize: "16px", marginRight: "6px" }}>
+                        <IoReloadOutline />
+                      </span>
+                      Thu hồi tin nhắn
+                    </MenuItem>
+                  ) : null}
+
+                  <MenuItem onClick={() => deleteMessageWithMe()}>
+                    <span style={{ color: "#E64848" }}>
+                      <span style={{ fontSize: "16px", marginRight: "6px" }}>
+                        <AiOutlineDelete />
+                      </span>
+                      Xóa ở phía tôi
+                    </span>
+                  </MenuItem>
+                </Menu>
               </>
             )}
             {mess.isDeleted ? (
@@ -459,59 +459,60 @@ const Message = ({
                 )}
               </>
             )}
-            {status === 1 ? null : (
-              <>
-                <div className="option">
-                  <span
-                    aria-controls={open ? "basic-menu" : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
-                    title="Thêm"
-                  >
-                    <BiDotsHorizontalRounded />
-                  </span>
-                  <span title="Trả lời">
-                    <MdFormatQuote />
-                  </span>
-                </div>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    "aria-labelledby": "basic-button",
-                  }}
-                >
-                  <MenuItem onClick={copyToClipboard}>
-                    <span style={{ fontSize: "16px", marginRight: "6px" }}>
-                      <FaRegCopy />
-                    </span>
-                    Copy tin nhắn
-                  </MenuItem>
-                  <Divider />
-                  {me ? (
-                    <MenuItem
-                      style={{ color: "#E64848" }}
-                      onClick={() => handleReMessage()}
-                    >
-                      <span style={{ fontSize: "16px", marginRight: "6px" }}>
-                        <IoReloadOutline />
-                      </span>
-                      Thu hồi tin nhắn
-                    </MenuItem>
-                  ) : null}
 
-                  <MenuItem onClick={() => deleteMessageWithMe()}>
-                    <span style={{ color: "#E64848" }}>
-                      <span style={{ fontSize: "16px", marginRight: "6px" }}>
-                        <AiOutlineDelete />
-                      </span>
-                      Xóa ở phía tôi
-                    </span>
-                  </MenuItem>
-                </Menu>
+            {me ? (
+              <>
+                {preMessage && preMessage[0]?.userId === mess?.userId ? (
+                  <Avatar className="avatar" style={{ opacity: 0 }} />
+                ) : (
+                  <React.Fragment>
+                    {user?.avatar ? (
+                      <Avatar
+                        className="avatar"
+                        src={user?.avatar}
+                        alt={user?.first_name}
+                      />
+                    ) : (
+                      <Avatar
+                        className="avatar"
+                        style={{
+                          textTransform: "capitalize",
+                          backgroundColor: "#055E68",
+                        }}
+                        src={user?.avatar}
+                      >
+                        {user?.last_name[0]}
+                      </Avatar>
+                    )}
+                  </React.Fragment>
+                )}
+              </>
+            ) : (
+              <>
+                {preMessage && preMessage[0]?.userId === mess?.userId ? (
+                  <Avatar className="avatar" style={{ opacity: 0 }} />
+                ) : (
+                  <React.Fragment>
+                    {userChatting?.avatar ? (
+                      <Avatar
+                        className="avatar"
+                        src={userChatting?.avatar}
+                        alt={userChatting?.first_name}
+                      />
+                    ) : (
+                      <Avatar
+                        className="avatar"
+                        style={{
+                          textTransform: "capitalize",
+                          backgroundColor: "#e7f0ce",
+                        }}
+                        src={userChatting?.avatar}
+                      >
+                        {userChatting?.last_name[0]}
+                      </Avatar>
+                    )}
+                  </React.Fragment>
+                )}
               </>
             )}
           </div>

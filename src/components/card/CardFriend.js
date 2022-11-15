@@ -71,13 +71,17 @@ const CardFriend = ({ u, handleCloseModel, socket }) => {
 
   //xu ly ket ban in here
   const handeOnClick = () => {
+    console.log("click trong form kb", isFriend);
+    console.log(isFriend);
     //neu da la ban -> return
     if (isFriend === "friend" || isFriend === "Bạn đã gửi") {
+      console.log(" la ban or da gui");
       return;
     }
 
     //chua la ban
-    if (isFriend === "none") {
+    if (isFriend === "Kết bạn") {
+      console.log("chua la ban");
       //call api add friend
       notifyAddFriend();
       //call api save into db
@@ -87,6 +91,7 @@ const CardFriend = ({ u, handleCloseModel, socket }) => {
       handleCloseModel();
       //add socket
     } else if (isFriend === "Chấp nhận") {
+      console.log("chap nhan ket ban");
       //ng khac gui yeu cau kb
       //click de accept friend
       const handleAccept = async (id) => {

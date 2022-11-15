@@ -12,7 +12,7 @@ const HomeComponent = () => {
     <div className="home">
       <div className="home_title">
         <h6>
-          Chào mừng bạn đến với <span>Zalo PC!</span>
+          Chào mừng bạn đến với <span>ZenChat PC!</span>
         </h6>
         <p>
           Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người{" "}
