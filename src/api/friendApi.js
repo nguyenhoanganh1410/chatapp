@@ -1,4 +1,5 @@
 import axiosClient from "./axiosClient";
+import axios from "axios";
 
 
 const friendApi = {
@@ -24,6 +25,21 @@ const friendApi = {
             id: id,
           });
     },
+
+    checkStatus: (id,freId) => {
+        return axiosClient.get(`friends/check?userId=${id}&friendId=${freId}`);
+    },
+
+    deleteInvite: (userId,freId) => {
+        // return axiosClient.delete(`friends/invites/${freId}`, {
+        //     data: { id: userId },
+        // });
+        return axiosClient.delete(`friends/deleteInvite/${userId}`,
+        {
+            data: { id: freId },
+        }
+        );
+    }
 
 };
 

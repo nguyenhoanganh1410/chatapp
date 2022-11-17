@@ -91,6 +91,52 @@ const ChatList = ({ socket }) => {
         }
       });
 
+      socket.current.on("get-last-msg-r", ({receiverId}) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              receiverId,
+              panigation.page,
+              panigation.size
+            );
+
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+
+        fetchConversations();
+      });
+
+      socket.current.on("get-last-msg-s", ({senderId}) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              senderId,
+              panigation.page,
+              panigation.size
+            );
+
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+
+        fetchConversations();
+      });
+
       socket.current.on("get-message", ({ senderId, message, isGroup }) => {
         if (isGroup) {
           const fetchConversations = async () => {
@@ -184,6 +230,53 @@ const ChatList = ({ socket }) => {
         };
         fetchConversations();
       });
+
+      socket.current.on("update-invite", (idUser) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              user.uid,
+              panigation.page,
+              panigation.size
+            );
+
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+        fetchConversations();
+      });
+
+      socket.current.on("update-inviteFr", (idFriend) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              user.uid,
+              panigation.page,
+              panigation.size
+            );
+
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+        fetchConversations();
+      });
+
+
+
     }
   }, [user, conversations]);
 

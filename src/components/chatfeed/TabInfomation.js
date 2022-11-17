@@ -129,17 +129,17 @@ const TabInfomation = ({ socket }) => {
       socket.current.on("notifi-kickUser", (data) => {
         if (data) {
           //console.log("kick");
-          const featchListMember = async (idConversation) => {
+          const featchListMember = async (data) => {
             try {
               const response = await conversationApi.getListMember(
-                idConversation
+                data
               );
               setMembers(response.members);
             } catch (error) {
               console.log("Failed to fetch conversation list: ", error);
             }
           };
-          featchListMember(idConversation);
+          featchListMember(data);
         }
       });
     }

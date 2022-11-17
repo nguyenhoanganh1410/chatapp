@@ -62,6 +62,7 @@ const Message = ({
   };
 
   React.useEffect(() => {
+    console.log("mess", mess);
     if (user.uid === mess.userId) {
       setMe(true);
     } else {
@@ -205,7 +206,7 @@ const Message = ({
           >
             {me ? (
               <>
-                {preMessage && preMessage[0].userId === mess.userId ? (
+                { mess.userId ? (
                   <Avatar className="avatar" style={{ opacity: 0 }} />
                 ) : (
                   <React.Fragment>
