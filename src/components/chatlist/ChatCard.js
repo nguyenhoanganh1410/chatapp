@@ -1,6 +1,6 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import avt from "../../images/av.jpg";
+
 import "./ChatCardStyle.scss";
 import { BsThreeDots } from "react-icons/bs";
 import Divider from "@mui/material/Divider";
@@ -14,7 +14,6 @@ import {
 } from "../../store/Actions";
 import Contex from "../../store/Context";
 import UserService from "../../services/UserService";
-import { differenceInHours } from "date-fns";
 import useDateLogic from "../../hooks/useDateLogic";
 import useCheckFile from "../../hooks/useCheckFile";
 
@@ -87,13 +86,6 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       .catch((err) => {
         console.log(err.message);
       });
-
-    // if (socket.current) {
-    //   socket.current.emit("seen-message", {
-    //     conversationId: idConversation,
-    //     userId: user.uid,
-    //   });
-    // }
   };
 
   return (

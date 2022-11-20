@@ -17,8 +17,8 @@ import { ToastContainer, toast } from "react-toastify";
 
 const HomePage = () => {
   const socket = useRef();
-  const [a, setA] = useState("a");
-  console.log(socket);
+  // const [a, setA] = useState("a");
+  // console.log(socket);
   // let socket = init();
 
   //width, height of current screen
@@ -37,10 +37,10 @@ const HomePage = () => {
     user,
     showTabInfo,
     indexTab,
+    showListRequestFriend,
   } = state;
 
   useEffect(() => {
-    setA("b");
     if (user) {
       socket.current = io("https://13.228.206.211");
       // socket.current = io("http://localhost:5005");
@@ -69,7 +69,7 @@ const HomePage = () => {
   // }, [dimensions]);
   return (
     <React.Fragment>
-      <TabBarComponent a={a} socket={socket} />
+      <TabBarComponent socket={socket} />
       {dimensions.width < 800 ? null : <ChatList socket={socket} />}
       {indexTab === 0 ? (
         <React.Fragment>
@@ -123,7 +123,31 @@ const HomePage = () => {
           )}
         </React.Fragment>
       ) : (
-        <ListRequestComponent socket={socket} />
+        <React.Fragment>
+          {showListRequestFriend ? (
+            <ListRequestComponent socket={socket} />
+          ) : (
+            <div
+              style={
+                showTabInfo
+                  ? {
+                      display: "grid",
+                      gridTemplateColumns: "1.95fr 1.05fr",
+                      flexGrow: "1",
+                    }
+                  : {
+                      display: "grid",
+
+                      flexGrow: "1",
+                    }
+              }
+              className="chat_main"
+            >
+              <ChatFeed socket={socket} />
+              {showTabInfo ? <TabInfomation socket={socket} /> : null}
+            </div>
+          )}
+        </React.Fragment>
       )}
 
       <ModelUpdateUser />

@@ -242,8 +242,14 @@ const LoginForm = () => {
           >
             {loading ? (
               <span>
-                {" "}
-                <CircularProgress />
+                <CircularProgress
+                  style={{
+                    color: "blue",
+                    height: "20px",
+                    width: "20px",
+                    marginRight: "8px",
+                  }}
+                />
               </span>
             ) : null}
             {t("register")}

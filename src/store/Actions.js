@@ -20,10 +20,18 @@ export const SET_IDMESSAGEDELETEDWITHME = "set_IdMessageDeletedWithMe";
 export const SET_GROUPCHATTING = "set_GroupChatting";
 export const SET_IDLEADERGROUP = "set_idLeaderGroup";
 export const SET_LISTFRIEND = "set_ListFriend";
+export const SET_SHOWLISTREWUESTFRIEND = "set_ShowListRequestFriend";
 
 export const SetGroupChatting = (payload) => {
   return {
     type: SET_GROUPCHATTING,
+    payload,
+  };
+};
+
+export const SetShowListRequestFriend = (payload) => {
+  return {
+    type: SET_SHOWLISTREWUESTFRIEND,
     payload,
   };
 };

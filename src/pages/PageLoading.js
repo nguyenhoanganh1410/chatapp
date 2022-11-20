@@ -5,7 +5,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 const PageLoading = () => {
   return (
     <div className="chat_loading">
-      <h1>Zalo</h1>
+      <h1>ZenChat</h1>
       <div className="loading_group">
         <CircularProgress />
         <p>Đang đăng nhập...</p>

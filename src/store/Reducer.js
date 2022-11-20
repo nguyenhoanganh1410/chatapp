@@ -19,6 +19,7 @@ import {
   SET_GROUPCHATTING,
   SET_IDLEADERGROUP,
   SET_LISTFRIEND,
+  SET_SHOWLISTREWUESTFRIEND,
 } from "./Actions";
 
 //innite state
@@ -71,6 +72,8 @@ const initState = {
   idLeaderGroup: null,
 
   listFriend: [],
+
+  showListRequestFriend: true,
 };
 
 //depatch
@@ -80,6 +83,11 @@ const Reducer = (state, action) => {
       return {
         ...state,
         listFriend: action.payload,
+      };
+    case SET_SHOWLISTREWUESTFRIEND:
+      return {
+        ...state,
+        showListRequestFriend: action.payload,
       };
     case SET_IDLEADERGROUP:
       return {

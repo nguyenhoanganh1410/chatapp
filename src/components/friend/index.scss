@@ -53,15 +53,20 @@
         &:hover{
             background-color: var(--N40);
         }
-        img{
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            margin-right: 0.5rem;
-            border-radius: 50%;
-        }
+        // img{
+        //     width: 50px;
+        //     height: 50px;
+        //     object-fit: cover;
+        //     margin-right: 0.5rem;
+        //     border-radius: 50%;
+
+        // }
         p{
             text-transform: capitalize;
+            margin-left: 0.5rem;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(0,0,0,0.8);
         }
     }
 }

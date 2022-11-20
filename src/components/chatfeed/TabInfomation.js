@@ -43,6 +43,7 @@ import UserService from "../../services/UserService";
 import conversationHook from "../../hooks/conversationHook";
 import aleartHook from "../../hooks/aleartHook";
 
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -85,7 +86,7 @@ const TabInfomation = ({ socket }) => {
     idLeaderGroup,
   } = state;
 
-  console.log("tabInfo: ", userChatting);
+  //console.log("tabInfo: ", userChatting);
 
   //import costom hook
   const { addMemberIntoGroup } = conversationHook();
@@ -353,7 +354,10 @@ const TabInfomation = ({ socket }) => {
             ) : (
               <Avatar
                 className="avatarCustom"
-                style={{ textTransform: "capitalize" }}
+                style={{
+                  textTransform: "capitalize",
+                  backgroundColor: "#055E68",
+                }}
                 src={userChatting?.avatar}
               >
                 {userChatting?.last_name[0]}

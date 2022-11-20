@@ -120,9 +120,17 @@ const LoginForm = () => {
           >
             {loading ? (
               <span>
-                <CircularProgress />
+                <CircularProgress
+                  style={{
+                    color: "blue",
+                    height: "20px",
+                    width: "20px",
+                    marginRight: "8px",
+                  }}
+                />
               </span>
             ) : null}
+
             {t("login")}
           </Button>
           <p className="forget" onClick={() => navigate("/password")}>

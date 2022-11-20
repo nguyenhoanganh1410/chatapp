@@ -4,12 +4,10 @@ import Divider from "@mui/material/Divider";
 import * as React from "react";
 import Contex from "../../store/Context";
 import { useContext } from "react";
-import { BsThreeDots } from "react-icons/bs";
-
 import { IoPersonAddSharp } from "react-icons/io5";
-import avt from "../../images/av.jpg";
 import friendApi from "../../api/friendApi";
 import { SetListFriend } from "../../store/Actions";
+import FriendCard from "./FriendCard";
 
 const ListFriend = ({ socket }) => {
   const { state, depatch } = useContext(Contex);
@@ -17,7 +15,7 @@ const ListFriend = ({ socket }) => {
 
   const { user, idConversation } = state;
 
-  console.log(listFriend);
+  //console.log(listFriend);
 
   React.useEffect(() => {
     const featchListMember = async (userId) => {
@@ -71,10 +69,7 @@ const ListFriend = ({ socket }) => {
       </p>
       <div className="group_friend">
         {listFriend.map((item) => (
-          <div className="f_card">
-            <img src={item.avaUser} />
-            <p>{item.userFistName + item.userLastName}</p>
-          </div>
+          <FriendCard item={item} />
         ))}
       </div>
     </div>

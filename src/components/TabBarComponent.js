@@ -18,6 +18,7 @@ import {
   SetIdConversation,
   SetIdLeaderGroup,
   SetIndexTab,
+  SetShowListRequestFriend,
   SetUser,
   SetUserChatting,
 } from "../store/Actions";
@@ -105,6 +106,7 @@ const TabBarComponent = ({ socket, a }) => {
 
   const handleIndexTab = (idx) => {
     depatch(SetIndexTab(idx));
+    depatch(SetShowListRequestFriend(true));
   };
   return (
     <div className="tab-bar">
@@ -112,7 +114,6 @@ const TabBarComponent = ({ socket, a }) => {
         {user?.avatar ? (
           <Avatar
             className="avatar"
-           
             src={user?.avatar}
             ref={anchorRef}
             aria-controls={open ? "composition-menu" : undefined}

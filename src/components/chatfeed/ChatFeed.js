@@ -36,7 +36,7 @@ const ChatFeed = ({ socket }) => {
   const [arrivalMess, setArrivalMess] = useState("");
   const [isFriend, setIsFriend] = useState(false);
 
-  console.log(isFriend);
+  //console.log(isFriend);
   //detructering...
   const {
     userChatting,
@@ -247,7 +247,7 @@ const ChatFeed = ({ socket }) => {
           panigation.size
         );
         const { totalPages } = response;
-        console.log(totalPages);
+       // console.log(totalPages);
         const { friendStatus } = response;
         setIsFriend(friendStatus);
 
