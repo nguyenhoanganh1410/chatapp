@@ -8,7 +8,7 @@ import queryString from "query-string";
 
 const axiosClient = axios.create({
   // baseURL: process.env.REACT_APP_API_URL,
-  baseURL: "https://13.228.206.211",
+  baseURL: "https://13.212.137.7",
   headers: {
     "content-type": "application/json",
   },

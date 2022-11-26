@@ -42,7 +42,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (user) {
-      socket.current = io("https://13.228.206.211");
+      socket.current = io("https://13.212.137.7");
       // socket.current = io("http://localhost:5005");
       // console.log(socket);
       socket.current.emit("start", user);

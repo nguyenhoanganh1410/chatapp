@@ -308,18 +308,21 @@ const ChatList = ({ socket }) => {
                 <div className="listChatCard">
                   {conversations ? (
                     conversations?.map((conversation) => {
-                      if (conversation.conversations.mb.numberUnread > 0) {
-                        return (
+                      if (conversation?.conversations?.mb?.numberUnread > 0) {
+                        return (                       
                           <ChatCard
-                            conversation={conversation}
-                            key={Math.random()}
-                          />
+                          conversation={conversation}
+                          key={Math.random()}
+                          socket={socket}
+                          setConversations={setConversations}
+                        />
                         );
                       }
                     })
                   ) : (
                     <p style={{ fontWeight: "500" }}>Không có</p>
                   )}
+                  
                 </div>
               </TabPanel>
             </Box>
