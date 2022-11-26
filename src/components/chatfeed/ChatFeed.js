@@ -60,15 +60,13 @@ const ChatFeed = ({ socket }) => {
   //   console.log("scroll");
   // };
 
-  // useEffect(() => {
-  //   if (socket.current) {
-  //     socket.current.emit("seen-message", {
-  //       isSeen:true,
-  //       conversationId: idConversation,
-  //       userId: user.uid,
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    socket.current.on("get-last-msg-r", (data) => {
+      console.log("data",data);
+    });
+  }, []);
+
+ 
 
   //khi tin nhan duoc gui thi them tin nhan do vao messages -> render
   useEffect(() => {
@@ -160,6 +158,7 @@ const ChatFeed = ({ socket }) => {
     socket.current?.on("reMessage", (data) => {
       setIdReMessage(data);
     });
+    
   }, []);
 
   // }, [userChatting]);

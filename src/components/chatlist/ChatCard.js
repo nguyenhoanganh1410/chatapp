@@ -88,7 +88,11 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
         console.log(err.message);
       });
 
+      console.log("num",conversations.mb.numberUnread);
+      conversations.mb.numberUnread=0;
+
     // if (socket.current) {
+    //   console.log("seen");
     //   socket.current.emit("seen-message", {
     //     conversationId: idConversation,
     //     userId: user.uid,

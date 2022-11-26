@@ -12,6 +12,7 @@ import friendApi from "../../api/friendApi";
 import { SetListFriend } from "../../store/Actions";
 const CardFriend = ({ u }) => {
   const { state, depatch } = React.useContext(Contex);
+  
 
   const { listFriend, user } = state;
 

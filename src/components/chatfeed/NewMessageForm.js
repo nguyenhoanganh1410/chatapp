@@ -38,6 +38,7 @@ const NewMessageForm = ({
   const { user, messageSent } = state;
   const inputChooseIMG = useRef();
 
+
   useEffect(() => {
     if (socket.current) {
       socket.current.on("typing", (data) => {
@@ -172,7 +173,7 @@ const NewMessageForm = ({
     //ckeck
     //ckeck
     //th1: chưa từng trò chuyện, có idConversation == null
-    if (!idConversation) {
+    if (!idConversation)  {
       console.log("chua co conversation ---> create");
       //tao cuoc tro chuyen
       const createConversation = async () => {
@@ -260,7 +261,7 @@ const NewMessageForm = ({
     //ckeck
     //th1: chưa từng trò chuyện, có idConversation == null
     setNewMessage("");
-    if (!idConversation) {
+    if (typeof(idConversation)!==String  ) {
       console.log("chua co conversation ---> create");
       //tao cuoc tro chuyen
       const createConversation = async () => {
@@ -273,10 +274,10 @@ const NewMessageForm = ({
           console.log("id conversation moi tao ---> " + response);
 
           //join a room with name = id conversation
-          socket.current.emit("join-room", {
-            idCon: response,
-            isNew: true,
-          });
+          // socket.current.emit("join-room", {
+          //   idCon: response,
+          //   isNew: true,
+          // });
           try {
             //create new message
             const newMess = {
@@ -314,7 +315,7 @@ const NewMessageForm = ({
       createConversation();
     } else {
       //th2: đã có cuộc trò chuyện
-      console.log(" co conversation ---> create");
+      console.log(" co conversation ---> create",idConversation);
       try {
         const newMess = {
           userId: user.uid,
@@ -402,6 +403,7 @@ const NewMessageForm = ({
   // useEffect(() => {
   //   arrivalMess && setMessages((prev) => [...prev, arrivalMess]);
   // }, [arrivalMess]);
+ 
 
   return (
     <div className="new_message" ref={divMessage}>

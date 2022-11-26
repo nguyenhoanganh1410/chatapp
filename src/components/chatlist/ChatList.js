@@ -75,29 +75,33 @@ const ChatList = ({ socket }) => {
 
   React.useEffect(() => {
     if (socket.current) {
+      const pages=0;
+      const sizes=3;
       // console.log(conversations);
       const ids = conversations?.map((ele) => ele.conversations._id);
       socket.current.emit("join-conversations", ids);
-      socket.current.on("get-last-message", (data) => {
-        // console.log(data);
-        // setConversations(data);
-        const { listSender, listReceiver } = data;
-        if (listSender[0].inFo.userIdFriend !== user.uid) {
-          setConversations(listSender);
-          console.log(listSender);
-        } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
-          setConversations(listReceiver);
-          console.log(listReceiver);
-        }
-      });
+      // socket.current.on("get-last-message", (data) => {
+      //   // console.log(data);
+      //   // setConversations(data);
+      //   const { listSender, listReceiver } = data;
+      //   if (listSender[0].inFo.userIdFriend !== user.uid) {
+      //     setConversations(listSender);
+      //     console.log(listSender);
+      //   } else if (listReceiver[0].inFo.userIdFriend !== user.uid) {
+      //     setConversations(listReceiver);
+      //     console.log(listReceiver);
+      //   }
+      // }); 
 
       socket.current.on("get-last-msg-r", ({receiverId}) => {
         const fetchConversations = async () => {
           try {
             const response = await conversationApi.getConversations(
               receiverId,
-              panigation.page,
-              panigation.size
+              // panigation.page,
+              // panigation.size
+                pages,
+                sizes
             );
 
             const { data, page, size, totalPages } = response;
@@ -119,8 +123,10 @@ const ChatList = ({ socket }) => {
           try {
             const response = await conversationApi.getConversations(
               senderId,
-              panigation.page,
-              panigation.size
+              // panigation.page,
+              // panigation.size
+              pages,
+              sizes
             );
 
             const { data, page, size, totalPages } = response;
