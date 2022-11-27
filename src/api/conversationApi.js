@@ -24,7 +24,7 @@ const conversationApi = {
   // -params:userId.
   // -body:userFriendId:(Ix7UVDUIrmRYOB6uGFc715drn2H3)
 
-  createConversation: (meId, userFriendId) => {
+  createConversationIndividual: (meId, userFriendId) => {
     return axiosClient.post(`conversation/individuals/${meId}`, {
       userFriendId: userFriendId,
     });

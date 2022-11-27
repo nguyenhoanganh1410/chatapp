@@ -33,16 +33,33 @@ const NewMessageForm = ({
   const [newMessageSticker, setNewMessageSticker] = useState("");
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [meTyping, setMeTyping] = useState("");
 
   const { user, messageSent } = state;
   const inputChooseIMG = useRef();
 
   useEffect(() => {
     if (socket.current) {
-      socket.current.on("typing", () => setIsTyping(true));
-      socket.current.on("stop-typing", () => setIsTyping(false));
+      socket.current.on("typing", (data) => {
+        console.log(data.idConversation, idConversation);
+
+        if(data.idConversation === idConversation){
+          setIsTyping(true);
+          setMeTyping(data.me);
+        }else{
+          setIsTyping(false);
+        }
+      });
+      socket.current.on("stop-typing", (data) => {
+        if(data.idConversation === idConversation){
+          setIsTyping(false);
+          setMeTyping(data.me);
+        }else{
+          setIsTyping(false);
+        }
+      });
     }
-  }, []);
+  }, [idConversation]);
   //detructering...
   // console.log({user});
 
@@ -248,7 +265,7 @@ const NewMessageForm = ({
       //tao cuoc tro chuyen
       const createConversation = async () => {
         try {
-          const response = await conversationApi.createConversation(
+          const response = await conversationApi.createConversationIndividual(
             user.uid,
             userChatting.uid
           );
@@ -328,7 +345,8 @@ const NewMessageForm = ({
           });
           console.log("send");
         }
-        socket.current.emit("stop-typing", idConversation);
+        let me = user.first_name + "" + user.last_name;
+        socket.current.emit("stop-typing", {idConversation,me});
 
         // sendNotification({
         //   userName: user.first_name,
@@ -349,7 +367,8 @@ const NewMessageForm = ({
       if (!typing) {
         console.log(idConversation);
         setTyping(true);
-        socket.current.emit("typing", idConversation);
+        let me = user.first_name + "" + user.last_name;
+        socket.current.emit("typing", {idConversation,me});
       }
 
       let lastTypingTime = new Date().getTime();
@@ -359,7 +378,8 @@ const NewMessageForm = ({
         let timeDiff = typingTimer - lastTypingTime;
         if (timeDiff >= timerLength && typing) {
           setTyping(false);
-          socket.current.emit("stop-typing", idConversation);
+        let me = user.first_name + "" + user.last_name;
+          socket.current.emit("stop-typing", {idConversation,me});
           console.log(idConversation);
         }
       }, timerLength);
@@ -367,7 +387,7 @@ const NewMessageForm = ({
   };
   isTyping
     ? console.log(
-        user.first_name + "" + user.last_name + " đang soạn tin nhắn....."
+      meTyping + " đang soạn tin nhắn....."
       )
     : console.log("not typing");
 
@@ -387,7 +407,7 @@ const NewMessageForm = ({
     <div className="new_message" ref={divMessage}>
       {isTyping ? (
         <div>
-          {user.first_name + "" + user.last_name + " đang soạn tin nhắn....."}
+          {meTyping + " đang soạn tin nhắn....."}
         </div>
       ) : null}
       <form onSubmit={onFormSubmit}>

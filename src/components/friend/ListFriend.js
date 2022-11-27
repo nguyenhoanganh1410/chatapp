@@ -31,10 +31,23 @@ const ListFriend = ({ socket }) => {
     };
     featchListMember(user.uid);
   }, [user]);
-
+  
   React.useEffect(() => {
     if (socket.current) {
-      socket.current.on("updateListFrien", (idFriend) => {
+      socket.current.on("update-invite", (idUser) => {
+        if (idUser) {
+          const featchListMember = async (userId) => {
+            try {
+              const response = await friendApi.getListFriend(userId);
+              setListFriend(response);
+            } catch (error) {
+              console.log("Failed to fetch conversation list: ", error);
+            }
+          };
+          featchListMember(user.uid);
+        }
+      });
+      socket.current.on("update-inviteFr", (idFriend) => {
         if (idFriend) {
           const featchListMember = async (userId) => {
             try {

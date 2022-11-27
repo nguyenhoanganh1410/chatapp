@@ -17,6 +17,7 @@ import {
 import Contex from "../../store/Context";
 import useDateLogic from "../../hooks/useDateLogic";
 import useCheckFile from "../../hooks/useCheckFile";
+import avatGroup from "../../images/avtgroup.jpg";
 import { useEffect } from "react";
 const ChatCardGroup = ({ status, conversation, socket }) => {
   const { state, depatch } = React.useContext(Contex);
@@ -76,37 +77,11 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
             src={inFo?.avatar[0]}
           />
         ) : (
-          <AvatarGroup max={4} className="group_avatar">
-            <div>
-              <Avatar
-                className="avt avatar_item"
-                alt="Remy Sharp"
-                src={inFo?.avatar[0]?.avaUser}
-              />
-              <Avatar
-                className="avt avatar_item"
-                alt="Remy Sharp"
-                src={inFo?.avatar[0]?.avaUser}
-              />
-            </div>
-            <AvatarGroup max={2}>
-              <Avatar
-                className="avt avatar_item"
-                alt="Remy Sharp"
-                src={inFo?.avatar[0]?.avaUser}
-              />
-              <Avatar
-                className="avt avatar_item"
-                alt="Remy Sharp"
-                src={inFo?.avatar[0]?.avaUser}
-              />
-              <Avatar
-                className="avt avatar_item"
-                alt="Remy Sharp"
-                src={inFo?.avatar[0]?.avaUser}
-              />
-            </AvatarGroup>
-          </AvatarGroup>
+          <Avatar
+            className="avt group_avatar"
+            alt="Remy Sharp"
+            src={avatGroup}
+          />
         )}
 
         <div className="card_name">
@@ -166,8 +141,9 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
       </div>
 
       <div className="group_right">
-        <div className="card_time">
-          {/* {" "}
+        {/* <div className="card_time">
+          {" "}
+
           {handleDate(
             new Date(),
             new Date(
@@ -176,8 +152,10 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
                 { timeZone: "Asia/Ho_Chi_Minh" }
               )
             )
+
           )} */}
-        </div>
+        {/* //        </div> */}
+
         {conversations?.mb?.numberUnread > 0 ? (
           <span className="numberNotification">
             {conversations?.mb?.numberUnread}
