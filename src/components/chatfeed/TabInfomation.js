@@ -42,7 +42,7 @@ import UserService from "../../services/UserService";
 
 import conversationHook from "../../hooks/conversationHook";
 import aleartHook from "../../hooks/aleartHook";
-
+import avtGroup from "../../images/avtgroup.jpg";
 
 const style = {
   position: "absolute",
@@ -132,9 +132,7 @@ const TabInfomation = ({ socket }) => {
           //console.log("kick");
           const featchListMember = async (data) => {
             try {
-              const response = await conversationApi.getListMember(
-                data
-              );
+              const response = await conversationApi.getListMember(data);
               setMembers(response.members);
             } catch (error) {
               console.log("Failed to fetch conversation list: ", error);
@@ -358,7 +356,7 @@ const TabInfomation = ({ socket }) => {
                   textTransform: "capitalize",
                   backgroundColor: "#055E68",
                 }}
-                src={userChatting?.avatar}
+                src={avtGroup}
               >
                 {userChatting?.last_name[0]}
               </Avatar>

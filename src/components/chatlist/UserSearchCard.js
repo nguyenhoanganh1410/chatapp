@@ -14,6 +14,7 @@ import UserSearchedService from "../../services/UserSearchedService";
 import conversationApi from "../../api/conversationApi";
 
 const UserSearchCard = ({ u }) => {
+
   const { state, depatch } = React.useContext(Contex);
   //detructering...
   const {
@@ -56,6 +57,7 @@ const UserSearchCard = ({ u }) => {
   //10/11/2022 - 10:17 am
   //auth: Anh Nguyen
   const handleChat = () => {
+   // console.log(u);
     //có 2 trường hợp:
     //TH1: click vào user dang tìm kiếm -> add user đó vào lịch sử tìm kiếm -> mở cuộc hội thoại
     //đang tìm kiếm: searchingStatus = true
@@ -93,7 +95,7 @@ const UserSearchCard = ({ u }) => {
             snapshot
           ) {
             console.log("2-succesfully!!!");
-            depatch(SetIdConversation(null));
+           // depatch(SetIdConversation(null));
           });
         }
       });

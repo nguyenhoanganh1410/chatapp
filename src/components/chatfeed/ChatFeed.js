@@ -49,6 +49,8 @@ const ChatFeed = ({ socket }) => {
 
   const messagesEnd = useRef();
 
+  console.log(idConversation);
+
   const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
   const [page, setPage] = React.useState(0);
 
@@ -247,7 +249,7 @@ const ChatFeed = ({ socket }) => {
           panigation.size
         );
         const { totalPages } = response;
-       // console.log(totalPages);
+        // console.log(totalPages);
         const { friendStatus } = response;
         setIsFriend(friendStatus);
 

@@ -9,6 +9,7 @@ import ModelDetailUser from "../model/ModelDetailUser";
 import love from "../../images/love.jpg";
 import { format } from "timeago.js";
 import { FaRegUser } from "react-icons/fa";
+import avtGroup from "../../images/avtgroup.jpg";
 
 const ChatHeaderGroup = ({ socket }) => {
   const { state, depatch } = React.useContext(Context);
@@ -33,6 +34,7 @@ const ChatHeaderGroup = ({ socket }) => {
         <div className="info_block">
           <Avatar
             className="avt"
+            src={avtGroup}
             style={{ textTransform: "capitalize" }}
           ></Avatar>
         </div>

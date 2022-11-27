@@ -287,6 +287,7 @@ const NewMessageForm = ({
             };
 
             //set messageSent
+            //render ui -> cai thien trai nghiem ng dung
             depatch(SetMessageSent({ ...newMess, _id: Math.random() + "1" }));
 
             const messSave = await messageApi.addTextMess(newMess);
