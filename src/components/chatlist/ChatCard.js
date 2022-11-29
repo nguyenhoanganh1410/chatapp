@@ -86,6 +86,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       .catch((err) => {
         console.log(err.message);
       });
+      conversations.mb.numberUnread=0;
   };
 
   return (

@@ -35,6 +35,15 @@ const CardFriend = ({ u, handleCloseModel, socket }) => {
       }
     };
     featchListMember(user.uid);
+
+    socket?.current.on("update-inviteFr",idFriend=>{
+      featchListMember(user.uid);
+    });
+    socket?.current.on("update-invite",idUser=>{
+      featchListMember(user.uid);
+    });
+
+
   }, [user]);
 
   React.useEffect(() => {
@@ -67,10 +76,16 @@ const CardFriend = ({ u, handleCloseModel, socket }) => {
     };
 
     featchStatusFriend(user.uid, u.uid);
+    socket?.current.on("update-inviteFr",idFriend=>{
+      featchStatusFriend(user.uid, u.uid);
+    });
+    socket?.current.on("update-invite",idUser=>{
+      featchStatusFriend(user.uid, u.uid);
+    });
   });
 
   //xu ly ket ban in here
-  const handeOnClick = () => {
+  const handeOnClick = async() => {
     console.log("click trong form kb", isFriend);
     console.log(isFriend);
     //neu da la ban -> return
@@ -84,8 +99,19 @@ const CardFriend = ({ u, handleCloseModel, socket }) => {
       console.log("chua la ban");
       //call api add friend
       notifyAddFriend();
+
+      const idCon = await conversationApi.getConversation(user.uid, u.uid);
+      console.log("idCon::", idCon);
+
       //call api save into db
-      featchAddFriend(user.uid, u.uid);
+      featchAddFriend(user.uid, u.uid).then((res) => {
+        console.log("res::", res);
+        socket?.current.emit("handle-request-friend", {
+          idUser: user.uid,
+          idFriend: u.uid,
+          idCon: idCon,
+        });
+      });
 
       //close model
       handleCloseModel();
@@ -95,21 +121,28 @@ const CardFriend = ({ u, handleCloseModel, socket }) => {
       //ng khac gui yeu cau kb
       //click de accept friend
       const handleAccept = async (id) => {
-        try {
-          const response = await friendApi.acceptFriend(user.uid, id);
-          //  console.log(response);
-          if (socket.current) {
-            socket.current.emit("accept-friend", {
-              idUser: user.uid,
-              idFriend: id,
-            });
+
+        const featchAcceptInvite = async (userId, freId) => {
+          try {
+            return await friendApi.acceptFriend(user.uid, id);
+            // console.log("re:::",response);
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
           }
-        } catch (error) {
-          console.log("Failed to fetch conversation list: ", error);
-        }
+        };
+    
+        featchAcceptInvite(user.uid,id).then((res)=>{
+          console.log("res:::",res);
+          socket?.current.emit("handle-request-friend", {
+            idUser: user.uid,
+            idFriend: id,
+            idCon: res.conversationId,
+            message:res.message
+          });
+        })
       };
 
-      handleAccept(u.uid);
+      handleAccept(u.uid)
       //close model
       handleCloseModel();
     }

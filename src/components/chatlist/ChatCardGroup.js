@@ -31,7 +31,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
   const { handleDate } = useDateLogic();
 
   const { inFo, conversations } = conversation;
-  console.log(inFo);
+ 
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -92,7 +92,6 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
                 ? "Bạn: "
                 : inFo?.userInfo?.map((u) => {
                     if (conversations?.lastMessage[0]?.userId === u?.userId) {
-                      console.log(u);
                       return u?.userFistName + " " + u?.userLastName + ": ";
                     }
                   })}

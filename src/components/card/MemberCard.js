@@ -8,8 +8,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { BsThreeDots } from "react-icons/bs";
 import conversationApi from "../../api/conversationApi";
-const MemberCard = ({ u, socket, modelAdd }) => {
-  //console.log(u);
+const MemberCard = ({ u, socket, modelAdd,leaderId }) => {
+  console.log("leaderId",leaderId);
   //material ui
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -105,7 +105,7 @@ const MemberCard = ({ u, socket, modelAdd }) => {
           >
             {u?.userFistName + " " + u?.userLastName}
           </p>
-          {idLeaderGroup === u.userId && !modelAdd ? (
+          {leaderId === u.userId && !modelAdd ? (
             <p
               style={{
                 textTransform: "capitalize",
@@ -130,7 +130,7 @@ const MemberCard = ({ u, socket, modelAdd }) => {
       {/* modelAdd duoc truyen xuong tu model tadd member */}
       {modelAdd ? null : (
         <React.Fragment>
-          {idLeaderGroup === user.uid && user.uid !== u.userId ? (
+          {leaderId === user.uid && user.uid !== u.userId ? (
             <span
               className="threeDots"
               id="basic-button"

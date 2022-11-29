@@ -114,35 +114,45 @@ const TabInfomation = ({ socket }) => {
   React.useEffect(() => {
     const featchListMember = async (idConversation) => {
       try {
-        const response = await conversationApi.getListMember(idConversation);
-        setMembers(response.members);
-        setLeaderId(response.leaderId);
+        return await conversationApi.getListMember(idConversation);
       } catch (error) {
         console.log("Failed to fetch conversation list: ", error);
       }
     };
-    featchListMember(idConversation);
-  }, [idConversation]);
+    featchListMember(idConversation).then((response) => {
+      console.log("list member: ", response);
+      setMembers(response.members);
+      setLeaderId(response.leaderId)
+    });
 
-  React.useEffect(() => {
-    //socket call api get list member when kick, add member into the group
-    if (socket.current) {
+    if(socket.current){
       socket.current.on("notifi-kickUser", (data) => {
-        if (data) {
-          //console.log("kick");
-          const featchListMember = async (data) => {
-            try {
-              const response = await conversationApi.getListMember(data);
-              setMembers(response.members);
-            } catch (error) {
-              console.log("Failed to fetch conversation list: ", error);
-            }
-          };
-          featchListMember(data);
-        }
-      });
+        featchListMember(data);
+      })
     }
-  }, [idConversation]);
+
+  }, [user,idConversation,members,leaderId]);
+  console.log("leaderId:: ", leaderId);
+
+  // React.useEffect(() => {
+  //   //socket call api get list member when kick, add member into the group
+  //   if (socket.current) {
+  //     socket.current.on("notifi-kickUser", (data) => {
+  //       if (data) {
+  //         //console.log("kick");
+  //         const featchListMember = async (data) => {
+  //           try {
+  //             const response = await conversationApi.getListMember(data);
+  //             setMembers(response.members);
+  //           } catch (error) {
+  //             console.log("Failed to fetch conversation list: ", error);
+  //           }
+  //         };
+  //         featchListMember(data);
+  //       }
+  //     });
+  //   }
+  // }, [idConversation]);
 
   const handleLeaveGroup = async () => {
     try {
@@ -420,7 +430,7 @@ const TabInfomation = ({ socket }) => {
               </AccordionSummary>
               <AccordionDetails>
                 {members.map((u, idx) => {
-                  return <MemberCard u={u} socket={socket} />;
+                  return <MemberCard u={u} socket={socket} leaderId={leaderId} />;
                 })}
               </AccordionDetails>
             </Accordion>
