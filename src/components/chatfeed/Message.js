@@ -16,10 +16,11 @@ import { iconsTouch } from "../../data/Data";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { useState } from "react";
-import { SetIdMessageDeletedWithMe } from "../../store/Actions";
+import { SetIdMessageDeletedWithMe, SetReplyMess } from "../../store/Actions";
 import WordsComponent from "../filecomponent/WordsComponent";
 import useCheckFile from "../../hooks/useCheckFile";
 import UserService from "../../services/UserService";
+import { useEffect } from "react";
 
 //status : 0 binh thuong, 1 thu hoi, 2 bi xoa
 const Message = ({
@@ -32,8 +33,14 @@ const Message = ({
 }) => {
   const { state, depatch } = React.useContext(Contex);
   //detructering...
-  const { userChatting, idConversation, user, statusMessage, groupChatting } =
-    state;
+  const {
+    userChatting,
+    idConversation,
+    user,
+    statusMessage,
+    groupChatting,
+    replyMess,
+  } = state;
   const [showIcons, setShowIcons] = React.useState(false);
 
   const [me, setMe] = React.useState(false);
@@ -41,6 +48,9 @@ const Message = ({
   const [userCurrentMess, setUserCurrentMess] = React.useState(null);
 
   const { checkUrlIsDocx, checkUrlIsVideo } = useCheckFile();
+
+  //thong tin user tren tin nhan dc reply
+  const [userReply, setUserReply] = useState(null);
 
   // console.log("pre messs ----->");
   // console.log(preMessage);
@@ -193,7 +203,23 @@ const Message = ({
       setUserCurrentMess(snapshot.data());
       //  depatch(SetUser(userTemp));
     });
+
+    //get user by user id for render user name of message reply
+    if (mess?.replyMessageId?.length > 0) {
+      UserService.getById(mess?.replyMessageId[0]?.userId).then(function (
+        snapshot
+      ) {
+        ////const userTemp = { uid: u.uid, ...snapshot.data() };
+        console.log(snapshot.data());
+        setUserReply(snapshot.data());
+      });
+    }
   }, []);
+
+  //click -> open ui for reply
+  const handleReply = () => {
+    depatch(SetReplyMess(mess));
+  };
 
   return (
     <>
@@ -215,7 +241,7 @@ const Message = ({
                   >
                     <BiDotsHorizontalRounded />
                   </span>
-                  <span title="Trả lời">
+                  <span title="Trả lời" onClick={() => handleReply()}>
                     <MdFormatQuote />
                   </span>
                 </div>
@@ -337,6 +363,62 @@ const Message = ({
                                       " " +
                                       userCurrentMess?.first_name}
                                   </p>
+                                ) : null}
+
+                                {mess?.replyMessageId?.length > 0 ? (
+                                  <div
+                                    className="reply_block"
+                                    style={{
+                                      marginBottom: "6px",
+                                      display: "flex",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        height: "40px",
+                                        width: "2px",
+                                        backgroundColor: "#0091ff",
+                                        marginRight: "8px",
+                                      }}
+                                    ></div>
+                                    <div>
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                        }}
+                                      >
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                          }}
+                                        >
+                                          <p>
+                                            <span
+                                              style={{
+                                                fontWeight: 500,
+                                                textTransform: "capitalize",
+                                                marginLeft: "2px",
+                                              }}
+                                            >
+                                              {userReply?.first_name +
+                                                " " +
+                                                userReply?.last_name}
+                                            </span>
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <p
+                                        className="text_reply"
+                                        style={{ color: "#434242" }}
+                                      >
+                                        {mess.replyMessageId[0].content}
+                                      </p>
+                                    </div>
+                                  </div>
                                 ) : null}
                                 <p className="textMess">{mess?.content}</p>
                               </>

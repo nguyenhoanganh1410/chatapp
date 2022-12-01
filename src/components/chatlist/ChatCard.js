@@ -10,6 +10,7 @@ import { RiArrowRightSLine } from "react-icons/ri";
 import {
   SetGroupChatting,
   SetIdConversation,
+  SetReplyMess,
   SetUserChatting,
 } from "../../store/Actions";
 import Contex from "../../store/Context";
@@ -23,7 +24,14 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
   const { handleDate } = useDateLogic();
   const { checkUrlIsImage, checkUrlIsDocx, checkUrlIsVideo } = useCheckFile();
   //detructering...
-  const { user, userSearched, idConversation, userChatting } = state;
+  const {
+    user,
+    userSearched,
+    idConversation,
+    userChatting,
+    groupChatting,
+    replyMess,
+  } = state;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   // const [isChatting, setIsChatting] = React.useState(false);
@@ -70,7 +78,13 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
   //click 1 conversation -> show chat feed
   const handleShowChat = () => {
     //delete groupChitting
-    depatch(SetGroupChatting(null));
+    if (groupChatting) {
+      depatch(SetGroupChatting(null));
+    }
+
+    if (replyMess) {
+      depatch(SetReplyMess(null));
+    }
 
     //featch user by id
     UserService.getById(inFo.userIdFriend)
@@ -162,7 +176,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
 
       <div className="group_right">
         <div className="card_time">
-          {/* {handleDate(
+          {handleDate(
             new Date(),
             new Date(
               `${conversations?.lastMessage[0]?.updatedAt}`.toLocaleString(
@@ -170,7 +184,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
                 { timeZone: "Asia/Ho_Chi_Minh" }
               )
             )
-          )} */}
+          )}
         </div>
         {conversations.mb.numberUnread > 0 ? (
           <span className="numberNotification">

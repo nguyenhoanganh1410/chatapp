@@ -12,6 +12,7 @@ import {
   SetGroupChatting,
   SetIdConversation,
   SetIdLeaderGroup,
+  SetReplyMess,
   SetUserChatting,
 } from "../../store/Actions";
 import Contex from "../../store/Context";
@@ -21,8 +22,14 @@ import avatGroup from "../../images/avtgroup.jpg";
 import { useEffect } from "react";
 const ChatCardGroup = ({ status, conversation, socket }) => {
   const { state, depatch } = React.useContext(Contex);
-  const { groupChatting, userChatting, user, idConversation, idLeaderGroup } =
-    state;
+  const {
+    groupChatting,
+    userChatting,
+    user,
+    idConversation,
+    idLeaderGroup,
+    replyMess,
+  } = state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { checkUrlIsImage, checkUrlIsDocx, checkUrlIsVideo } = useCheckFile();
   const open = Boolean(anchorEl);
@@ -31,7 +38,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
   const { handleDate } = useDateLogic();
 
   const { inFo, conversations } = conversation;
-  console.log(inFo);
+  //  console.log(inFo);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -54,7 +61,12 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
 
   const handleGroupChat = () => {
     //delete user chatting
-    depatch(SetUserChatting(null));
+    if (userChatting) {
+      depatch(SetUserChatting(null));
+    }
+    if (replyMess) {
+      depatch(SetReplyMess(null));
+    }
     depatch(SetGroupChatting(inFo));
     depatch(SetIdConversation(inFo.idCon));
 
@@ -92,6 +104,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
                 ? "Bạn: "
                 : inFo?.userInfo?.map((u) => {
                     if (conversations?.lastMessage[0]?.userId === u?.userId) {
+                      //
                       console.log(u);
                       return u?.userFistName + " " + u?.userLastName + ": ";
                     }
@@ -141,9 +154,8 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
       </div>
 
       <div className="group_right">
-        {/* <div className="card_time">
+        <div className="card_time">
           {" "}
-
           {handleDate(
             new Date(),
             new Date(
@@ -152,9 +164,8 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
                 { timeZone: "Asia/Ho_Chi_Minh" }
               )
             )
-
-          )} */}
-        {/* //        </div> */}
+          )}
+        </div>
 
         {conversations?.mb?.numberUnread > 0 ? (
           <span className="numberNotification">

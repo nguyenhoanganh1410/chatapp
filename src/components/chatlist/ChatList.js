@@ -91,7 +91,7 @@ const ChatList = ({ socket }) => {
         }
       });
 
-      socket.current.on("get-last-msg-r", ({receiverId}) => {
+      socket.current.on("get-last-msg-r", ({ receiverId }) => {
         const fetchConversations = async () => {
           try {
             const response = await conversationApi.getConversations(
@@ -114,7 +114,7 @@ const ChatList = ({ socket }) => {
         fetchConversations();
       });
 
-      socket.current.on("get-last-msg-s", ({senderId}) => {
+      socket.current.on("get-last-msg-s", ({ senderId }) => {
         const fetchConversations = async () => {
           try {
             const response = await conversationApi.getConversations(
@@ -274,9 +274,6 @@ const ChatList = ({ socket }) => {
         };
         fetchConversations();
       });
-
-
-
     }
   }, [user, conversations]);
 
@@ -321,7 +318,7 @@ const ChatList = ({ socket }) => {
                   aria-label="basic tabs example"
                 >
                   <Tab label="Tất cả" {...a11yProps(0)} />
-                  <Tab label="Chưa đọc" {...a11yProps(1)}  />
+                  <Tab label="Chưa đọc" {...a11yProps(1)} />
                 </Tabs>
               </Box>
 
@@ -344,7 +341,6 @@ const ChatList = ({ socket }) => {
                     <>
                       {conversations?.length > 0 ? (
                         conversations?.map((conversation) => {
-                          console.log(conversation);
                           if (conversation?.conversations?.type) {
                             return (
                               <ChatCardGroup
@@ -402,20 +398,19 @@ const ChatList = ({ socket }) => {
                   {conversations ? (
                     conversations?.map((conversation) => {
                       if (conversation?.conversations?.mb?.numberUnread > 0) {
-                        return (                       
+                        return (
                           <ChatCard
-                          conversation={conversation}
-                          key={Math.random()}
-                          socket={socket}
-                          setConversations={setConversations}
-                        />
+                            conversation={conversation}
+                            key={Math.random()}
+                            socket={socket}
+                            setConversations={setConversations}
+                          />
                         );
                       }
                     })
                   ) : (
                     <p style={{ fontWeight: "500" }}>Không có</p>
                   )}
-                  
                 </div>
               </TabPanel>
             </Box>

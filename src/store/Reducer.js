@@ -20,6 +20,7 @@ import {
   SET_IDLEADERGROUP,
   SET_LISTFRIEND,
   SET_SHOWLISTREWUESTFRIEND,
+  SET_REPLYMESS,
 } from "./Actions";
 
 //innite state
@@ -74,11 +75,18 @@ const initState = {
   listFriend: [],
 
   showListRequestFriend: true,
+
+  replyMess: null,
 };
 
 //depatch
 const Reducer = (state, action) => {
   switch (action.type) {
+    case SET_REPLYMESS:
+      return {
+        ...state,
+        replyMess: action.payload,
+      };
     case SET_LISTFRIEND:
       return {
         ...state,

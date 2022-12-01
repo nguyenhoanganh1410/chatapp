@@ -49,7 +49,7 @@ const ChatFeed = ({ socket }) => {
 
   const messagesEnd = useRef();
 
-  console.log(idConversation);
+  //console.log(idConversation);
 
   const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
   const [page, setPage] = React.useState(0);

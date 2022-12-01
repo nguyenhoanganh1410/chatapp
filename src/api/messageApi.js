@@ -16,6 +16,7 @@ const messageApi = {
     const url = `/messages/text`;
     return axiosClient.post(url, mess);
   },
+  
 
   addFileMess: (mess) => {
     const url = `/messages/files`;

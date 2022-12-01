@@ -22,9 +22,18 @@ export const SET_IDLEADERGROUP = "set_idLeaderGroup";
 export const SET_LISTFRIEND = "set_ListFriend";
 export const SET_SHOWLISTREWUESTFRIEND = "set_ShowListRequestFriend";
 
+export const SET_REPLYMESS = "set_ReplyMess";
+
 export const SetGroupChatting = (payload) => {
   return {
     type: SET_GROUPCHATTING,
+    payload,
+  };
+};
+
+export const SetReplyMess = (payload) => {
+  return {
+    type: SET_REPLYMESS,
     payload,
   };
 };

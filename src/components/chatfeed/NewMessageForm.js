@@ -10,10 +10,14 @@ import { useContext, useEffect } from "react";
 import messageApi from "../../api/messageApi";
 // import {socket} from '../../store/socketClient';
 
-import io from "socket.io-client";
+import { MdFormatQuote, MdOutlineCancel } from "react-icons/md";
 import conversationApi from "../../api/conversationApi";
 // import {init} from '../../store/socketClient';
-import { SetIdConversation, SetMessageSent } from "../../store/Actions";
+import {
+  SetIdConversation,
+  SetMessageSent,
+  SetReplyMess,
+} from "../../store/Actions";
 
 const NewMessageForm = ({
   userChatting,
@@ -35,7 +39,7 @@ const NewMessageForm = ({
   const [isTyping, setIsTyping] = useState(false);
   const [meTyping, setMeTyping] = useState("");
 
-  const { user, messageSent } = state;
+  const { user, messageSent, replyMess } = state;
   const inputChooseIMG = useRef();
 
   useEffect(() => {
@@ -43,18 +47,18 @@ const NewMessageForm = ({
       socket.current.on("typing", (data) => {
         console.log(data.idConversation, idConversation);
 
-        if(data.idConversation === idConversation){
+        if (data.idConversation === idConversation) {
           setIsTyping(true);
           setMeTyping(data.me);
-        }else{
+        } else {
           setIsTyping(false);
         }
       });
       socket.current.on("stop-typing", (data) => {
-        if(data.idConversation === idConversation){
+        if (data.idConversation === idConversation) {
           setIsTyping(false);
           setMeTyping(data.me);
-        }else{
+        } else {
           setIsTyping(false);
         }
       });
@@ -317,12 +321,16 @@ const NewMessageForm = ({
       //th2: đã có cuộc trò chuyện
       console.log(" co conversation ---> create");
       try {
-        const newMess = {
+        let newMess = {
           userId: user.uid,
           content: newMessage,
           conversationId: idConversation,
           type: "TEXT",
         };
+        if (replyMess) {
+          newMess = { ...newMess, replyMessageId: [replyMess._id] };
+        }
+
         //set messageSent
         depatch(
           SetMessageSent({
@@ -333,7 +341,28 @@ const NewMessageForm = ({
         );
 
         //call api add a message into db
-        const messSave = await messageApi.addTextMess(newMess);
+        let messSave = await messageApi.addTextMess(newMess);
+
+        console.log(replyMess);
+        if (replyMess) {
+          messSave = {
+            ...messSave,
+            replyMessageId: [
+              {
+                _id: replyMess._id,
+                userId: replyMess.userId,
+                content: replyMess.content,
+              },
+            ],
+          };
+        }
+        console.log("new mes ->>>", messSave);
+
+        // console.log("mess ----> ", newMess);
+        if (replyMess) {
+          depatch(SetReplyMess(null));
+          // console.log(newMess);
+        }
 
         if (socket.current) {
           socket.current.emit("send-message", {
@@ -347,7 +376,7 @@ const NewMessageForm = ({
           console.log("send");
         }
         let me = user.first_name + "" + user.last_name;
-        socket.current.emit("stop-typing", {idConversation,me});
+        socket.current.emit("stop-typing", { idConversation, me });
 
         // sendNotification({
         //   userName: user.first_name,
@@ -369,7 +398,7 @@ const NewMessageForm = ({
         console.log(idConversation);
         setTyping(true);
         let me = user.first_name + "" + user.last_name;
-        socket.current.emit("typing", {idConversation,me});
+        socket.current.emit("typing", { idConversation, me });
       }
 
       let lastTypingTime = new Date().getTime();
@@ -379,17 +408,15 @@ const NewMessageForm = ({
         let timeDiff = typingTimer - lastTypingTime;
         if (timeDiff >= timerLength && typing) {
           setTyping(false);
-        let me = user.first_name + "" + user.last_name;
-          socket.current.emit("stop-typing", {idConversation,me});
+          let me = user.first_name + "" + user.last_name;
+          socket.current.emit("stop-typing", { idConversation, me });
           console.log(idConversation);
         }
       }, timerLength);
     }
   };
   isTyping
-    ? console.log(
-      meTyping + " đang soạn tin nhắn....."
-      )
+    ? console.log(meTyping + " đang soạn tin nhắn.....")
     : console.log("not typing");
 
   // useEffect(() => {
@@ -404,11 +431,51 @@ const NewMessageForm = ({
   //   arrivalMess && setMessages((prev) => [...prev, arrivalMess]);
   // }, [arrivalMess]);
 
+  const handleCloseReply = () => {
+    depatch(SetReplyMess(null));
+  };
   return (
     <div className="new_message" ref={divMessage}>
-      {isTyping ? (
-        <div>
-          {meTyping + " đang soạn tin nhắn....."}
+      {isTyping ? <div>{meTyping + " đang soạn tin nhắn....."}</div> : null}
+      {replyMess ? (
+        <div className="reply_block">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <span style={{ marginRight: "2px" }}>
+                <MdFormatQuote />
+              </span>
+              <p>
+                Trả lời{" "}
+                <span
+                  style={{
+                    fontWeight: 500,
+                    textTransform: "capitalize",
+                    marginLeft: "2px",
+                  }}
+                >
+                  {userChatting.first_name + " " + userChatting.last_name}
+                </span>
+              </p>
+            </div>
+            <span
+              style={{ fontSize: "14px", cursor: "pointer" }}
+              onClick={() => handleCloseReply()}
+            >
+              <MdOutlineCancel />
+            </span>
+          </div>
+          <p className="text_reply">{replyMess?.content}</p>
         </div>
       ) : null}
       <form onSubmit={onFormSubmit}>
