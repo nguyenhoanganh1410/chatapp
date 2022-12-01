@@ -264,8 +264,10 @@ const NewMessageForm = ({
     //ckeck
     //th1: chưa từng trò chuyện, có idConversation == null
     setNewMessage("");
-    if (!idConversation) {
-      console.log("chua co conversation ---> create");
+    // if (!idConversation) {
+    console.log('type',typeof(idConversation));
+    if (typeof(idConversation) !== 'string') {
+      console.log("chua co conversation ---> create",idConversation);
       //tao cuoc tro chuyen
       const createConversation = async () => {
         try {
@@ -277,10 +279,10 @@ const NewMessageForm = ({
           console.log("id conversation moi tao ---> " + response);
 
           //join a room with name = id conversation
-          socket.current.emit("join-room", {
-            idCon: response,
-            isNew: true,
-          });
+          // socket.current.emit("join-room", {
+          //   idCon: response,
+          //   isNew: true,
+          // });
           try {
             //create new message
             const newMess = {
@@ -319,7 +321,7 @@ const NewMessageForm = ({
       createConversation();
     } else {
       //th2: đã có cuộc trò chuyện
-      console.log(" co conversation ---> create");
+      console.log(" co conversation ---> create",idConversation);
       try {
         let newMess = {
           userId: user.uid,

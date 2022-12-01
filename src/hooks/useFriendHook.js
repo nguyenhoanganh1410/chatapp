@@ -3,8 +3,7 @@ const useFriendHook = () => {
   // const [statusFriend, setStatusFriend] = useState(null);
   const featchAddFriend = async (userId, freId) => {
     try {
-      const response = await friendApi.sendInvite(userId, freId);
-      console.log(response);
+      return await friendApi.sendInvite(userId, freId);
     } catch (error) {
       console.log("Failed to fetch conversation list: ", error);
     }
