@@ -277,6 +277,7 @@ const ChatList = ({ socket }) => {
     //get api set list conversation
     //fetch product in wishlist
     const fetchConversations = async () => {
+      console.log("loading");
       try {
         const response = await conversationApi.getConversations(
           user.uid,
@@ -296,44 +297,44 @@ const ChatList = ({ socket }) => {
 
     fetchConversations();
 
-    if(socket.current){
+    if (socket.current) {
       const ids = conversations?.map((ele) => ele.conversations._id);
-    socket.current.emit("join-conversations", ids);
+      socket.current.emit("join-conversations", ids);
 
-    socket.current.on("get-last-msg-r", ({senderId}) => {
-      fetchConversations();
-    });
+      socket.current.on("get-last-msg-r", ({ senderId }) => {
+        fetchConversations();
+      });
 
-    socket.current.on("get-last-msg-s", ({senderId}) => {
-      fetchConversations();
-    });
+      socket.current.on("get-last-msg-s", ({ senderId }) => {
+        
+        fetchConversations();
+      });
 
-    socket.current.on("get-message", ({ senderId, message, isGroup }) => {
-      fetchConversations();
-    });
+      socket.current.on("get-message", ({ senderId, message, isGroup }) => {
+        fetchConversations();
+      });
 
-    socket.current.on("get-conversation-group", (idCon) => {
-      fetchConversations();
-    });
+      socket.current.on("get-conversation-group", (idCon) => {
+        fetchConversations();
+      });
 
-    socket.current.on("kickUser-group", (idCon) => {
-      fetchConversations();
-    });
+      socket.current.on("kickUser-group", (idCon) => {
+        fetchConversations();
+      });
 
-    socket.current.on("messNotifi", (idCon) => {
-      fetchConversations();
-    });
+      socket.current.on("messNotifi", (idCon) => {
+        fetchConversations();
+      });
 
-    socket.current.on("update-inviteFr", (idFriend) => {
-      fetchConversations();
-    });
+      socket.current.on("update-inviteFr", (idFriend) => {
+        fetchConversations();
+      });
 
-    socket.current.on("update-invite", (idUser) => {
-      fetchConversations();
-    });
+      socket.current.on("update-invite", (idUser) => {
+        fetchConversations();
+      });
     }
-
-  }, [user,conversations]);
+  }, [user]);
 
   return (
     <div className="chatlist">

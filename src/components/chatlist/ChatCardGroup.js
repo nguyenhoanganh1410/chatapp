@@ -38,11 +38,6 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
   const { handleDate } = useDateLogic();
 
   const { inFo, conversations } = conversation;
-<<<<<<< HEAD
-  //  console.log(inFo);
-=======
- 
->>>>>>> d1a85457d4fe65ac9909b99019a2892a882bf302
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -108,7 +103,6 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
                 ? "Bạn: "
                 : inFo?.userInfo?.map((u) => {
                     if (conversations?.lastMessage[0]?.userId === u?.userId) {
-
                       return u?.userFistName + " " + u?.userLastName + ": ";
                     }
                   })}
@@ -157,7 +151,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
       </div>
 
       <div className="group_right">
-        <div className="card_time">
+        {/* <div className="card_time">
           {" "}
           {handleDate(
             new Date(),
@@ -168,7 +162,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
               )
             )
           )}
-        </div>
+        </div> */}
 
         {conversations?.mb?.numberUnread > 0 ? (
           <span className="numberNotification">
