@@ -100,7 +100,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       .catch((err) => {
         console.log(err.message);
       });
-    conversations.mb.numberUnread = 0;
+      conversations.mb.numberUnread=0;
   };
 
   return (
@@ -176,7 +176,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
       </div>
 
       <div className="group_right">
-        {/* <div className="card_time">
+        <div className="card_time">
           {handleDate(
             new Date(),
             new Date(
@@ -186,7 +186,7 @@ const ChatCard = ({ conversation, socket, setConversations }) => {
               )
             )
           )}
-        </div> */}
+        </div>
         {conversations.mb.numberUnread > 0 ? (
           <span className="numberNotification">
             {conversations.mb.numberUnread}

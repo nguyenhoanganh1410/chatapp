@@ -230,7 +230,7 @@ const ChatHeader = ({ userChatting, socket }) => {
 
         <div className="info_text">
           <span className="info_name">
-            {userChatting?.last_name + " " + userChatting?.first_name}
+            {userChatting?.first_name + " " + userChatting?.last_name}
           </span>
           {/* // <span className="info_online">{isOnline ? "0" : "1"}</span> */}
 

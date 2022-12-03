@@ -73,205 +73,201 @@ const ChatList = ({ socket }) => {
     setValue(newValue);
   };
 
-  // React.useEffect(() => {
-  //   if (socket.current) {
-  //     // console.log(conversations);
-  //     const ids = conversations?.map((ele) => ele.conversations._id);
-  //     socket.current.emit("join-conversations", ids);
+  React.useEffect(() => {
+    if (socket.current) {
+      // console.log(conversations);
+      const ids = conversations?.map((ele) => ele.conversations._id);
+      socket.current.emit("join-conversations", ids);
 
-  //     socket.current.on("get-last-msg-r", ({receiverId}) => {
-  //       const fetchConversations = async () => {
-  //         try {
-  //           const response = await conversationApi.getConversations(
-  //             receiverId,
-  //             panigation.page,
-  //             panigation.size
-  //           );
+      socket.current.on("get-last-msg-r", ({ receiverId }) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              receiverId,
+              panigation.page,
+              panigation.size
+            );
 
-  //           const { data, page, size, totalPages } = response;
-  //           console.log(data);
-  //           if (response) {
-  //             setConversations(data);
-  //             setLoading(false);
-  //           }
-  //         } catch (error) {
-  //           console.log("Failed to fetch conversation list: ", error);
-  //         }
-  //       };
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
 
-  //       fetchConversations();
-  //       console.log("fetch last r:: ");
-  //     });
+        fetchConversations();
+        console.log("fetch last r:: ");
+      });
 
-  //     socket.current.on("get-last-msg-s", ({senderId}) => {
-  //       const fetchConversations = async () => {
-  //         try {
-  //           const response = await conversationApi.getConversations(
-  //             senderId,
-  //             panigation.page,
-  //             panigation.size
-  //           );
+      socket.current.on("get-last-msg-s", ({ senderId }) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              senderId,
+              panigation.page,
+              panigation.size
+            );
 
-  //           const { data, page, size, totalPages } = response;
-  //           console.log(data);
-  //           if (response) {
-  //             setConversations(data);
-  //             setLoading(false);
-  //           }
-  //         } catch (error) {
-  //           console.log("Failed to fetch conversation list: ", error);
-  //         }
-  //       };
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
 
-  //       fetchConversations();
-  //       console.log("fetch last s:: ");
+        fetchConversations();
+        console.log("fetch last s:: ");
+      });
 
-  //     });
+      socket.current.on("get-message", ({ senderId, message, isGroup }) => {
+        if (isGroup) {
+          const fetchConversations = async () => {
+            try {
+              const response = await conversationApi.getConversations(
+                user.uid,
+                panigation.page,
+                panigation.size
+              );
 
-  //     socket.current.on("get-message", ({ senderId, message, isGroup }) => {
-  //       if (isGroup) {
-  //         const fetchConversations = async () => {
-  //           try {
-  //             const response = await conversationApi.getConversations(
-  //               user.uid,
-  //               panigation.page,
-  //               panigation.size
-  //             );
+              const { data, page, size, totalPages } = response;
+              console.log(data);
+              if (response) {
+                setConversations(data);
+                setLoading(false);
+              }
+            } catch (error) {
+              console.log("Failed to fetch conversation list: ", error);
+            }
+          };
 
-  //             const { data, page, size, totalPages } = response;
-  //             console.log(data);
-  //             if (response) {
-  //               setConversations(data);
-  //               setLoading(false);
-  //             }
-  //           } catch (error) {
-  //             console.log("Failed to fetch conversation list: ", error);
-  //           }
-  //         };
+          fetchConversations();
+          console.log("fetch getMess:: ");
+        }
+      });
 
-  //         fetchConversations();
-  //       console.log("fetch getMess:: ");
+      socket.current.on("get-conversation-group", (idCon) => {
+        if (idCon) {
+          const fetchConversations = async () => {
+            try {
+              const response = await conversationApi.getConversations(
+                user.uid,
+                panigation.page,
+                panigation.size
+              );
 
-  //       }
-  //     });
+              const { data, page, size, totalPages } = response;
+              console.log(data);
+              if (response) {
+                setConversations(data);
+                setLoading(false);
+              }
+            } catch (error) {
+              console.log("Failed to fetch conversation list: ", error);
+            }
+          };
 
-  //     socket.current.on("get-conversation-group", (idCon) => {
-  //       if (idCon) {
-  //         const fetchConversations = async () => {
-  //           try {
-  //             const response = await conversationApi.getConversations(
-  //               user.uid,
-  //               panigation.page,
-  //               panigation.size
-  //             );
+          fetchConversations();
+          console.log("fetch group:: ");
+        }
+      });
 
-  //             const { data, page, size, totalPages } = response;
-  //             console.log(data);
-  //             if (response) {
-  //               setConversations(data);
-  //               setLoading(false);
-  //             }
-  //           } catch (error) {
-  //             console.log("Failed to fetch conversation list: ", error);
-  //           }
-  //         };
+      socket.current.on("kickUser-group", (idCon) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              user.uid,
+              panigation.page,
+              panigation.size
+            );
 
-  //         fetchConversations();
-  //       console.log("fetch group:: ");
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+        fetchConversations();
+      });
 
-  //       }
-  //     });
+      socket.current.on("messNotifi", (idCon) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              user.uid,
+              panigation.page,
+              panigation.size
+            );
 
-  //     socket.current.on("kickUser-group", (idCon) => {
-  //       const fetchConversations = async () => {
-  //         try {
-  //           const response = await conversationApi.getConversations(
-  //             user.uid,
-  //             panigation.page,
-  //             panigation.size
-  //           );
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+        fetchConversations();
+      });
 
-  //           const { data, page, size, totalPages } = response;
-  //           console.log(data);
-  //           if (response) {
-  //             setConversations(data);
-  //             setLoading(false);
-  //           }
-  //         } catch (error) {
-  //           console.log("Failed to fetch conversation list: ", error);
-  //         }
-  //       };
-  //       fetchConversations();
-  //     });
+      socket.current.on("update-invite", (idUser) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              user.uid,
+              panigation.page,
+              panigation.size
+            );
 
-  //     socket.current.on("messNotifi", (idCon) => {
-  //       const fetchConversations = async () => {
-  //         try {
-  //           const response = await conversationApi.getConversations(
-  //             user.uid,
-  //             panigation.page,
-  //             panigation.size
-  //           );
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+        fetchConversations();
+      });
 
-  //           const { data, page, size, totalPages } = response;
-  //           console.log(data);
-  //           if (response) {
-  //             setConversations(data);
-  //             setLoading(false);
-  //           }
-  //         } catch (error) {
-  //           console.log("Failed to fetch conversation list: ", error);
-  //         }
-  //       };
-  //       fetchConversations();
-  //     });
+      socket.current.on("update-inviteFr", (idFriend) => {
+        const fetchConversations = async () => {
+          try {
+            const response = await conversationApi.getConversations(
+              user.uid,
+              panigation.page,
+              panigation.size
+            );
 
-  //     socket.current.on("update-invite", (idUser) => {
-  //       const fetchConversations = async () => {
-  //         try {
-  //           const response = await conversationApi.getConversations(
-  //             user.uid,
-  //             panigation.page,
-  //             panigation.size
-  //           );
-
-  //           const { data, page, size, totalPages } = response;
-  //           console.log(data);
-  //           if (response) {
-  //             setConversations(data);
-  //             setLoading(false);
-  //           }
-  //         } catch (error) {
-  //           console.log("Failed to fetch conversation list: ", error);
-  //         }
-  //       };
-  //       fetchConversations();
-  //     });
-
-  //     socket.current.on("update-inviteFr", (idFriend) => {
-  //       const fetchConversations = async () => {
-  //         try {
-  //           const response = await conversationApi.getConversations(
-  //             user.uid,
-  //             panigation.page,
-  //             panigation.size
-  //           );
-
-  //           const { data, page, size, totalPages } = response;
-  //           console.log(data);
-  //           if (response) {
-  //             setConversations(data);
-  //             setLoading(false);
-  //           }
-  //         } catch (error) {
-  //           console.log("Failed to fetch conversation list: ", error);
-  //         }
-  //       };
-  //       fetchConversations();
-  //     });
-
-  //   }
-  // }, [user, conversations]);
+            const { data, page, size, totalPages } = response;
+            console.log(data);
+            if (response) {
+              setConversations(data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.log("Failed to fetch conversation list: ", error);
+          }
+        };
+        fetchConversations();
+      });
+    }
+  }, [user, conversations]);
 
   React.useEffect(() => {
     //get api set list conversation
@@ -297,43 +293,43 @@ const ChatList = ({ socket }) => {
 
     fetchConversations();
 
-    if (socket.current) {
-      const ids = conversations?.map((ele) => ele.conversations._id);
-      socket.current.emit("join-conversations", ids);
+    // if (socket.current) {
+    //   const ids = conversations?.map((ele) => ele.conversations._id);
+    //   socket.current.emit("join-conversations", ids);
 
-      socket.current.on("get-last-msg-r", ({ senderId }) => {
-        fetchConversations();
-      });
+    //   socket.current.on("get-last-msg-r", ({ senderId }) => {
+    //     fetchConversations();
+    //   });
 
-      socket.current.on("get-last-msg-s", ({ senderId }) => {
-        
-        fetchConversations();
-      });
+    //   socket.current.on("get-last-msg-s", ({ senderId }) => {
 
-      socket.current.on("get-message", ({ senderId, message, isGroup }) => {
-        fetchConversations();
-      });
+    //     fetchConversations();
+    //   });
 
-      socket.current.on("get-conversation-group", (idCon) => {
-        fetchConversations();
-      });
+    //   socket.current.on("get-message", ({ senderId, message, isGroup }) => {
+    //     fetchConversations();
+    //   });
 
-      socket.current.on("kickUser-group", (idCon) => {
-        fetchConversations();
-      });
+    //   socket.current.on("get-conversation-group", (idCon) => {
+    //     fetchConversations();
+    //   });
 
-      socket.current.on("messNotifi", (idCon) => {
-        fetchConversations();
-      });
+    //   socket.current.on("kickUser-group", (idCon) => {
+    //     fetchConversations();
+    //   });
 
-      socket.current.on("update-inviteFr", (idFriend) => {
-        fetchConversations();
-      });
+    //   socket.current.on("messNotifi", (idCon) => {
+    //     fetchConversations();
+    //   });
 
-      socket.current.on("update-invite", (idUser) => {
-        fetchConversations();
-      });
-    }
+    //   socket.current.on("update-inviteFr", (idFriend) => {
+    //     fetchConversations();
+    //   });
+
+    //   socket.current.on("update-invite", (idUser) => {
+    //     fetchConversations();
+    //   });
+    // }
   }, [user]);
 
   return (

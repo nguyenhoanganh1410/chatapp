@@ -91,7 +91,7 @@ const AvatarUserOnline = ({ userChatting, isOnline, isFriend }) => {
 
                     //  onClick={() => handleShowInfo()}
                   >
-                    {userChatting?.last_name[0]}
+                    {userChatting?.first_name[0]}
                   </Avatar>
                 </StyledBadge>
               </Stack>
@@ -106,7 +106,7 @@ const AvatarUserOnline = ({ userChatting, isOnline, isFriend }) => {
 
                 //  onClick={() => handleShowInfo()}
               >
-                {userChatting?.last_name[0]}
+                {userChatting?.first_name[0]}
               </Avatar>
             )}
             {/* {isFriend ? (

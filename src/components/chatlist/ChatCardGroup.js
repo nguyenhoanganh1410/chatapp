@@ -151,7 +151,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
       </div>
 
       <div className="group_right">
-        {/* <div className="card_time">
+        <div className="card_time">
           {" "}
           {handleDate(
             new Date(),
@@ -162,7 +162,7 @@ const ChatCardGroup = ({ status, conversation, socket }) => {
               )
             )
           )}
-        </div> */}
+        </div>
 
         {conversations?.mb?.numberUnread > 0 ? (
           <span className="numberNotification">
